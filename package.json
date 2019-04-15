@@ -1,0 +1,18 @@
+{
+  "name": "tddd27_2019_moviesquare",
+  "version": "1.0.0",
+  "description": "The server side using node and express for an movie website called MovieSquare",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.ida.liu.se/jacny980/TDDD27_2019_MovieSquare.git"
+  },
+  "author": "Jacob Nyman, jacny980 and Viktor Sandberg, viksa378",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}

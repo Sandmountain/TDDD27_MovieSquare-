@@ -1,3 +1,12 @@
 {
-  "mongoURI": "mongodb+srv://Gostis:Gostis123@moviesquare-gytjx.gcp.mongodb.net/test?retryWrites=true"
+  "mongoURI": "mongodb+srv://Gostis:Gostis123@moviesquare-gytjx.gcp.mongodb.net/test?retryWrites=true",
+  "jwtSecret": "myJwtSecret-TDDD27-MovieSquare",
+  "facebook": {
+    "clientID": "409632523219900",
+    "clientSecret": "b8f4f98ace939323fe0218d875f7409a"
+  },
+  "google": {
+    "clientID": "633539077918-96pod09f6qt61of3quqn7hmh6hm70d18.apps.googleusercontent.com",
+    "clientSecret": "LQstucg2CYBcZUGTDLV8caFX"
+  }
 }

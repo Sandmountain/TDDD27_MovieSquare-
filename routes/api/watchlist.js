@@ -8,7 +8,7 @@ const Movie = require("../../models/Movies");
 // @access Public
 router.get("/", (req, res) =>
   Movie.find()
-    .sort({ Date: -1 })
+    .sort({ date: -1 })
     .then(movies => res.json(movies))
 );
 
@@ -16,8 +16,13 @@ router.get("/", (req, res) =>
 // @desc   Add a  movie to watchlist
 // @access Public
 router.post("/", (req, res) => {
+  //Creates the movie from the schema model
   const newMovie = new Movie({
-    movieAPI_id: req.body.movieAPI_id
+    movieID: req.body.movieID,
+    movieTitle: req.body.movieTitle,
+    imgURL: req.body.imgURL,
+    movieGenre: req.body.movieGenre,
+    movieName: req.body.movieName
   });
 
   newMovie.save().then(movie => res.json(movie));

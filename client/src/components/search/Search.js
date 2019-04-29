@@ -34,7 +34,7 @@ class Search extends Component {
   onAmountChange = (e, index, value) => this.setState({ imageSizes: value });
 
   render() {
-    console.log(this.state.images);
+    //console.log(this.state.images);
     return (
       <div>
         <TextField

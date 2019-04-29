@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import NavBar from "./components/navbar/NavBar";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Search from "./components/search/Search";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store";
+
+import WatchList from "./components/Watchlist/WatchList";
 
 /* OLD UI
 import logo from "./logo.svg";
@@ -18,15 +23,30 @@ import Collage from "./components/Collage";
 
 library.add(faStroopwafel);
 */
+
 class App extends Component {
   render() {
     return (
-      <MuiThemeProvider>
-        <div>
-          <NavBar />
-          <Search />
-        </div>
-      </MuiThemeProvider>
+      <Provider store={store}>
+        <BrowserRouter>
+          <MuiThemeProvider>
+            <NavBar />
+
+            <Route
+              path="/"
+              exact
+              render={() => {
+                return (
+                  <div>
+                    <Search />
+                  </div>
+                );
+              }}
+            />
+            <Route path="/watchlist" exact component={WatchList} />
+          </MuiThemeProvider>
+        </BrowserRouter>
+      </Provider>
     );
   }
 }

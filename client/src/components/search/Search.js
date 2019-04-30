@@ -1,9 +1,17 @@
 import React, { Component } from "react";
-import TextField from "material-ui/TextField";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
+import {
+  TextField,
+  Grid,
+  GridList,
+  Paper,
+  withStyles,
+  InputBase,
+  Divider,
+  IconButton,
+  Icon
+} from "@material-ui/core";
 import axios from "axios";
-import ImageResults from "../image-results/ImageResults";
+import MovieResult from "../MovieResult/Movie-Result";
 
 class Search extends Component {
   state = {
@@ -27,42 +35,89 @@ class Search extends Component {
           )
           .then(res => this.setState({ images: res.data.results }))
           .catch(err => console.log(err));
+      } else {
+        return this.setState({ images: "" });
       }
     });
   };
 
-  onAmountChange = (e, index, value) => this.setState({ imageSizes: value });
+  //onAmountChange = (e, index, value) => this.setState({ imageSizes: value });
 
   render() {
-    //console.log(this.state.images);
     return (
       <div>
-        <TextField
-          name="searchText"
-          value={this.state.searchText}
-          onChange={this.onTextChange}
-          floatingLabelText="Serach for Movies"
-          style={{ paddingLeft: "10px", paddingRight: "10px" }}
-          fullWidth={true}
-        />
-        <br />
-        <SelectField
-          name="imageSizes"
-          floatingLabelText="Image Sizes"
-          value={this.state.imageSizes}
-          onChange={this.onAmountChange}
-        >
-          <MenuItem value={"w185"} primaryText="Small" />
-          <MenuItem value={"w780"} primaryText="Medium" />
-          <MenuItem value={"w1280"} primaryText="Large" />
-        </SelectField>
-        <br />
-        {this.state.images.length > 0 ? (
-          <ImageResults images={this.state.images} />
-        ) : null}
+        <Grid container justify="center" alignItems="center">
+          <Grid item sm={4}>
+            <Paper style={styles.root} elevation={1}>
+              <InputBase
+                style={styles.inputField}
+                name="searchText"
+                value={this.state.searchText}
+                onChange={this.onTextChange}
+                placeholder="Search Google Maps"
+              />
+              <IconButton
+                style={styles.iconButton}
+                color="primary"
+                aria-label="Search"
+              >
+                <Icon>search</Icon>
+              </IconButton>
+            </Paper>
+          </Grid>
+        </Grid>
+        <Grid container justify="center" alignItems="center">
+          <Grid item sm={8}>
+            <Paper style={styles.MainBody} elevation="4" color="primary">
+              <Paper style={styles.inlineMainBody} color="primary">
+                {this.state.images.length > 0 ? (
+                  <MovieResult images={this.state.images} />
+                ) : null}
+              </Paper>
+            </Paper>
+          </Grid>
+        </Grid>
       </div>
     );
   }
 }
+
+const styles = {
+  root: {
+    marginTop: "30px",
+    marginBottom: "2px",
+    display: "flex",
+    alignItems: "center",
+    width: 600
+  },
+  inputField: {
+    paddingLeft: 20,
+    width: 600,
+    flex: 1
+  },
+  inlineMainBody: {
+    width: "100%",
+    minHeight: "1000px",
+    padding: 4
+  },
+  MainBody: {
+    width: "100%",
+    minHeight: "1000px",
+    padding: "10px",
+    background: "gray"
+  }
+};
+
+/*
+<Grid container justify="center" alignItems="center">
+          <TextField
+            name="searchText"
+            value={this.state.searchText}
+            onChange={this.onTextChange}
+            label="Serach for Movies"
+            margin="normal"
+          />
+        </Grid>
+*/
 
 export default Search;

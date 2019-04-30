@@ -1,50 +1,28 @@
 import React, { Component } from "react";
-import NavBar from "./components/navbar/NavBar";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import Search from "./components/search/Search";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+
+//** Original **/
+import NavBar from "./components/NavBar/NavBar";
+import Search from "./components/Search/Search";
 import store from "./store";
-
 import WatchList from "./components/Watchlist/WatchList";
-
-/* OLD UI
-import logo from "./logo.svg";
-import "./App.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Container } from "reactstrap";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faStroopwafel } from "@fortawesome/free-solid-svg-icons";
-
-import AppNavbar from "./components/AppNavbar";
-import MainBody from "./components/MainBody";
-import Collage from "./components/Collage";
-
-library.add(faStroopwafel);
-*/
+import MainBody from "./components/MainBody/MainBody";
 
 class App extends Component {
   render() {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <MuiThemeProvider>
-            <NavBar />
-
-            <Route
-              path="/"
-              exact
-              render={() => {
-                return (
-                  <div>
-                    <Search />
-                  </div>
-                );
-              }}
-            />
-            <Route path="/watchlist" exact component={WatchList} />
-          </MuiThemeProvider>
+          <NavBar />
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return <MainBody />;
+            }}
+          />
+          <Route exact path="/watchlist" component={WatchList} />
         </BrowserRouter>
       </Provider>
     );

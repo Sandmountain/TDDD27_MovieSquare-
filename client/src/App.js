@@ -19,7 +19,7 @@ class App extends Component {
             exact
             path="/"
             render={() => {
-              return <MainBody />;
+              return <Search />;
             }}
           />
           <Route exact path="/watchlist" component={WatchList} />

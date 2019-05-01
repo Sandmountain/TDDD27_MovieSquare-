@@ -23,7 +23,7 @@ class Search extends Component {
     imageSizes: "w185",
     images: []
   };
-
+  /*
   onTextChange = e => {
     this.setState({ [e.target.name]: e.target.value }, () => {
       if (this.state.searchText.length > 0) {
@@ -31,9 +31,40 @@ class Search extends Component {
           .get(
             `${this.state.apiUrl}?api_key=${this.state.apiKey}&query=${
               this.state.searchText
-            }&sort_by=popularity.desc`
+            }&sort_by=popularity.desc&page=1`
           )
           .then(res => this.setState({ images: res.data.results }))
+          .catch(err => console.log(err));
+      } else {
+        return this.setState({ images: "" });
+      }
+    });
+  };
+  */
+  onTextChange = e => {
+    this.setState({ [e.target.name]: e.target.value }, () => {
+      if (this.state.searchText.length > 0) {
+        axios
+          .all([
+            axios.get(
+              `${this.state.apiUrl}?api_key=${this.state.apiKey}&query=${
+                this.state.searchText
+              }&sort_by=popularity.desc&page=1`
+            ),
+            axios.get(
+              `${this.state.apiUrl}?api_key=${this.state.apiKey}&query=${
+                this.state.searchText
+              }&sort_by=popularity.desc&page=2`
+            )
+          ])
+          .then(
+            axios.spread((page1, page2) => {
+              console.log(page1, page2);
+              const array = page1.data.results.concat(page2.data.results);
+              console.log(array);
+              this.setState({ images: array });
+            })
+          )
           .catch(err => console.log(err));
       } else {
         return this.setState({ images: "" });
@@ -48,7 +79,7 @@ class Search extends Component {
       <div>
         <Grid container justify="center" alignItems="center">
           <Grid item sm={4}>
-            <Paper style={styles.root} elevation={1}>
+            <Paper style={styles.root} elevation={1} color="secondary">
               <InputBase
                 style={styles.inputField}
                 name="searchText"
@@ -68,7 +99,7 @@ class Search extends Component {
         </Grid>
         <Grid container justify="center" alignItems="center">
           <Grid item sm={8}>
-            <Paper style={styles.MainBody} elevation="4" color="primary">
+            <Paper style={styles.MainBody} elevation="4">
               <Paper style={styles.inlineMainBody} color="primary">
                 {this.state.images.length > 0 ? (
                   <MovieResult images={this.state.images} />
@@ -87,8 +118,7 @@ const styles = {
     marginTop: "30px",
     marginBottom: "2px",
     display: "flex",
-    alignItems: "center",
-    width: 600
+    alignItems: "center"
   },
   inputField: {
     paddingLeft: 20,
@@ -98,13 +128,15 @@ const styles = {
   inlineMainBody: {
     width: "100%",
     minHeight: "1000px",
-    padding: 4
+    padding: 4,
+    backgroundColor: "white"
   },
   MainBody: {
     width: "100%",
     minHeight: "1000px",
     padding: "10px",
-    background: "gray"
+    backgroundColor: "#f44336"
+    //backgroundColor: "#434343"
   }
 };
 

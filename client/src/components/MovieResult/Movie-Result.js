@@ -5,6 +5,7 @@ import {
   GridList,
   GridListTile,
   GridListTileBar,
+  CircularProgress,
   Icon
 } from "@material-ui/core";
 
@@ -12,13 +13,22 @@ import {
 import { connect } from "react-redux";
 import { addMovie, getMovies } from "../../actions/watchListAction";
 import axios from "axios";
+import OnImagesLoaded from "react-on-images-loaded";
 
 class ImageResults extends Component {
   state = {
     apiUrl: "https://api.themoviedb.org/3/genre/movie/list",
     apiKey: "0d9a8d275e343ddfe2589947fe17d099",
-    genres: []
+    genres: [],
+    imageLoading: true
   };
+
+  handleImageLoaded() {
+    this.setState({ imageLoading: false });
+  }
+  handleImageError() {
+    console.log("No image");
+  }
 
   addToWatchList = img => {
     let genres = [];
@@ -68,8 +78,15 @@ class ImageResults extends Component {
           {images.map(img => (
             <GridListTile key={img.id}>
               <img
+                style={!this.state.imageLoading ? {} : { display: "none" }}
                 src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
                 alt=""
+                onLoad={() => this.setState({ imageLoading: false })}
+                onError={e => {
+                  this.setState({ imageLoading: false });
+                  e.target.onerror = null;
+                  e.target.src = require("./error.png");
+                }}
               />
               <GridListTileBar
                 title={img.original_title}

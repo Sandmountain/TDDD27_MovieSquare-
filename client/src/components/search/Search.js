@@ -13,6 +13,11 @@ class Search extends Component {
     imageSizes: "w185",
     images: []
   };
+
+  handleImageLoading() {
+    this.setState({ imagesLoading: false });
+  }
+
   /*
   onTextChange = e => {
     this.setState({ [e.target.name]: e.target.value }, () => {
@@ -75,7 +80,7 @@ class Search extends Component {
                 name="searchText"
                 value={this.state.searchText}
                 onChange={this.onTextChange}
-                placeholder="Search Google Maps"
+                placeholder="Search Movies"
               />
               <IconButton
                 style={styles.iconButton}

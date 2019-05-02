@@ -14,23 +14,21 @@ class App extends Component {
     return (
       <Provider store={store}>
         <BrowserRouter>
-          <MuiThemeProvider>
-            <NavBar />
+          <NavBar />
 
-            <Route
-              path="/"
-              exact
-              render={() => {
-                return (
-                  <div>
-                    <Search />
-                  </div>
-                );
-              }}
-            />
-            <Route path="/watchlist" exact component={WatchList} />
-            <Route path="/loginpage" exact component={LoginPage} />
-          </MuiThemeProvider>
+          <Route
+            path="/"
+            exact
+            render={() => {
+              return (
+                <div>
+                  <Search />
+                </div>
+              );
+            }}
+          />
+          <Route path="/watchlist" exact component={WatchList} />
+          <Route path="/loginpage" exact component={LoginPage} />
         </BrowserRouter>
       </Provider>
     );

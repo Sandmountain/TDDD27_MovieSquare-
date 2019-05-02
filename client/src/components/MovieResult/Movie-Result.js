@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { GridList, GridTile } from "material-ui/GridList";
-import IconButton from "material-ui/IconButton";
-import StarH from "material-ui/svg-icons/toggle/star-border";
+import {
+  IconButton,
+  GridList,
+  GridListTile,
+  GridListTileBar,
+  Icon
+} from "@material-ui/core";
+
 //Redux
 import { connect } from "react-redux";
 import { addMovie, getMovies } from "../../actions/watchListAction";
@@ -26,7 +31,6 @@ class ImageResults extends Component {
         }
       }
     }
-
     const newMovie = {
       movieID: img.id,
       imgURL: img.poster_path,
@@ -37,7 +41,7 @@ class ImageResults extends Component {
     //Add item via addItem Action
     this.props.addMovie(newMovie);
 
-    //Change the star to filled...?
+    //TODO: Change the star to filled...?
   };
 
   idToString = img => {
@@ -62,25 +66,29 @@ class ImageResults extends Component {
       imageListContent = (
         <GridList cols={5} cellHeight="auto">
           {images.map(img => (
-            <GridTile
-              title={img.original_title}
-              key={img.id}
-              subtitle={
-                <span>
-                  by <strong>{img.release_date}</strong>
-                </span>
-              }
-              actionIcon={
-                <IconButton onClick={() => this.addToWatchList(img)}>
-                  <StarH color="white" />;
-                </IconButton>
-              }
-            >
+            <GridListTile key={img.id}>
               <img
                 src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
                 alt=""
               />
-            </GridTile>
+              <GridListTileBar
+                title={img.original_title}
+                key={img.id}
+                subtitle={
+                  <span>
+                    by <strong>{img.release_date}</strong>
+                  </span>
+                }
+                actionIcon={
+                  <IconButton
+                    color="secondary"
+                    onClick={() => this.addToWatchList(img)}
+                  >
+                    <Icon>playlist_add</Icon>
+                  </IconButton>
+                }
+              />
+            </GridListTile>
           ))}
         </GridList>
       );
@@ -88,7 +96,7 @@ class ImageResults extends Component {
       imageListContent = null;
       //Spinner here probably
     }
-    return <div> {imageListContent}</div>;
+    return <div>{imageListContent}</div>;
   }
 
   //getting ids from database (could possibly be done localy instead)
@@ -107,12 +115,13 @@ ImageResults.propTypes = {
   movie: PropTypes.object.isRequired
 };
 
+/*
 var gridTileStyle = {
   height: "100% !important",
   paddingTop: 5,
   backgroundColor: "#fff"
 };
-
+*/
 const mapStateToProps = state => ({
   movie: state.movie
 });

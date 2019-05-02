@@ -1,12 +1,20 @@
 import React, { Component } from "react";
-import { Container, ListGroup, ListGroupItem, Button } from "reactstrap";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Grid,
+  ListItemSecondaryAction,
+  IconButton,
+  Icon
+} from "@material-ui/core";
 
-import List from "material-ui/List";
-import ListItem from "material-ui/List/ListItem";
-import { connect } from "react-redux";
 import { getMovies, deleteMovie } from "../../actions/watchListAction";
+
+import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import uuid from "uuid";
+
 class WatchList extends Component {
   componentDidMount() {
     this.props.getMovies();
@@ -20,25 +28,25 @@ class WatchList extends Component {
     const { movies } = this.props.movie;
     const favGenre = favoriteGenre(movies);
     return (
-      <Container>
+      <Grid>
         <h1>Your favorite genre is</h1>
         <h3>{favGenre + " "} </h3>
-        <List>
+        <List component="ul">
           {movies.map(({ _id, movieTitle }) => (
-            <ListItem key={uuid()}>
-              <Button
-                className="removebtn"
-                color="danger"
-                size="sm"
-                onClick={this.onDeleteClick.bind(this, _id)}
-              >
-                &times;
-              </Button>{" "}
-              {movieTitle}
+            <ListItem button key={uuid()}>
+              <ListItemText primary={movieTitle} />
+              <ListItemSecondaryAction>
+                <IconButton
+                  color="secondary"
+                  onClick={this.onDeleteClick.bind(this, _id)}
+                >
+                  <Icon>playlist_add_check </Icon>
+                </IconButton>
+              </ListItemSecondaryAction>
             </ListItem>
           ))}
         </List>
-      </Container>
+      </Grid>
     );
   }
 }

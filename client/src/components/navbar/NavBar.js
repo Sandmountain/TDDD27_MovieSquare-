@@ -1,24 +1,70 @@
 import React from "react";
-import AppBar from "material-ui/AppBar";
-import darkBaseTheme from "material-ui/styles/baseThemes/darkBaseTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
-import Button from "material-ui/FlatButton/FlatButton";
+import {
+  Toolbar,
+  AppBar,
+  Typography,
+  Button,
+  IconButton,
+  Icon
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
+import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
-const NavBar = () => (
-  <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-    <AppBar title="MoveSquare">
-      <Button>
-        <Link to="/watchlist">WatchList</Link>
-      </Button>
-      <Button>
-        <Link to="/">Home</Link>
-      </Button>
-    </AppBar>
-  </MuiThemeProvider>
-);
+const styles = {
+  flex: {
+    flex: 1
+  },
+  root: {
+    flexGrow: 1
+  },
+  grow: {
+    flexGrow: 1
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20
+  }
+};
 
-function goWatchList() {}
+const watchListLink = props => <Link to="/watchlist" {...props} />;
+const profileLink = props => <Link to="/profile" {...props} />;
+const homeLink = props => <Link to="/" {...props} />;
 
-export default NavBar;
+function NavBar(props) {
+  const { classes } = props;
+  return (
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="Menu"
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" color="inherit" className={classes.grow}>
+            MovieSquare
+          </Typography>
+          <Button component={watchListLink} color="inherit">
+            <Icon>playlist_play</Icon>
+          </Button>
+          <Button component={homeLink} color="inherit">
+            <Icon>home</Icon>
+          </Button>
+          <Button component={profileLink} color="inherit">
+            <Icon>account_circle</Icon>
+          </Button>
+        </Toolbar>
+      </AppBar>
+    </div>
+  );
+}
+
+NavBar.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(NavBar);

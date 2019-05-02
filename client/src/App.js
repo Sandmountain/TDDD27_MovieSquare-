@@ -7,7 +7,6 @@ import NavBar from "./components/NavBar/NavBar";
 import Search from "./components/Search/Search";
 import store from "./store";
 import WatchList from "./components/Watchlist/WatchList";
-import MainBody from "./components/MainBody/MainBody";
 
 class App extends Component {
   render() {

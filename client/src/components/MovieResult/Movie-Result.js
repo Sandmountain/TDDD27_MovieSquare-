@@ -2,12 +2,10 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 import {
   IconButton,
-  Grid,
   GridList,
   GridListTile,
   GridListTileBar,
-  Icon,
-  Paper
+  Icon
 } from "@material-ui/core";
 
 //Redux

@@ -1,15 +1,5 @@
 import React, { Component } from "react";
-import {
-  TextField,
-  Grid,
-  GridList,
-  Paper,
-  withStyles,
-  InputBase,
-  Divider,
-  IconButton,
-  Icon
-} from "@material-ui/core";
+import { Grid, Paper, InputBase, IconButton, Icon } from "@material-ui/core";
 import axios from "axios";
 import MovieResult from "../MovieResult/Movie-Result";
 

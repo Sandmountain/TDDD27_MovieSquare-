@@ -75,8 +75,8 @@ router.post(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     const token = signToken(req.user);
-
-    res.json({ msg: "Wey logged in with google!!!", token });
+    const tempUser = req.user;
+    res.json({ msg: "Wey logged in with google!!!", token, tempUser });
   }
 );
 

@@ -2,10 +2,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const config = require("config");
+const cors = require("cors");
+
 const watchlist = require("./routes/api/watchlist");
 const users = require("./routes/api/users");
 
 const app = express();
+
+app.use(cors());
 
 //Body parser middleware
 app.use(express.json());

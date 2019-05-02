@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import WatchList from "./components/Watchlist/WatchList";
+import LoginPage from "./components/LoginPage";
 
 /* OLD UI
 import logo from "./logo.svg";
@@ -44,6 +45,7 @@ class App extends Component {
               }}
             />
             <Route path="/watchlist" exact component={WatchList} />
+            <Route path="/loginpage" exact component={LoginPage} />
           </MuiThemeProvider>
         </BrowserRouter>
       </Provider>

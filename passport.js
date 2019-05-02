@@ -63,6 +63,7 @@ passport.use(
 
         done(null, user, { msg: "Sucessful login!" });
       } catch (error) {
+        console.log("error", error);
         done(error, false);
       }
     }
@@ -100,13 +101,14 @@ passport.use(
 
         done(null, newUser);
       } catch (error) {
+        console.log("error", error);
         done(error, false);
       }
     }
   )
 );
 
-// Facebook Strategy
+// Google Strategy
 passport.use(
   "google",
   new GoogleStrategy(
@@ -137,6 +139,7 @@ passport.use(
 
         done(null, newUser);
       } catch (error) {
+        console.log("error", error);
         done(error, false);
       }
     }

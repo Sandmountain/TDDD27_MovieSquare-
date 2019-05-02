@@ -33,7 +33,7 @@ class ImageResults extends Component {
   addToWatchList = img => {
     let genres = [];
 
-    //Function for this? Finding the genres for each movie
+    //Function for Finding the genres for each movie from their id
     for (let i = 0; i < img.genre_ids.length; i++) {
       for (let j = 0; j < this.state.genres.length; j++) {
         if (img.genre_ids[i] === this.state.genres[j].id) {
@@ -43,13 +43,16 @@ class ImageResults extends Component {
     }
     const newMovie = {
       movieID: img.id,
-      imgURL: img.poster_path,
+      imgURL: img.poster_path ? img.poster_path : require("./error.png"),
       movieTitle: img.original_title,
       movieGenre: genres
     };
 
     //Add item via addItem Action
-    this.props.addMovie(newMovie);
+
+    this.props.movie.movies.includes(newMovie.movieTitle)
+      ? console.log("exists")
+      : this.props.addMovie(newMovie);
 
     //TODO: Change the star to filled...?
   };
@@ -84,7 +87,7 @@ class ImageResults extends Component {
                 onLoad={() => this.setState({ imageLoading: false })}
                 onError={e => {
                   this.setState({ imageLoading: false });
-                  e.target.onerror = null;
+                  //Could give endless loop if not: e.target.onerror = null;
                   e.target.src = require("./error.png");
                 }}
               />

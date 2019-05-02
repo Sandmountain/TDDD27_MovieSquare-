@@ -3,8 +3,8 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 
 //** Original **/
-import NavBar from "./components/navbar/NavBar";
-import Search from "./components/search/Search";
+import NavBar from "./components/NavBar/NavBar";
+import Search from "./components/Search/Search";
 import store from "./store";
 import WatchList from "./components/Watchlist/WatchList";
 import LoginPage from "./components/LoginPage";

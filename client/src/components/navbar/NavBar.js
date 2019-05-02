@@ -11,6 +11,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import PopperList from "../Watchlist/PopperList";
 
 const styles = {
   flex: {
@@ -57,6 +58,7 @@ function NavBar(props) {
           <Button component={profileLink} color="inherit">
             <Icon>account_circle</Icon>
           </Button>
+          <PopperList />
         </Toolbar>
       </AppBar>
     </div>

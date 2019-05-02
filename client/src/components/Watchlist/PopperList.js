@@ -6,6 +6,18 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Fade from "@material-ui/core/Fade";
 import Paper from "@material-ui/core/Paper";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemSecondaryAction,
+  IconButton,
+  Icon,
+  Divider
+} from "@material-ui/core";
+import { getMovies, deleteMovie } from "../../actions/watchListAction";
+import { connect } from "react-redux";
+import uuid from "uuid";
 
 const styles = theme => ({
   typography: {
@@ -13,10 +25,26 @@ const styles = theme => ({
   }
 });
 
-class SimplePopper extends React.Component {
+class PopperList extends React.Component {
   state = {
     anchorEl: null,
     open: false
+  };
+
+  componentDidMount() {
+    this.props.getMovies();
+  }
+  /*
+  componentDidUpdate(prevProps, previousState) {
+    //console.log(prevProps); //this.props.movie.movies
+    if (prevProps.movie.movies !== this.props.movie.movies) {
+      this.props.getMovies();
+    }
+  }
+  */
+
+  onDeleteClick = id => {
+    this.props.deleteMovie(id);
   };
 
   handleClick = event => {
@@ -32,11 +60,14 @@ class SimplePopper extends React.Component {
     const { anchorEl, open } = this.state;
     const id = open ? "simple-popper" : null;
 
+    const { movies } = this.props.movie;
+    //console.log(movies);
     return (
       <div>
         <Button
           aria-describedby={id}
           variant="contained"
+          color="secondary"
           onClick={this.handleClick}
         >
           Toggle Popper
@@ -45,9 +76,21 @@ class SimplePopper extends React.Component {
           {({ TransitionProps }) => (
             <Fade {...TransitionProps} timeout={350}>
               <Paper>
-                <Typography className={classes.typography}>
-                  The content of the Popper.
-                </Typography>
+                <List component="ul">
+                  {movies.map(({ _id, movieTitle }) => (
+                    <ListItem button key={uuid()}>
+                      <ListItemText primary={movieTitle} />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          color="secondary"
+                          onClick={this.onDeleteClick.bind(this, _id)}
+                        >
+                          <Icon>playlist_add_check </Icon>
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
               </Paper>
             </Fade>
           )}
@@ -57,8 +100,17 @@ class SimplePopper extends React.Component {
   }
 }
 
-SimplePopper.propTypes = {
-  classes: PropTypes.object.isRequired
+const mapStateToProps = state => ({
+  movie: state.movie
+});
+
+PopperList.propTypes = {
+  classes: PropTypes.object.isRequired,
+  getMovies: PropTypes.func.isRequired,
+  movie: PropTypes.object.isRequired
 };
 
-export default withStyles(styles)(SimplePopper);
+export default connect(
+  mapStateToProps,
+  { getMovies, deleteMovie }
+)(withStyles(styles)(PopperList));

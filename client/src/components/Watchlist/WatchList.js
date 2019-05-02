@@ -19,6 +19,14 @@ class WatchList extends Component {
   componentDidMount() {
     this.props.getMovies();
   }
+  /*
+  componentDidUpdate(prevProps, previousState) {
+    //console.log(prevProps); //this.props.movie.movies
+    if (prevProps.movie.movies !== this.props.movie.movies) {
+      this.props.getMovies();
+    }
+  }
+  */
 
   onDeleteClick = id => {
     this.props.deleteMovie(id);
@@ -27,14 +35,16 @@ class WatchList extends Component {
   render() {
     const { movies } = this.props.movie;
     const favGenre = favoriteGenre(movies);
+
     return (
       <Grid>
         <h1>Your favorite genre is</h1>
         <h3>{favGenre + " "} </h3>
+
         <List component="ul">
           {movies.map(({ _id, movieTitle }) => (
             <ListItem button key={uuid()}>
-              <ListItemText primary={movieTitle} />
+              <ListItemText secondary={movieTitle} color="secondary" />
               <ListItemSecondaryAction>
                 <IconButton
                   color="secondary"
@@ -70,10 +80,10 @@ const favoriteGenre = movies => {
     a[c] = (a[c] || 0) + 1;
     return a;
   }, {});
+
   let maxCount = Math.max(...Object.values(counts));
   let mostFrequent = Object.keys(counts).filter(k => counts[k] === maxCount);
 
-  console.log(mostFrequent);
   return mostFrequent;
 };
 

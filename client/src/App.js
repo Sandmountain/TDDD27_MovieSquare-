@@ -3,8 +3,8 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
 
 //** Original **/
-import NavBar from "./components/NavBar/NavBar";
-import Search from "./components/Search/Search";
+import NavBar from "./components/navbar/NavBar";
+import Search from "./components/search/Search";
 import store from "./store";
 import WatchList from "./components/Watchlist/WatchList";
 import LoginPage from "./components/LoginPage";
@@ -15,7 +15,6 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <NavBar />
-
           <Route
             path="/"
             exact

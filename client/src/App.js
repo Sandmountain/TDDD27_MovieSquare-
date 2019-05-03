@@ -8,6 +8,8 @@ import Search from "./components/search/Search";
 import store from "./store";
 import WatchList from "./components/Watchlist/WatchList";
 import LoginPage from "./components/LoginPage";
+import Profile from "./components/Profile";
+import ParentComponent from "./components/HOCs/jwtAuthGuard";
 
 class App extends Component {
   render() {
@@ -28,6 +30,7 @@ class App extends Component {
           />
           <Route path="/watchlist" exact component={WatchList} />
           <Route path="/loginpage" exact component={LoginPage} />
+          <Route path="/profile" exact component={ParentComponent(Profile)} />
         </BrowserRouter>
       </Provider>
     );

@@ -14,13 +14,15 @@ passport.use(
   "jwt",
   new JwtStrategy(
     {
-      jwtFromRequest: ExtractJwt.fromHeader("x-auth-key"),
+      jwtFromRequest: ExtractJwt.fromHeader("x-auth-token"),
       secretOrKey: config.get("jwtSecret")
     },
     async (JWTpayload, done) => {
       try {
         // Check for user
         const user = await User.findById(JWTpayload._id);
+
+        console.log("user", user);
 
         // If user does not exist
         if (!user) {

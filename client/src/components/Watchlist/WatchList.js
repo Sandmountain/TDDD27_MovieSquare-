@@ -57,7 +57,8 @@ WatchList.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  movie: state.movie
+  movie: state.movie,
+  isAuthenticated: state.auth.isAuthenticated
 });
 
 const favoriteGenre = movies => {

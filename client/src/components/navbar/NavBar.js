@@ -31,6 +31,7 @@ const styles = {
 const watchListLink = props => <Link to="/watchlist" {...props} />;
 const profileLink = props => <Link to="/profile" {...props} />;
 const homeLink = props => <Link to="/" {...props} />;
+const loginPage = props => <Link to="/loginpage" {...props} />;
 
 function NavBar(props) {
   const { classes } = props;
@@ -48,6 +49,9 @@ function NavBar(props) {
           <Typography variant="h6" color="inherit" className={classes.grow}>
             MovieSquare
           </Typography>
+          <Button component={loginPage}>
+            <Icon>lock</Icon>
+          </Button>
           <Button component={watchListLink} color="inherit">
             <Icon>playlist_play</Icon>
           </Button>

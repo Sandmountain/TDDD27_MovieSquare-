@@ -3,10 +3,13 @@ const router = express.Router();
 
 const Movie = require("../../models/Movies");
 
+const passportFile = require("../../passport");
+const passport = require("passport");
+
 // @route  GET api/watchlist
 // @desc   Get all movies in watchlist
 // @access Public
-router.get("/", (req, res) =>
+router.get("/", passport.authenticate("jwt", { session: false }), (req, res) =>
   Movie.find()
     .sort({ date: -1 })
     .then(movies => res.json(movies))

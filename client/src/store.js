@@ -1,8 +1,17 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
+import axios from "axios";
 import rootReducer from "./reducers";
 
-const initalState = {};
+const jwtToken = localStorage.getItem("JWT_TOKEN");
+axios.defaults.headers.common["x-auth-token"] = jwtToken;
+
+const initalState = {
+  auth: {
+    token: jwtToken,
+    isAuthenticated: jwtToken ? true : false
+  }
+};
 
 const middleware = [thunk];
 

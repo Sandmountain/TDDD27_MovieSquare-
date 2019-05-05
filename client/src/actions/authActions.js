@@ -1,6 +1,7 @@
 import axios from "axios";
 import { AUTH_LOGIN_SUCCESS, AUTH_LOGOUT_SUCCESS } from "./types";
 
+// TODO: Lägg till catch på axios
 export const oauthGoogle = data => async dispatch => {
   const res = await axios.post("http://localhost:5000/api/users/oauth/google", {
     access_token: data
@@ -11,9 +12,9 @@ export const oauthGoogle = data => async dispatch => {
     type: AUTH_LOGIN_SUCCESS,
     payload: res.data.token
   });
-  console.log("JWT token google", res.data.token);
 
-  localStorage.setItem("JWT_TOKEN", res.data.token);
+  //localStorage.setItem("JWT_TOKEN", res.data.token);
+  console.log("JWT token google", res.data.token);
 };
 
 export const oauthFacebook = data => async dispatch => {
@@ -31,7 +32,7 @@ export const oauthFacebook = data => async dispatch => {
   });
   console.log("JWT token facebook", res.data.token);
 
-  localStorage.setItem("JWT_TOKEN", res.data.token);
+  //localStorage.setItem("JWT_TOKEN", res.data.token);
 };
 
 export const logout = () => dispatch => {
@@ -40,4 +41,5 @@ export const logout = () => dispatch => {
     type: AUTH_LOGOUT_SUCCESS,
     payload: ""
   });
+  //localStorage.removeItem("JWT_TOKEN");
 };

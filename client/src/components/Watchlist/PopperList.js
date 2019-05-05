@@ -1,21 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import Popper from "@material-ui/core/Popper";
-import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import Fade from "@material-ui/core/Fade";
-import Paper from "@material-ui/core/Paper";
 import {
   List,
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  Button,
+  Popper,
+  Fade,
+  Paper,
   IconButton,
-  Icon,
-  Divider
+  Icon
 } from "@material-ui/core";
-import { getMovies, deleteMovie } from "../../actions/watchListAction";
+import { getMovies, deleteMovie } from "../../actions/userWatchlistAction";
 import { connect } from "react-redux";
 import uuid from "uuid";
 
@@ -32,7 +30,7 @@ class PopperList extends React.Component {
   };
 
   componentDidMount() {
-    this.props.getMovies();
+    this.props.getMovies("1234");
   }
   /*
   componentDidUpdate(prevProps, previousState) {
@@ -44,10 +42,11 @@ class PopperList extends React.Component {
   */
 
   onDeleteClick = id => {
-    this.props.deleteMovie(id);
+    this.props.deleteMovie("1234", id);
   };
 
   handleClick = event => {
+    this.props.getMovies("1234");
     const { currentTarget } = event;
     this.setState(state => ({
       anchorEl: currentTarget,
@@ -56,7 +55,6 @@ class PopperList extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
     const { anchorEl, open } = this.state;
     const id = open ? "simple-popper" : null;
 

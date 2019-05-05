@@ -2,55 +2,34 @@ import React, { Component } from "react";
 import { Grid, Paper, InputBase, IconButton, Icon } from "@material-ui/core";
 import axios from "axios";
 import MovieResult from "../MovieResult/Movie-Result";
+import config from "../../config.json";
+import MovieInfo from "../MovieInfo/MovieInfo";
 
 class Search extends Component {
   state = {
     searchText: "",
     amount: 10,
-    apiUrl: "https://api.themoviedb.org/3/search/movie",
-    apiKey: "0d9a8d275e343ddfe2589947fe17d099",
-    imageUrl: "http://image.tmdb.org/t/p/w185/",
-    imageSizes: "w185",
     images: []
   };
 
   handleImageLoading() {
     this.setState({ imagesLoading: false });
   }
-
-  /*
-  onTextChange = e => {
-    this.setState({ [e.target.name]: e.target.value }, () => {
-      if (this.state.searchText.length > 0) {
-        axios
-          .get(
-            `${this.state.apiUrl}?api_key=${this.state.apiKey}&query=${
-              this.state.searchText
-            }&sort_by=popularity.desc&page=1`
-          )
-          .then(res => this.setState({ images: res.data.results }))
-          .catch(err => console.log(err));
-      } else {
-        return this.setState({ images: "" });
-      }
-    });
-  };
-  */
   onTextChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-    if (e.keyCode == 13) {
+    if (e.keyCode === 13) {
       if (this.state.searchText.length > 0) {
         axios
           .all([
             axios.get(
-              `${this.state.apiUrl}?api_key=${this.state.apiKey}&query=${
-                this.state.searchText
-              }&sort_by=popularity.desc&page=1`
+              `${config.themovieDB.apiUrl}?api_key=${
+                config.themovieDB.apiKey
+              }&query=${this.state.searchText}&sort_by=popularity.desc&page=1`
             ),
             axios.get(
-              `${this.state.apiUrl}?api_key=${this.state.apiKey}&query=${
-                this.state.searchText
-              }&sort_by=popularity.desc&page=2`
+              `${config.themovieDB.apiUrl}?api_key=${
+                config.themovieDB.apiKey
+              }&query=${this.state.searchText}&sort_by=popularity.desc&page=2`
             )
           ])
           .then(
@@ -80,7 +59,7 @@ class Search extends Component {
                 value={this.state.searchText}
                 onChange={this.onTextChange}
                 onKeyDown={e => {
-                  if (e.keyCode == 13) {
+                  if (e.keyCode === 13) {
                     this.onTextChange(e);
                   }
                 }}
@@ -104,7 +83,8 @@ class Search extends Component {
                   <MovieResult images={this.state.images} />
                 ) : (
                   <div>
-                    <h2>No results</h2>
+                    {/* Make a nice component for no results*/}
+                    <p>Nothing here</p>
                   </div>
                 )}
               </Paper>

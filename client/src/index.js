@@ -20,6 +20,15 @@ const theme = createMuiTheme({
       default: red
     },
     type: "dark"
+  },
+  overrides: {
+    BottomNavigationAction: {
+      // Name of the component ⚛️ / style sheet
+      text: {
+        // Name of the rule
+        color: "white" // Some CSS
+      }
+    }
   }
 });
 

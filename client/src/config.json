@@ -1,4 +1,10 @@
 {
   "GOOGLE_CLIENT_ID": "633539077918-96pod09f6qt61of3quqn7hmh6hm70d18.apps.googleusercontent.com",
-  "FACEBOOK_APP_ID": "409632523219900"
+  "FACEBOOK_APP_ID": "409632523219900",
+  "themovieDB": {
+    "apiUrl": "https://api.themoviedb.org/3/search/movie",
+    "apiKey": "0d9a8d275e343ddfe2589947fe17d099",
+    "imageUrl": "http://image.tmdb.org/t/p/",
+    "imageSizes": "w185/"
+  }
 }

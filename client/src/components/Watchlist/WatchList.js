@@ -9,7 +9,7 @@ import {
   Icon
 } from "@material-ui/core";
 
-import { getMovies, deleteMovie } from "../../actions/watchListAction";
+import { getMovies, deleteMovie } from "../../actions/userWatchlistAction";
 
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
@@ -17,19 +17,11 @@ import uuid from "uuid";
 
 class WatchList extends Component {
   componentDidMount() {
-    this.props.getMovies();
+    this.props.getMovies("1234");
   }
-  /*
-  componentDidUpdate(prevProps, previousState) {
-    //console.log(prevProps); //this.props.movie.movies
-    if (prevProps.movie.movies !== this.props.movie.movies) {
-      this.props.getMovies();
-    }
-  }
-  */
 
   onDeleteClick = id => {
-    this.props.deleteMovie(id);
+    this.props.deleteMovie("1234", id);
   };
 
   render() {

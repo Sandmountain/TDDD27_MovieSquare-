@@ -5,15 +5,13 @@ import {
   GridList,
   GridListTile,
   GridListTileBar,
-  CircularProgress,
   Icon
 } from "@material-ui/core";
 
 //Redux
 import { connect } from "react-redux";
-import { addMovie, getMovies } from "../../actions/watchListAction";
+import { addMovie, getMovies } from "../../actions/userWatchlistAction";
 import axios from "axios";
-import OnImagesLoaded from "react-on-images-loaded";
 
 class ImageResults extends Component {
   state = {
@@ -48,11 +46,16 @@ class ImageResults extends Component {
       movieGenre: genres
     };
 
-    //Add item via addItem Action
-
-    this.props.movie.movies.includes(newMovie.movieTitle)
-      ? console.log("exists")
-      : this.props.addMovie(newMovie);
+    //Add item via addItem Action if not in the wwatchlist
+    if (
+      this.props.movie.movies.filter(
+        movies => movies.movieTitle === img.original_title
+      ).length > 0
+    ) {
+      console.log("exists");
+    } else {
+      this.props.addMovie("1234", newMovie);
+    }
 
     //TODO: Change the star to filled...?
   };
@@ -80,11 +83,18 @@ class ImageResults extends Component {
         <GridList cols={5} cellHeight="auto">
           {images.map(img => (
             <GridListTile key={img.id}>
+              {/* Lägg in en hoverfunktion över bilderna likt plex (dvs en border i primaryColor)*/}
               <img
-                style={!this.state.imageLoading ? {} : { display: "none" }}
+                style={
+                  !this.state.imageLoading
+                    ? { cursor: "pointer" }
+                    : { display: "none" }
+                }
                 src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
                 alt=""
                 onLoad={() => this.setState({ imageLoading: false })}
+                // Länka vidare till MovieInfo
+                onClick={() => console.log(img)}
                 onError={e => {
                   this.setState({ imageLoading: false });
                   //Could give endless loop if not: e.target.onerror = null;
@@ -121,7 +131,7 @@ class ImageResults extends Component {
 
   //getting ids from database (could possibly be done localy instead)
   componentDidMount() {
-    this.props.getMovies();
+    this.props.getMovies("1234");
     axios
       .get(`${this.state.apiUrl}?api_key=${this.state.apiKey}&language=en-US`)
       .then(res => this.setState({ genres: res.data.genres }))

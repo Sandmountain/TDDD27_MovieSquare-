@@ -6,6 +6,8 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import config from "../../config.json";
 import axios from "axios";
+import { getMovieID } from "../../actions/movieInfoAction";
+import { connect } from "react-redux";
 
 //Flera resultat med append_to_respons=
 //http://api.themoviedb.org/3/movie/157336?api_key=0d9a8d275e343ddfe2589947fe17d099&append_to_response=videos
@@ -19,52 +21,6 @@ import axios from "axios";
 //Använda sig av OMDBapi:t för imdb score, rotten tomatoes etc...?
 // i= (imdbID som fås från andra apit) finns dock limit här på hur många queries som får göras...
 //http://www.omdbapi.com/?apikey=6f9b4562&i=tt4154796
-
-const movieExample = {
-  imageSRC: "http://image.tmdb.org/t/p/w342//or06FN3Dka5tukK1e9sl16pB3iy.jpg",
-  backdrop_path:
-    "http://image.tmdb.org/t/p/original//zuW6fOiusv4X9nnW3paHGfXcSll.jpg",
-  disc:
-    "After the devastating events of Avengers: Infinity War, the universe is in ruins due to the efforts of the Mad Titan, Thanos. With the help of remaining allies, the Avengers must assemble once more in order to undo Thanos' actions and restore order to the universe once and for all, no matter what consequences may be in store. ",
-  title: "Avengers: Endgame",
-  vote_average: "8.7",
-  year: "2019-04-24",
-  genre: ["Adventure", "Science Fiction", "Action"],
-  imdb: "tt4154796",
-  company: "Marvel Studios",
-  video: "url",
-  spokenLangugage: "en",
-  runtime: "181",
-  tagline: "Part of the journey is the end"
-};
-
-const similiar = [
-  {
-    imageSRC: "http://image.tmdb.org/t/p/w185//w2PMyoyLU22YvrGK3smVM9fW1jj.jpg",
-    title: "Captain Marvel",
-    id: 1
-  },
-  {
-    imageSRC: "http://image.tmdb.org/t/p/w185//6P3c80EOm7BodndGBUAJHHsHKrp.jpg",
-    title: "Ant-man and the Wasp",
-    id: 2
-  },
-  {
-    imageSRC: "http://image.tmdb.org/t/p/w185//bi4jh0Kt0uuZGsGJoUUfqmbrjQg.jpg",
-    title: "Zhazam!",
-    id: 3
-  },
-  {
-    imageSRC: "http://image.tmdb.org/t/p/w185//7d6EY00g1c39SGZOoCJ5Py9nNth.jpg",
-    title: "Spider-Man: Into the Spider-Verse",
-    id: 4
-  },
-  {
-    imageSRC: "http://image.tmdb.org/t/p/w185//bOGkgRGdhrBYJSLpXaxhXVstddV.jpg",
-    title: "Avengers: Infinity War",
-    id: 5
-  }
-];
 
 const styles = theme => ({
   foreGroundImage: {
@@ -101,12 +57,13 @@ class MovieInfo extends Component {
       data: []
     };
   }
-  getMovieInfo = () => {
-    let movieID = window.location.pathname.substring(
-      11,
-      window.location.pathname.length
-    );
 
+  componentDidMount() {
+    this.props.getMovieID();
+  }
+
+  getMovieInfo = () => {
+    let movieID = this.props.id;
     if (movieID !== "") {
       axios
         .get(
@@ -123,10 +80,7 @@ class MovieInfo extends Component {
 
   render() {
     const { classes } = this.props;
-    const { currentMovie } = this.state.data;
-    //const {}
-    //const { id } = this.props.id;
-    console.log(this.state.data);
+
     return (
       <Fragment>
         <Grid
@@ -258,7 +212,10 @@ class MovieInfo extends Component {
         <Divider />
         <Grid item sm={12}>
           <Divider />
-          <SimilarMovies similiar={similiar} style={{ overflow: "hide" }} />
+          <SimilarMovies
+            similiar={this.state.data.similar}
+            style={{ overflow: "hide" }}
+          />
         </Grid>
 
         <Grid item sm={12}>
@@ -270,10 +227,19 @@ class MovieInfo extends Component {
 }
 
 MovieInfo.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  getMovieID: PropTypes.func.isRequired,
+  id: PropTypes.string
 };
 
-export default withStyles(styles)(MovieInfo);
+const mapStateToProps = state => ({
+  id: state.movieID.id
+});
+
+export default connect(
+  mapStateToProps,
+  { getMovieID }
+)(withStyles(styles)(MovieInfo));
 
 /*
 mapStateToProps,

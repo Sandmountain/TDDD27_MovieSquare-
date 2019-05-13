@@ -31,7 +31,7 @@ const theme = createMuiTheme({
     },
     MuiExpansionPanelSummary: {
       content: {
-        margin: 0
+        margin: 2
       }
     }
   }

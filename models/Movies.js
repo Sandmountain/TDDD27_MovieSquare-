@@ -8,14 +8,31 @@ const movieSchema = new Schema({
     type: String,
     required: true
   },
-  movieGenre: Array,
   movieTitle: {
     type: String,
     required: true
   },
+  originalTitle: {
+    type: String
+  },
+  movieOverview: {
+    type: String
+  },
+  movieRating: {
+    type: String
+  },
+  movieLanguage: {
+    type: String
+  },
+  releaseDate: {
+    typ: String
+  },
+  movieGenre: Array,
   imgURL: {
-    type: String,
-    required: true
+    type: String
+  },
+  backdropURL: {
+    type: String
   },
   date: {
     type: Date,

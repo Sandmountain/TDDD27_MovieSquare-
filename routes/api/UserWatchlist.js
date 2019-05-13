@@ -4,8 +4,8 @@ const router = express.Router();
 const userWatchlist = require("../../models/UserWatchlist");
 const Movie = require("../../models/Movies");
 
-// @route  GET api/watchlist
-// @desc   Get all movies in watchlist
+// @route  GET api/userID/watchlist
+// @desc   Get all movies in the users watchlist
 // @access Public
 router.get("/userID/:id", async (req, res) => {
   const userID = req.params.id;
@@ -18,24 +18,28 @@ router.get("/userID/:id", async (req, res) => {
   }
 });
 
-// @route  POST api/watchlist
-// @desc   Add a  movie to watchlist
+// @route  POST api/userID/watchlist
+// @desc   Add a movie to the users watchlist
 // @access Public
 router.post("/userID/", async (req, res) => {
   //Creates the movie from the schema model
-  //userWatchlist.findOne(req.params.userID)
 
   const { userID, movie } = req.body;
 
   const user = await userWatchlist.findOne({ userID: userID });
-
   if (user) {
     const newMovie = new Movie({
       movieID: movie.movieID,
       movieTitle: movie.movieTitle,
       imgURL: movie.imgURL,
       movieGenre: movie.movieGenre,
-      movieName: movie.movieName
+      movieName: movie.movieName,
+      originalTitle: movie.movieTitle,
+      backdropURL: movie.backdropURL,
+      movieOverview: movie.overview,
+      movieRating: movie.rating,
+      movieLanguage: movie.language,
+      releaseDate: movie.releaseDate
     });
     user.watchlist.push(newMovie);
     user.save();
@@ -45,7 +49,13 @@ router.post("/userID/", async (req, res) => {
       movieTitle: movie.movieTitle,
       imgURL: movie.imgURL,
       movieGenre: movie.movieGenre,
-      movieName: movie.movieName
+      movieName: movie.movieName,
+      originalTitle: movie.movieTitle,
+      backdropURL: movie.backdropURL,
+      movieOverview: movie.overview,
+      movieRating: movie.rating,
+      movieLanguage: movie.language,
+      releaseDate: movie.releaseDate
     });
     const newUserWatchlist = new userWatchlist({
       userID: userID,
@@ -56,8 +66,8 @@ router.post("/userID/", async (req, res) => {
   }
 });
 
-// @route  DELETE api/watchlist
-// @desc   Delete a movie in watchlist
+// @route  DELETE api/userID/watchlist
+// @desc   Delete a movie in the users watchlist
 // @access Public
 router.delete("/userID/", async (req, res) => {
   const { userID, id } = req.body;
@@ -66,6 +76,52 @@ router.delete("/userID/", async (req, res) => {
   if (user) {
     user.watchlist.pull({ _id: id });
     user.save().then(UserWatchlist => res.json(user.watchlist));
+  }
+});
+
+// @route  GET api/userID/history
+// @desc   Get all movies in the users history
+// @access Public
+router.get("/userID/history/:id", async (req, res) => {
+  const userID = req.params.id;
+
+  const user = await userWatchlist.findOne({ userID: userID });
+  if (user) {
+    res.json(user.history);
+  } else {
+    res.json("");
+  }
+});
+
+// @route  POST api/userID/history
+// @desc   Add a movie to the users history
+// @access Public
+router.post("/userID/history", async (req, res) => {
+  //Creates the movie from the schema model
+
+  const { userID, movie } = req.body;
+  const user = await userWatchlist.findOne({ userID: userID });
+
+  if (user) {
+    const newMovie = new Movie({
+      movieID: movie.movieID,
+      movieTitle: movie.movieTitle,
+      imgURL: movie.imgURL,
+      movieGenre: movie.movieGenre,
+      movieName: movie.movieName,
+      originalTitle: movie.movieTitle,
+      backdropURL: movie.backdropURL,
+      movieOverview: movie.overview,
+      movieRating: movie.rating,
+      movieLanguage: movie.language,
+      releaseDate: movie.releaseDate
+    });
+    user.history.push(newMovie);
+    user.save();
+  } else {
+    return res
+      .status(404)
+      .json({ msg: "Unexcpected error, are you logged in?" });
   }
 });
 

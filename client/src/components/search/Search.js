@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Grid, Paper, InputBase, IconButton, Icon } from "@material-ui/core";
 import axios from "axios";
 import MovieResult from "../MovieResult/Movie-Result";
@@ -82,10 +82,10 @@ class Search extends Component {
                 {this.state.images.length > 0 ? (
                   <MovieResult images={this.state.images} />
                 ) : (
-                  <div>
+                  <Fragment>
                     {/* Make a nice component for no results*/}
-                    <p>Nothing here</p>
-                  </div>
+                    <MovieInfo />
+                  </Fragment>
                 )}
               </Paper>
             </Paper>

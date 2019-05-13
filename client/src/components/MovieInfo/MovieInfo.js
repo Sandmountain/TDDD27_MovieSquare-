@@ -2,6 +2,10 @@ import React, { Component, Fragment } from "react";
 import { Grid, Typography, Divider, Icon, Fab } from "@material-ui/core";
 import SimilarMovies from "./SimiliarMovies";
 import BottomNavBar from "./BottomNavBar";
+import PropTypes from "prop-types";
+import { withStyles } from "@material-ui/core/styles";
+import config from "../../config.json";
+import axios from "axios";
 
 //Flera resultat med append_to_respons=
 //http://api.themoviedb.org/3/movie/157336?api_key=0d9a8d275e343ddfe2589947fe17d099&append_to_response=videos
@@ -28,7 +32,10 @@ const movieExample = {
   genre: ["Adventure", "Science Fiction", "Action"],
   imdb: "tt4154796",
   company: "Marvel Studios",
-  video: "url"
+  video: "url",
+  spokenLangugage: "en",
+  runtime: "181",
+  tagline: "Part of the journey is the end"
 };
 
 const similiar = [
@@ -59,16 +66,19 @@ const similiar = [
   }
 ];
 
-const styles = {
+const styles = theme => ({
   foreGroundImage: {
     position: "relative",
     zIndex: "5",
     padding: "12px "
   },
   backdropStyle: {
-    width: "auto",
-    opacity: "0.2",
-    zIndex: 0
+    position: "absolute",
+    zIndex: 1,
+    flexShrink: "0",
+    maxWidth: "100%",
+    minHeight: "100%",
+    opacity: "0.2"
   },
   fabButtons: {
     marginRight: 10
@@ -81,125 +91,191 @@ const styles = {
     alignItems: "center",
     overflow: "hidden"
   }
-};
-/*
+});
 
-*/
+class MovieInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.getMovieInfo();
+    this.state = {
+      data: []
+    };
+  }
+  getMovieInfo = () => {
+    let movieID = window.location.pathname.substring(
+      11,
+      window.location.pathname.length
+    );
 
-export default class MovieInfo extends Component {
+    if (movieID !== "") {
+      axios
+        .get(
+          `${config.themovieDB.movieURL}/${movieID}?api_key=${
+            config.themovieDB.apiKey
+          }&append_to_response=credits,videos,similar`
+        )
+        .then(res => {
+          this.setState({ data: res.data });
+          //console.log(res.data);
+        });
+    }
+  };
+
   render() {
+    const { classes } = this.props;
+    const { currentMovie } = this.state.data;
+    //const {}
+    //const { id } = this.props.id;
+    console.log(this.state.data);
     return (
       <Fragment>
         <Grid
-          container
+          item
           style={{
+            borderTopLeftRadius: "5px",
+            borderTopRightRadius: "5px",
             position: "relative",
             overflow: "hidden",
             minHeight: "100%"
           }}
         >
           <img
-            src={movieExample.backdrop_path}
+            src={`http://image.tmdb.org/t/p/original/${
+              this.state.data.backdrop_path
+            }`}
             alt="img"
-            style={{
-              position: "absolute",
-              zIndex: 1,
-              flexShrink: "0",
-              maxWidth: "100%",
-              minHeight: "100%",
-              opacity: "0.2"
-            }}
+            className={classes.backdropStyle}
           />
-
-          <Grid item xs={3} style={styles.foreGroundImage}>
-            <img
-              alt="img"
-              style={{
-                maxWidth: "90%",
-                height: "auto",
-
-                boxShadow: "0px 0px 5px 1px rgba(0,0,0,0.75)"
-              }}
-              src={movieExample.imageSRC}
-            />
-          </Grid>
-          <Grid item xs={9} style={styles.foreGroundImage}>
-            <Typography
-              color="primary"
-              variant="h3"
-              display="block"
-              style={{ opacity: 1, zIndex: "2" }}
-            >
-              {movieExample.title}
-            </Typography>
-            <Typography color="inherit" variant="subtitle2">
-              {movieExample.year}{" "}
-              <Typography color="inherit" align="right">
-                {movieExample.genre + " "}
+          <Grid container>
+            <Grid item sm={3} className={classes.foreGroundImage}>
+              <img
+                alt="img"
+                style={{
+                  maxWidth: "90%",
+                  height: "auto",
+                  boxShadow: "0px 0px 5px 1px rgba(0,0,0,0.75)"
+                }}
+                src={`http://image.tmdb.org/t/p/w185/${
+                  this.state.data.poster_path
+                }`}
+              />
+            </Grid>
+            <Grid item sm={9} className={classes.foreGroundImage}>
+              <Typography
+                color="primary"
+                variant="h3"
+                display="block"
+                style={{ opacity: 1, zIndex: "2" }}
+              >
+                {this.state.data.title}
               </Typography>
-            </Typography>
+              <Typography color="inherit" variant="subtitle2" gutterBottom>
+                Released {this.state.data.year}{" "}
+              </Typography>
+              <Typography
+                color="inherit"
+                align="right"
+                variant="subtitle2"
+                gutterBottom
+              >
+                {this.state.data.genres + " "} | {this.state.data.runtime}min |{" "}
+                {this.state.data.original_language}
+              </Typography>
 
-            <Divider style={{ marginTop: 10, marginBottom: 10 }} />
+              <Divider style={{ marginTop: 10, marginBottom: 10 }} />
 
-            <Fab
-              size="medium"
-              color="secondary"
-              aria-label="Edit"
-              variant="extended"
-              style={styles.fabButtons}
-            >
-              <b>{movieExample.vote_average}</b>
-            </Fab>
-            <Fab
-              size="small"
-              color="primary"
-              aria-label="Edit"
-              style={styles.fabButtons}
-            >
-              <Icon>playlist_add</Icon>
-            </Fab>
-            <Fab
-              size="small"
-              color="primary"
-              aria-label="Edit"
-              style={styles.fabButtons}
-            >
-              <Icon>home</Icon>
-            </Fab>
-            <Fab
-              size="small"
-              color="primary"
-              aria-label="Edit"
-              style={styles.fabButtons}
-            >
-              <Icon>play_arrow</Icon>
-            </Fab>
+              <Fab
+                size="medium"
+                color="secondary"
+                aria-label="Edit"
+                variant="extended"
+                className={classes.fabButtons}
+              >
+                <b>{this.state.data.vote_average}</b>
+              </Fab>
+              <Fab
+                size="small"
+                color="primary"
+                aria-label="Edit"
+                className={classes.fabButtons}
+              >
+                <Icon>playlist_add</Icon>
+              </Fab>
+              <Fab
+                size="small"
+                color="primary"
+                aria-label="Edit"
+                className={classes.fabButtons}
+              >
+                <Icon>home</Icon>
+              </Fab>
+              <Fab
+                size="small"
+                color="primary"
+                aria-label="Edit"
+                className={classes.fabButtons}
+              >
+                <Icon>play_arrow</Icon>
+              </Fab>
 
-            <Divider style={{ marginTop: 10, marginBottom: 10 }} />
-            <Typography color="inherit" variant="h6">
-              Overview
-            </Typography>
-            <Typography color="inherit" variant="body1">
-              {movieExample.disc}
-            </Typography>
+              <Divider style={{ marginTop: 10, marginBottom: 10 }} />
+              <Typography color="inherit" variant="h6">
+                Overview
+              </Typography>
+              <Typography color="inherit" variant="body1">
+                {this.state.data.overview}
+              </Typography>
+              <Divider style={{ marginBottom: "20px" }} />
+
+              <Grid item sm={12}>
+                <Typography color="inherit" variant="body1">
+                  <b>Directors:</b> Joe Russo, Anthony Russo
+                </Typography>
+                <Typography color="inherit" variant="body1">
+                  <b>Writers:</b> Joe Russo, Anthony Russo
+                </Typography>
+                <Typography color="inherit" variant="body1">
+                  <b>Cast:</b> Joe Russo, Anthony Russo
+                </Typography>
+                {this.state.data.tagline ? (
+                  <Fragment>
+                    <Divider style={{ marginTop: "20px" }} />
+                    <Typography
+                      color="inherit"
+                      variant="inherit"
+                      style={{ paddingLeft: "50px", fontStyle: "italic" }}
+                    >
+                      "{this.state.data.tagline}..."
+                    </Typography>
+                  </Fragment>
+                ) : (
+                  <div />
+                )}
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
         <Divider />
-        <Grid container>
-          <Typography color="primary" variant="h6">
-            Similar movies
-          </Typography>
+        <Grid item sm={12}>
           <Divider />
-          <Grid item sm={12}>
-            <SimilarMovies similiar={similiar} style={{ overflow: "hide" }} />
-          </Grid>
+          <SimilarMovies similiar={similiar} style={{ overflow: "hide" }} />
         </Grid>
-        <BottomNavBar />
+
+        <Grid item sm={12}>
+          <BottomNavBar />
+        </Grid>
       </Fragment>
     );
   }
 }
 
-/*
+MovieInfo.propTypes = {
+  classes: PropTypes.object.isRequired
+};
 
+export default withStyles(styles)(MovieInfo);
+
+/*
+mapStateToProps,
+  { getMovies, deleteMovie }
 */

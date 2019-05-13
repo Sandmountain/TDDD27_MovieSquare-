@@ -4,7 +4,7 @@ import axios from "axios";
 import rootReducer from "./reducers";
 
 const jwtToken = localStorage.getItem("JWT_TOKEN");
-axios.defaults.headers.common["x-auth-token"] = jwtToken;
+//axios.defaults.headers.common["x-auth-token"] = jwtToken;
 
 const initalState = {
   auth: {

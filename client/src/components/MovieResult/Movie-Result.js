@@ -8,6 +8,9 @@ import {
   Icon
 } from "@material-ui/core";
 
+import imageDiv from "./movieResult.css";
+import { Link } from "react-router-dom";
+
 //Redux
 import { connect } from "react-redux";
 import { addMovie, getMovies } from "../../actions/userWatchlistAction";
@@ -39,20 +42,29 @@ class ImageResults extends Component {
         }
       }
     }
+    console.log(img);
     const newMovie = {
       movieID: img.id,
       imgURL: img.poster_path ? img.poster_path : require("./error.png"),
       movieTitle: img.original_title,
+      title: img.title,
+      backdropURL: img.backdrop_path,
+      overview: img.overview,
+      rating: img.vote_average,
+      language: img.original_language,
+      releaseDate: img.release_date,
       movieGenre: genres
     };
 
     //Add item via addItem Action if not in the wwatchlist
-    if (
-      this.props.movie.movies.filter(
-        movies => movies.movieTitle === img.original_title
-      ).length > 0
-    ) {
-      console.log("exists");
+    if (this.props.movie.movies.length < 0) {
+      if (
+        this.props.movie.movies.filter(
+          movies => movies.movieTitle === img.original_title
+        ).length > 0
+      ) {
+        console.log("exists");
+      }
     } else {
       this.props.addMovie("1234", newMovie);
     }
@@ -84,23 +96,31 @@ class ImageResults extends Component {
           {images.map(img => (
             <GridListTile key={img.id}>
               {/* Lägg in en hoverfunktion över bilderna likt plex (dvs en border i primaryColor)*/}
-              <img
-                style={
-                  !this.state.imageLoading
-                    ? { cursor: "pointer" }
-                    : { display: "none" }
-                }
-                src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
-                alt=""
-                onLoad={() => this.setState({ imageLoading: false })}
-                // Länka vidare till MovieInfo
-                onClick={() => console.log(img)}
-                onError={e => {
-                  this.setState({ imageLoading: false });
-                  //Could give endless loop if not: e.target.onerror = null;
-                  e.target.src = require("./error.png");
+              <Link
+                to={{
+                  pathname: `/movieInfo/${img.id}`
                 }}
-              />
+              >
+                <img
+                  style={
+                    !this.state.imageLoading
+                      ? { cursor: "pointer" }
+                      : { display: "none" }
+                  }
+                  className="imageDiv"
+                  src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
+                  alt=""
+                  onLoad={() => this.setState({ imageLoading: false })}
+                  // Länka vidare till MovieInfo
+                  onClick={() => console.log(img)}
+                  onError={e => {
+                    this.setState({ imageLoading: false });
+                    //Could give endless loop if not: e.target.onerror = null;
+                    e.onError = null;
+                    e.target.src = require("./error.png");
+                  }}
+                />
+              </Link>
               <GridListTileBar
                 title={img.original_title}
                 key={img.id}

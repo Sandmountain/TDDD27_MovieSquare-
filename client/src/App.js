@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { BrowserRouter, Route } from "react-router-dom";
 import { Provider } from "react-redux";
+import "./App.css";
 
 //** Original **/
 import NavBar from "./components/NavBar/NavBar";
@@ -10,6 +11,7 @@ import WatchList from "./components/Watchlist/WatchList";
 import LoginPage from "./components/LoginPage";
 import Profile from "./components/Profile";
 import ParentComponent from "./components/HOCs/jwtAuthGuard";
+import MovieInfo from "./components/MovieInfo/MovieInfo";
 
 class App extends Component {
   render() {
@@ -29,6 +31,10 @@ class App extends Component {
             }}
           />
           <Route path="/watchlist" exact component={WatchList} />
+          <Route
+            path="/movieinfo/"
+            render={props => <MovieInfo {...props} />}
+          />
           <Route path="/loginpage" exact component={LoginPage} />
           <Route path="/profile" exact component={ParentComponent(Profile)} />
         </BrowserRouter>

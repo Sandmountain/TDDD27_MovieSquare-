@@ -28,11 +28,14 @@ const theme = createMuiTheme({
         // Name of the rule
         color: "white" // Some CSS
       }
+    },
+    MuiExpansionPanelSummary: {
+      content: {
+        margin: 0
+      }
     }
   }
 });
-
-console.log(theme);
 
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>

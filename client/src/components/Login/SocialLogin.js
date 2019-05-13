@@ -1,10 +1,13 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
-import config from "../config.json";
+import config from "../../config.json";
 import { connect } from "react-redux";
-import { oauthGoogle, oauthFacebook, logout } from "../actions/authActions";
+import { oauthGoogle, oauthFacebook, logout } from "../../actions/authActions";
 import PropTypes from "prop-types";
+import { IconButton } from "@material-ui/core";
+
+import "./style.css";
 
 class SocialLogin extends Component {
   static propTypes = {
@@ -36,20 +39,26 @@ class SocialLogin extends Component {
         {this.props.isAuthenticated ? (
           <button onClick={this.onClick}>Log out</button>
         ) : (
-          <div>
-            <FacebookLogin
-              appId={config.FACEBOOK_APP_ID}
-              autoLoad={false}
-              fields="name,email,picture"
-              callback={this.facebookResponse}
-            />
-            <GoogleLogin
-              clientId={config.GOOGLE_CLIENT_ID}
-              buttonText="Login"
-              onSuccess={this.googleResponse}
-              onFailure={this.googleResponse}
-            />
-          </div>
+          <Fragment>
+            <div>
+              <FacebookLogin
+                appId={config.FACEBOOK_APP_ID}
+                autoLoad={false}
+                fields="name,email,picture"
+                cssClass="btnFacebook"
+                callback={this.facebookResponse}
+              />
+            </div>
+            <div>
+              <GoogleLogin
+                clientId={config.GOOGLE_CLIENT_ID}
+                buttonText="Login with Google"
+                className="btnGoogle"
+                onSuccess={this.googleResponse}
+                onFailure={this.googleResponse}
+              />
+            </div>
+          </Fragment>
         )}
       </div>
     );

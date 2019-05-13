@@ -3,14 +3,12 @@ import {
   Grid,
   Fab,
   IconButton,
-  Button,
   Icon,
   Avatar,
   Divider
 } from "@material-ui/core";
-
 import { getMovies, deleteMovie } from "../../actions/userWatchlistAction";
-
+import { setMovieID } from "../../actions/movieInfoAction";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
@@ -22,10 +20,6 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-
-const movieInfoLink = () => (
-  <Link to={"/movieInfo" + this.state.clickedMovieId} />
-);
 
 const styles = theme => ({
   root: {
@@ -73,7 +67,9 @@ class WatchList extends Component {
   };
 
   goToMovie = (event, id) => {
+    this.props.setMovieID(id);
     this.setState({ clickedMovieId: id });
+
     event.stopPropagation();
   };
 
@@ -117,7 +113,7 @@ class WatchList extends Component {
                       <IconButton
                         //component={movieInfoLink}
                         style={{ padding: 5 }}
-                        onClick={e => this.goToMovie(e, movieID)}
+                        onClick={() => this.props.setMovieID(movieID)}
                       >
                         <Avatar
                           size="medium"
@@ -205,11 +201,14 @@ class WatchList extends Component {
 WatchList.propTypes = {
   getMovies: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
+  setMovieID: PropTypes.func.isRequired,
+  id: PropTypes.number,
   classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => ({
   movie: state.movie,
+  id: state.movieID.id,
   isAuthenticated: state.auth.isAuthenticated
 });
 
@@ -232,7 +231,7 @@ const favoriteGenre = movies => {
 
 export default connect(
   mapStateToProps,
-  { getMovies, deleteMovie }
+  { getMovies, deleteMovie, setMovieID }
 )(withStyles(styles)(WatchList));
 
 /*import React, { Component, Fragment } from "react";

@@ -10,4 +10,4 @@ export const AUTH_ERROR = "AUTH_ERROR";
 
 //MovieID
 export const GET_MOVIEINFO_ID = "GET_MOVIEINFO_ID";
-export const STORE_MOVIEINFO_ID = "STORE_MOVIEINFO_ID";
+export const SET_MOVIEINFO_ID = "SET_MOVIEINFO_ID";

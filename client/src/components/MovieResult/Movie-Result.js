@@ -7,8 +7,7 @@ import {
   GridListTileBar,
   Icon
 } from "@material-ui/core";
-
-import imageDiv from "./movieResult.css";
+import { setMovieID } from "../../actions/movieInfoAction";
 import { Link } from "react-router-dom";
 
 //Redux
@@ -42,7 +41,6 @@ class ImageResults extends Component {
         }
       }
     }
-    console.log(img);
     const newMovie = {
       movieID: img.id,
       imgURL: img.poster_path ? img.poster_path : require("./error.png"),
@@ -112,7 +110,7 @@ class ImageResults extends Component {
                   alt=""
                   onLoad={() => this.setState({ imageLoading: false })}
                   // Länka vidare till MovieInfo
-                  onClick={() => console.log(img)}
+                  onClick={() => this.props.setMovieID(img.id)}
                   onError={e => {
                     this.setState({ imageLoading: false });
                     //Could give endless loop if not: e.target.onerror = null;
@@ -162,7 +160,9 @@ class ImageResults extends Component {
 ImageResults.propTypes = {
   images: PropTypes.array.isRequired,
   getMovies: PropTypes.func.isRequired,
-  movie: PropTypes.object.isRequired
+  movie: PropTypes.object.isRequired,
+  setMovieID: PropTypes.func.isRequired,
+  id: PropTypes.number
 };
 
 /*
@@ -173,10 +173,11 @@ var gridTileStyle = {
 };
 */
 const mapStateToProps = state => ({
-  movie: state.movie
+  movie: state.movie,
+  id: state.movieID.id
 });
 
 export default connect(
   mapStateToProps,
-  { addMovie, getMovies }
+  { addMovie, getMovies, setMovieID }
 )(ImageResults);

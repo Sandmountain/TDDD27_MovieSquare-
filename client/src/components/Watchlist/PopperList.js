@@ -30,7 +30,7 @@ class PopperList extends React.Component {
   };
 
   componentDidMount() {
-    this.props.getMovies("1234");
+    this.props.getMovies(this.props.userID);
   }
   /*
   componentDidUpdate(prevProps, previousState) {
@@ -42,11 +42,11 @@ class PopperList extends React.Component {
   */
 
   onDeleteClick = id => {
-    this.props.deleteMovie("1234", id);
+    this.props.deleteMovie(this.props.userID, id);
   };
 
   handleClick = event => {
-    this.props.getMovies("1234");
+    this.props.getMovies(this.props.userID);
     const { currentTarget } = event;
     this.setState(state => ({
       anchorEl: currentTarget,
@@ -99,13 +99,15 @@ class PopperList extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  movie: state.movie
+  movie: state.movie,
+  userID: state.auth.userID
 });
 
 PopperList.propTypes = {
   classes: PropTypes.object.isRequired,
   getMovies: PropTypes.func.isRequired,
-  movie: PropTypes.object.isRequired
+  movie: PropTypes.object.isRequired,
+  userID: PropTypes.string
 };
 
 export default connect(

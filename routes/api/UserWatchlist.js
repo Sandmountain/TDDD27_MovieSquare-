@@ -23,6 +23,7 @@ router.get("/userID/:id", async (req, res) => {
 // @access Public
 router.post("/userID/", async (req, res) => {
   //Creates the movie from the schema model
+  console.log("hello");
 
   const { userID, movie } = req.body;
 

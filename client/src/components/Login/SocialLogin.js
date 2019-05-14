@@ -10,7 +10,9 @@ import PropTypes from "prop-types";
 import { Button } from "@material-ui/core";
 
 import "./style.css";
+
 const homeLink = props => <Link to="/home" {...props} />;
+
 class SocialLogin extends Component {
   state = {
     isLoaded: false

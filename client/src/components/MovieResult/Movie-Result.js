@@ -64,6 +64,8 @@ class ImageResults extends Component {
         console.log("exists");
       }
     } else {
+      console.log("Should add movie");
+
       this.props.addMovie(this.props.userID, newMovie);
     }
 

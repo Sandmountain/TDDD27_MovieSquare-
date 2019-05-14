@@ -59,11 +59,11 @@ class WatchList extends Component {
     clickedMovieId: ""
   };
   componentDidMount() {
-    this.props.getMovies("1234");
+    this.props.getMovies(this.props.userID);
   }
 
   onDeleteClick = id => {
-    this.props.deleteMovie("1234", id);
+    this.props.deleteMovie(this.props.userID, id);
   };
 
   goToMovie = (event, id) => {
@@ -203,13 +203,15 @@ WatchList.propTypes = {
   movie: PropTypes.object.isRequired,
   setMovieID: PropTypes.func.isRequired,
   id: PropTypes.number,
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  userID: PropTypes.string
 };
 
 const mapStateToProps = state => ({
   movie: state.movie,
   id: state.movieID.id,
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  userID: state.auth.userID
 });
 
 const favoriteGenre = movies => {

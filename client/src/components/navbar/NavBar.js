@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import {
   Toolbar,
   AppBar,
@@ -10,6 +10,7 @@ import {
 import MenuIcon from "@material-ui/icons/Menu";
 import { withStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+import { withRouter } from "react-router";
 import PropTypes from "prop-types";
 import PopperList from "../Watchlist/PopperList";
 import { connect } from "react-redux";
@@ -42,7 +43,14 @@ class NavBar extends Component {
     console.log("You are now logged out");
 
     await this.props.logout();
+    this.isUserAuthenticated();
   };
+
+  isUserAuthenticated() {
+    if (!this.props.isAuthenticated || !this.props.token) {
+      this.props.history.push("/");
+    }
+  }
 
   render() {
     const { classes } = this.props;
@@ -65,20 +73,22 @@ class NavBar extends Component {
                 <Icon>lock</Icon>
               </Button>
             ) : (
-              <Button onClick={this.logoutButton}>
-                <text>Log out</text>
-              </Button>
+              <Fragment>
+                <Button onClick={this.logoutButton}>
+                  <text>Log out</text>
+                </Button>
+                <Button component={watchListLink} color="inherit">
+                  <Icon>playlist_play</Icon>
+                </Button>
+                <Button component={homeLink} color="inherit">
+                  <Icon>home</Icon>
+                </Button>
+                <Button component={profileLink} color="inherit">
+                  <Icon>account_circle</Icon>
+                </Button>
+              </Fragment>
             )}
 
-            <Button component={watchListLink} color="inherit">
-              <Icon>playlist_play</Icon>
-            </Button>
-            <Button component={homeLink} color="inherit">
-              <Icon>home</Icon>
-            </Button>
-            <Button component={profileLink} color="inherit">
-              <Icon>account_circle</Icon>
-            </Button>
             <PopperList />
           </Toolbar>
         </AppBar>
@@ -96,7 +106,9 @@ NavBar.propTypes = {
   logout: PropTypes.func
 };
 
-export default connect(
-  mapStateToProps,
-  { logout }
-)(withStyles(styles)(NavBar));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { logout }
+  )(withStyles(styles)(NavBar))
+);

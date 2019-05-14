@@ -1,15 +1,20 @@
 import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router";
 import FacebookLogin from "react-facebook-login";
 import GoogleLogin from "react-google-login";
 import config from "../../config.json";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { oauthGoogle, oauthFacebook, logout } from "../../actions/authActions";
 import PropTypes from "prop-types";
-import { IconButton } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 import "./style.css";
-
+const homeLink = props => <Link to="/home" {...props} />;
 class SocialLogin extends Component {
+  state = {
+    isLoaded: false
+  };
   static propTypes = {
     oauthGoogle: PropTypes.func,
     errorMessage: PropTypes.string,
@@ -17,27 +22,36 @@ class SocialLogin extends Component {
     logout: PropTypes.func
   };
 
-  onClick = async () => {
-    console.log("Logout senor");
-    await this.props.logout();
-  };
+  isUserAuthenticated() {
+    if (this.props.isAuthenticated || this.props.token) {
+      this.props.history.push("/home");
+    }
+  }
 
   facebookResponse = async response => {
     console.log("facebook response", response);
+
     await this.props.oauthFacebook(response.accessToken);
+
+    await this.isUserAuthenticated();
   };
 
   googleResponse = async response => {
     console.log("google response", response);
 
     await this.props.oauthGoogle(response.accessToken);
+    await this.isUserAuthenticated();
   };
 
   render() {
     return (
       <div className="SocialLogin">
         {this.props.isAuthenticated ? (
-          <button onClick={this.onClick}>Log out</button>
+          <Fragment>
+            <Button component={homeLink} color="inherit">
+              Proceed to MovieSquare
+            </Button>
+          </Fragment>
         ) : (
           <Fragment>
             <div>
@@ -67,10 +81,13 @@ class SocialLogin extends Component {
 
 const mapStateToProps = state => ({
   errorMessage: state.auth.errorMessage,
-  isAuthenticated: state.auth.isAuthenticated
+  isAuthenticated: state.auth.isAuthenticated,
+  token: state.auth.token
 });
 
-export default connect(
-  mapStateToProps,
-  { oauthGoogle, oauthFacebook, logout }
-)(SocialLogin);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { oauthGoogle, oauthFacebook, logout }
+  )(SocialLogin)
+);

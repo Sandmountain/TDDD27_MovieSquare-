@@ -10,11 +10,12 @@ export const oauthGoogle = data => async dispatch => {
   console.log("res oauthGoogle post", res);
   dispatch({
     type: AUTH_LOGIN_SUCCESS,
-    payload: res.data.token
+    payload: res.data
   });
 
   //localStorage.setItem("JWT_TOKEN", res.data.token);
   console.log("JWT token google", res.data.token);
+  console.log("User ID", res.data.tempUserID);
 };
 
 export const oauthFacebook = data => async dispatch => {
@@ -28,9 +29,10 @@ export const oauthFacebook = data => async dispatch => {
   console.log("res oauthFacebook post", res);
   dispatch({
     type: AUTH_LOGIN_SUCCESS,
-    payload: res.data.token
+    payload: res.data
   });
   console.log("JWT token facebook", res.data.token);
+  console.log("User ID", res.data.tempUserID);
 
   //localStorage.setItem("JWT_TOKEN", res.data.token);
 };

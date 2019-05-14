@@ -12,7 +12,7 @@ import LoginPage from "./components/Login/LoginPage";
 import SearchPage from "./components/Search/SearchPage";
 import Profile from "./components/Profile";
 import ParentComponent from "./components/HOCs/jwtAuthGuard";
-import MovieInfo from "./components/MovieInfo/MovieInfo";
+import MovieInfoMainBody from "./components/MovieInfo/MovieInfoMainBody";
 
 class App extends Component {
   render() {
@@ -28,7 +28,7 @@ class App extends Component {
           />
           <Route
             path="/movieinfo/"
-            render={props => <MovieInfo {...props} />}
+            render={props => <MovieInfoMainBody {...props} />}
           />
           <Route path="/" exact component={LoginPage} />
           <Route path="/profile" exact component={ParentComponent(Profile)} />

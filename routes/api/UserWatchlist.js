@@ -14,7 +14,7 @@ router.get("/userID/:id", async (req, res) => {
   if (user) {
     res.json(user.watchlist);
   } else {
-    res.json("");
+    //res.json("");
   }
 });
 
@@ -43,7 +43,7 @@ router.post("/userID/", async (req, res) => {
       releaseDate: movie.releaseDate
     });
     user.watchlist.push(newMovie);
-    user.save();
+    await user.save();
   } else {
     const newMovie = new Movie({
       movieID: movie.movieID,

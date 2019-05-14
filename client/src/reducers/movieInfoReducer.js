@@ -1,7 +1,7 @@
 import { GET_MOVIEINFO_ID, SET_MOVIEINFO_ID } from "../actions/types";
 
 const initialState = {
-  id: "157336"
+  id: "299534"
 };
 
 export default function(state = initialState, action) {

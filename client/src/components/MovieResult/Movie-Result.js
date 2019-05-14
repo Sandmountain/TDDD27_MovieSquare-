@@ -80,7 +80,7 @@ class ImageResults extends Component {
           genres[i] = this.state.genres[i].name;
       }
     }
-    //console.log(genres);
+
     return genres;
   };
 
@@ -104,12 +104,12 @@ class ImageResults extends Component {
                 <img
                   style={
                     !this.state.imageLoading
-                      ? { cursor: "pointer" }
-                      : { display: "none" }
+                      ? { cursor: "pointer", height: "100%", width: "100%" }
+                      : { display: "none", height: "100%", width: "100%" }
                   }
                   className="imageDiv"
                   src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
-                  alt=""
+                  alt="Movie Poster"
                   onLoad={() => this.setState({ imageLoading: false })}
                   // Länka vidare till MovieInfo
                   onClick={() => this.props.setMovieID(img.id)}
@@ -168,13 +168,6 @@ ImageResults.propTypes = {
   userID: PropTypes.string
 };
 
-/*
-var gridTileStyle = {
-  height: "100% !important",
-  paddingTop: 5,
-  backgroundColor: "#fff"
-};
-*/
 const mapStateToProps = state => ({
   movie: state.movie,
   id: state.movieID.id,

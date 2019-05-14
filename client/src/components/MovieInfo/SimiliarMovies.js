@@ -17,16 +17,24 @@ function SimiliarMovies(similar) {
     ? (similarResults = similar.similiar.results.slice(0, 5))
     : (similarResults = null);
 
-  console.log(similarResults);
   return similar.similiar ? (
     <div>
       <GridList cols={5}>
         {similarResults.map(img => (
           <GridListTile key={uuid()}>
-            <img
-              src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
-              alt=""
-            />
+            {img.poster_path ? (
+              <img
+                src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
+                alt=""
+                onError={e => {
+                  this.onerror = null;
+                  e.target.src = require("./error.png");
+                }}
+              />
+            ) : (
+              <img src={require("./error.png")} alt="" />
+            )}
+
             <GridListTileBar
               title={img.title}
               key={img.id}

@@ -3,7 +3,11 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core";
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  CssBaseline
+} from "@material-ui/core";
 import { red, amber, grey } from "@material-ui/core/colors";
 
 const theme = createMuiTheme({

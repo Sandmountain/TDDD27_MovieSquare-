@@ -34,7 +34,6 @@ function SimiliarMovies(similar) {
             ) : (
               <img src={require("./error.png")} alt="" />
             )}
-
             <GridListTileBar
               title={img.title}
               key={img.id}

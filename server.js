@@ -7,6 +7,7 @@ const cors = require("cors");
 const watchlist = require("./routes/api/watchlist");
 const users = require("./routes/api/users");
 const userWatchlist = require("./routes/api/UserWatchlist");
+const searchMovies = require("./routes/api/SearchMovies");
 
 const app = express();
 
@@ -26,6 +27,7 @@ mongoose
 
 app.use("/api/watchlist", watchlist);
 app.use("/api/users", users);
+app.use("/api/SearchMovies", searchMovies);
 app.use("/api/UserWatchlist", userWatchlist);
 
 const PORT = process.env.PORT || 5000;

@@ -11,6 +11,9 @@ import {
 import { red, amber, grey } from "@material-ui/core/colors";
 
 const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
   palette: {
     primary: {
       main: grey[800]

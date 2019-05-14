@@ -164,7 +164,7 @@ ImageResults.propTypes = {
   getMovies: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
   setMovieID: PropTypes.func.isRequired,
-  id: PropTypes.number,
+  id: PropTypes.string,
   userID: PropTypes.string
 };
 

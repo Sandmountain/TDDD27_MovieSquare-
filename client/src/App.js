@@ -6,10 +6,10 @@ import "./App.css";
 //** Original **/
 import NavBar from "./components/Navbar/NavBar";
 import Search from "./components/Search/Search";
+
 import store from "./store";
 import WatchList from "./components/Watchlist/WatchList";
 import LoginPage from "./components/Login/LoginPage";
-import SearchPage from "./components/Search/SearchPage";
 import Profile from "./components/Profile";
 import ParentComponent from "./components/HOCs/jwtAuthGuard";
 import MovieInfoMainBody from "./components/MovieInfo/MovieInfoMainBody";
@@ -20,7 +20,8 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <NavBar />
-          <Route path="/home" exact component={ParentComponent(SearchPage)} />
+
+          <Route path="/home" exact component={ParentComponent(Search)} />
           <Route
             path="/watchlist"
             exact

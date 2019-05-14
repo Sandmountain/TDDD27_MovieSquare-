@@ -11,16 +11,11 @@ export const getMovies = userID => dispatch => {
   });
 };
 export const addMovie = (userID, movie) => dispatch => {
-  console.log("addMovie action");
-  console.log("userID", userID);
-
   const movieObject = {
     movie: movie,
     userID: userID
   };
   axios.post("/api/UserWatchlist/userID", movieObject).then(res => {
-    console.log("inside axios add movie");
-
     dispatch({
       type: ADD_MOVIE,
       payload: res.data

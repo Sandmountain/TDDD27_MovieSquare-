@@ -36,7 +36,7 @@ const styles = theme => ({
     position: "absolute",
     zIndex: 1,
     flexShrink: "0",
-    maxWidth: "100%",
+    //maxWidth: "100%",
     minHeight: "100%",
     opacity: "0.2"
   },
@@ -117,12 +117,11 @@ class MovieInfo extends Component {
     //this.props.getMovieID();
 
     if (!this.state.isLoading) {
-      console.log(this.state.data);
       return (
         <Fragment>
           <Grid item className={classes.mainGrid}>
             <img
-              src={`http://image.tmdb.org/t/p/original/${
+              src={`http://image.tmdb.org/t/p/w1280/${
                 this.state.data.backdrop_path
               }`}
               alt="img"
@@ -203,6 +202,7 @@ class MovieInfo extends Component {
                       ? this.state.data.homepage
                       : `https://www.imdb.com/title/${this.state.data.imdb_id}`
                   }
+                  style={{ textDecoration: "none" }}
                 >
                   <Fab
                     size="small"

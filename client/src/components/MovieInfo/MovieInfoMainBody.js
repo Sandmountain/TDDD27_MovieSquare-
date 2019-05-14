@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import MovieInfo from "./MovieInfo";
 import { Grid, Paper } from "@material-ui/core";
 
@@ -13,26 +13,34 @@ const styles = {
     width: "100%",
     minHeight: "1000px",
     padding: "10px"
+  },
+  root: {
+    marginTop: "30px",
+    marginBottom: "2px",
+    display: "flex",
+    alignItems: "center"
+  },
+  inputField: {
+    paddingLeft: 20,
+    width: 600,
+    flex: 1
   }
 };
 
 export default class MovieInfoMainBody extends Component {
   render() {
     return (
-      <Grid
-        container
-        justify="center"
-        alignItems="center"
-        style={{ paddingTop: 80 }}
-      >
-        <Grid item sm={8}>
-          <Paper style={styles.MainBody}>
-            <Paper style={styles.inlineMainBody}>
-              <MovieInfo />
+      <Fragment>
+        <Grid container justify="center" alignItems="center">
+          <Grid item sm={8}>
+            <Paper style={styles.MainBody}>
+              <Paper style={styles.inlineMainBody}>
+                <MovieInfo />
+              </Paper>
             </Paper>
-          </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      </Fragment>
     );
   }
 }

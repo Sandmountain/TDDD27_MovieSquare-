@@ -1,94 +1,46 @@
 import React, { Component, Fragment } from "react";
-import { Grid, Paper, InputBase, IconButton, Icon } from "@material-ui/core";
-import axios from "axios";
+import { Grid, Paper, CircularProgress, Typography } from "@material-ui/core";
 import MovieResult from "../MovieResult/Movie-Result";
-import config from "../../config.json";
+import { connect } from "react-redux";
+import { getSearchResults } from "../../actions/searchAction";
 
 class Search extends Component {
-  state = {
-    searchText: "",
-    isSearching: false,
-    amount: 10,
-    images: []
-  };
-
-  handleImageLoading() {
-    this.setState({ imagesLoading: false });
-  }
-  onTextChange = e => {
-    this.setState({ [e.target.name]: e.target.value });
-    if (e.keyCode === 13) {
-      if (this.state.searchText.length > 0) {
-        axios
-          .all([
-            axios.get(
-              `${config.themovieDB.apiUrl}?api_key=${
-                config.themovieDB.apiKey
-              }&query=${this.state.searchText}&sort_by=popularity.desc&page=1`
-            ),
-            axios.get(
-              `${config.themovieDB.apiUrl}?api_key=${
-                config.themovieDB.apiKey
-              }&query=${this.state.searchText}&sort_by=popularity.desc&page=2`
-            )
-          ])
-          .then(
-            axios.spread((page1, page2) => {
-              const array = page1.data.results.concat(page2.data.results);
-              this.setState({ images: array });
-              this.setState({ isSearching: true });
-            })
-          )
-          .catch(err => console.log(err));
-      } else {
-        return this.setState({ images: "" });
-      }
-    }
-  };
-
-  //onAmountChange = (e, index, value) => this.setState({ imageSizes: value });
-
   render() {
+    const { results, loading } = this.props.results;
     return (
       <div>
-        <Grid container justify="center" alignItems="center">
-          <Grid item sm={4}>
-            <Paper style={styles.root} color="secondary">
-              <InputBase
-                style={styles.inputField}
-                name="searchText"
-                value={this.state.searchText}
-                onChange={this.onTextChange}
-                onKeyDown={e => {
-                  if (e.keyCode === 13) {
-                    this.onTextChange(e);
-                  }
-                }}
-                placeholder="Search Movies"
-              />
-              <IconButton
-                style={styles.iconButton}
-                color="secondary"
-                aria-label="Search"
-              >
-                <Icon>search</Icon>
-              </IconButton>
-            </Paper>
-          </Grid>
-        </Grid>
         <Grid container justify="center" alignItems="center">
           <Grid item sm={8}>
             <Paper style={styles.MainBody}>
               <Paper style={styles.inlineMainBody}>
-                {this.state.images.length > 0 ? (
-                  <MovieResult images={this.state.images} />
+                {results.length > 0 ? (
+                  <MovieResult images={results} />
                 ) : (
                   <Fragment>
                     {/* Make a nice component for no results*/}
-                    {this.state.isSearching ? (
-                      <p> No results </p>
+                    {loading ? (
+                      <Fragment>
+                        <CircularProgress
+                          size={60}
+                          style={{
+                            position: "relative",
+                            left: "50%",
+                            marginTop: 100
+                          }}
+                        />{" "}
+                      </Fragment>
                     ) : (
-                      <p> Start searching </p>
+                      <Typography
+                        color="primary"
+                        style={{
+                          position: "relative",
+                          left: "50%",
+                          marginTop: 100
+                        }}
+                      >
+                        {" "}
+                        No results{" "}
+                      </Typography>
                     )}
                   </Fragment>
                 )}
@@ -98,6 +50,11 @@ class Search extends Component {
         </Grid>
       </div>
     );
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.results !== this.props.results) {
+      console.log("did Update");
+    }
   }
 }
 
@@ -128,16 +85,12 @@ const styles = {
   }
 };
 
-/*
-<Grid container justify="center" alignItems="center">
-          <TextField
-            name="searchText"
-            value={this.state.searchText}
-            onChange={this.onTextChange}
-            label="Serach for Movies"
-            margin="normal"
-          />
-        </Grid>
-*/
+const mapStateToProps = state => ({
+  results: state.results,
+  isSearching: state.loading
+});
 
-export default Search;
+export default connect(
+  mapStateToProps,
+  { getSearchResults }
+)(Search);

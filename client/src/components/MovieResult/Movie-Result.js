@@ -161,14 +161,9 @@ ImageResults.propTypes = {
   images: PropTypes.array.isRequired,
   getMovies: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
-<<<<<<< HEAD
-  setMovieID: PropTypes.func.isRequired
-  //id: PropTypes.number
-=======
   setMovieID: PropTypes.func.isRequired,
   id: PropTypes.number,
   userID: PropTypes.string
->>>>>>> ff5aef2a80fdb8b98ab279eadc7439b57887eaa5
 };
 
 const mapStateToProps = state => ({

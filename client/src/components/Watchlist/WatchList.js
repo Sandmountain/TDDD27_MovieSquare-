@@ -199,13 +199,9 @@ WatchList.propTypes = {
   getMovies: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
   setMovieID: PropTypes.func.isRequired,
-<<<<<<< HEAD
-  classes: PropTypes.object.isRequired
-=======
   id: PropTypes.number,
   classes: PropTypes.object.isRequired,
   userID: PropTypes.string
->>>>>>> ff5aef2a80fdb8b98ab279eadc7439b57887eaa5
 };
 
 const mapStateToProps = state => ({

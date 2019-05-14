@@ -65,8 +65,9 @@ router.post(
   passport.authenticate("facebook", { session: false }),
   (req, res) => {
     const token = signToken(req.user);
+    const tempUserID = req.user._id;
 
-    res.json({ msg: "Wey logged in with fb!!!", token });
+    res.json({ msg: "Wey logged in with fb!!!", token, tempUserID });
   }
 );
 
@@ -75,8 +76,8 @@ router.post(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     const token = signToken(req.user);
-    const tempUser = req.user;
-    res.json({ msg: "Wey logged in with google!!!", token, tempUser });
+    const tempUserID = req.user._id;
+    res.json({ msg: "Wey logged in with google!!!", token, tempUserID });
   }
 );
 

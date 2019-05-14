@@ -4,11 +4,12 @@ import { Provider } from "react-redux";
 import "./App.css";
 
 //** Original **/
-import NavBar from "./components/NavBar/NavBar";
+import NavBar from "./components/Navbar/NavBar";
 import Search from "./components/Search/Search";
 import store from "./store";
 import WatchList from "./components/Watchlist/WatchList";
-import LoginPage from "./components/LoginPage";
+import LoginPage from "./components/Login/LoginPage";
+import SearchPage from "./components/Search/SearchPage";
 import Profile from "./components/Profile";
 import ParentComponent from "./components/HOCs/jwtAuthGuard";
 import MovieInfoMainBody from "./components/MovieInfo/MovieInfoMainBody";
@@ -19,23 +20,17 @@ class App extends Component {
       <Provider store={store}>
         <BrowserRouter>
           <NavBar />
+          <Route path="/home" exact component={ParentComponent(SearchPage)} />
           <Route
-            path="/"
+            path="/watchlist"
             exact
-            render={() => {
-              return (
-                <div>
-                  <Search />
-                </div>
-              );
-            }}
+            component={ParentComponent(WatchList)}
           />
-          <Route path="/watchlist" exact component={WatchList} />
           <Route
             path="/movieinfo/"
             render={props => <MovieInfoMainBody {...props} />}
           />
-          <Route path="/loginpage" exact component={LoginPage} />
+          <Route path="/" exact component={LoginPage} />
           <Route path="/profile" exact component={ParentComponent(Profile)} />
         </BrowserRouter>
       </Provider>

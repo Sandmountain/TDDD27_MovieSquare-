@@ -8,25 +8,28 @@ import {
 const DEAFAULT_STATE = {
   token: localStorage.getItem("JWT_TOKEN"),
   isAuthenticated: false,
-  errorMessage: ""
+  errorMessage: "",
+  userID: ""
 };
 
 export default function(state = DEAFAULT_STATE, action) {
   switch (action.type) {
     case AUTH_LOGIN_SUCCESS:
     case AUTH_REGISTER_SUCCESS:
-      localStorage.setItem("JWT_TOKEN", action.payload);
+      localStorage.setItem("JWT_TOKEN", action.payload.token);
       return {
         ...state,
         isAuthenticated: true,
-        token: action.payload
+        token: action.payload.token,
+        userID: action.payload.tempUserID
       };
     case AUTH_LOGOUT_SUCCESS:
       localStorage.removeItem("JWT_TOKEN");
       return {
         ...state,
         isAuthenticated: false,
-        token: ""
+        token: "",
+        userID: ""
       };
     case AUTH_ERROR:
       return {

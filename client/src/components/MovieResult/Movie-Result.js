@@ -64,7 +64,7 @@ class ImageResults extends Component {
         console.log("exists");
       }
     } else {
-      this.props.addMovie("1234", newMovie);
+      this.props.addMovie(this.props.userID, newMovie);
     }
 
     //TODO: Change the star to filled...?
@@ -149,7 +149,7 @@ class ImageResults extends Component {
 
   //getting ids from database (could possibly be done localy instead)
   componentDidMount() {
-    this.props.getMovies("1234");
+    this.props.getMovies(this.props.userID);
     axios
       .get(`${this.state.apiUrl}?api_key=${this.state.apiKey}&language=en-US`)
       .then(res => this.setState({ genres: res.data.genres }))
@@ -161,13 +161,20 @@ ImageResults.propTypes = {
   images: PropTypes.array.isRequired,
   getMovies: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
+<<<<<<< HEAD
   setMovieID: PropTypes.func.isRequired
   //id: PropTypes.number
+=======
+  setMovieID: PropTypes.func.isRequired,
+  id: PropTypes.number,
+  userID: PropTypes.string
+>>>>>>> ff5aef2a80fdb8b98ab279eadc7439b57887eaa5
 };
 
 const mapStateToProps = state => ({
   movie: state.movie,
-  id: state.movieID.id
+  id: state.movieID.id,
+  userID: state.auth.userID
 });
 
 export default connect(

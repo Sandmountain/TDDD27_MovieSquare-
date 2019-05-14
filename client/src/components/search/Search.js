@@ -3,11 +3,11 @@ import { Grid, Paper, InputBase, IconButton, Icon } from "@material-ui/core";
 import axios from "axios";
 import MovieResult from "../MovieResult/Movie-Result";
 import config from "../../config.json";
-import MovieInfo from "../MovieInfo/MovieInfo";
 
 class Search extends Component {
   state = {
     searchText: "",
+    isSearching: false,
     amount: 10,
     images: []
   };
@@ -36,6 +36,7 @@ class Search extends Component {
             axios.spread((page1, page2) => {
               const array = page1.data.results.concat(page2.data.results);
               this.setState({ images: array });
+              this.setState({ isSearching: true });
             })
           )
           .catch(err => console.log(err));
@@ -84,7 +85,11 @@ class Search extends Component {
                 ) : (
                   <Fragment>
                     {/* Make a nice component for no results*/}
-                    <MovieInfo />
+                    {this.state.isSearching ? (
+                      <p> No results </p>
+                    ) : (
+                      <p> Start searching </p>
+                    )}
                   </Fragment>
                 )}
               </Paper>

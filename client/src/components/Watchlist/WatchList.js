@@ -68,7 +68,6 @@ class WatchList extends Component {
 
   goToMovie = (event, id) => {
     this.props.setMovieID(id);
-    this.setState({ clickedMovieId: id });
 
     event.stopPropagation();
   };
@@ -107,7 +106,7 @@ class WatchList extends Component {
                   >
                     <Link
                       to={{
-                        pathname: `/movieInfo/${this.state.clickedMovieId}`
+                        pathname: `/movieInfo/`
                       }}
                     >
                       <IconButton
@@ -120,8 +119,6 @@ class WatchList extends Component {
                           alt={movieTitle}
                           style={{ cursor: "pointer" }}
                           src={`http://image.tmdb.org/t/p/w185/${imgURL}`}
-
-                          // onClick={e => this.goToMovie()}
                         />
                       </IconButton>
                     </Link>
@@ -202,7 +199,6 @@ WatchList.propTypes = {
   getMovies: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
   setMovieID: PropTypes.func.isRequired,
-  id: PropTypes.number,
   classes: PropTypes.object.isRequired
 };
 
@@ -233,115 +229,3 @@ export default connect(
   mapStateToProps,
   { getMovies, deleteMovie, setMovieID }
 )(withStyles(styles)(WatchList));
-
-/*import React, { Component, Fragment } from "react";
-import {
-  List,
-  ListItem,
-  ListItemText,
-  Grid,
-  ListItemSecondaryAction,
-  IconButton,
-  Icon,
-  Typography,
-  Avatar
-} from "@material-ui/core";
-
-import { getMovies, deleteMovie } from "../../actions/userWatchlistAction";
-import config from "../../config.json";
-
-import { connect } from "react-redux";
-import PropTypes from "prop-types";
-import uuid from "uuid";
-
-class WatchList extends Component {
-  componentDidMount() {
-    this.props.getMovies("1234");
-  }
-
-  onDeleteClick = id => {
-    this.props.deleteMovie("1234", id);
-  };
-
-  render() {
-    const { movies } = this.props.movie;
-
-    const favGenre = favoriteGenre(movies);
-    console.log(movies);
-    return (
-      <Fragment>
-        <h1>Your favorite genre is</h1>
-        <h3>{favGenre + " "} </h3>
-
-        <Grid container justify="center" alignItems="center">
-          <Grid item xs={6} alignItems="center">
-            <List component="ul">
-              {movies.map(({ _id, movieTitle, imgURL }) => (
-                <ListItem button key={uuid()}>
-                  <Avatar
-                    alt={movieTitle}
-                    src={`http://image.tmdb.org/t/p/w185/${imgURL}`}
-                  />
-                  <ListItemText
-                    primary={
-                      <Typography color="primary">{movieTitle}</Typography>
-                    }
-                    color="secondary"
-                  />
-
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      color="secondary"
-                      onClick={this.onDeleteClick.bind(this, _id)}
-                    >
-                      <Icon>playlist_add_check </Icon>
-                    </IconButton>
-                    <IconButton
-                      color="primary"
-                      onClick={this.onDeleteClick.bind(this, _id)}
-                    >
-                      <Icon>delete </Icon>
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </Grid>
-        </Grid>
-      </Fragment>
-    );
-  }
-}
-
-WatchList.propTypes = {
-  getMovies: PropTypes.func.isRequired,
-  movie: PropTypes.object.isRequired
-};
-
-const mapStateToProps = state => ({
-  movie: state.movie,
-  isAuthenticated: state.auth.isAuthenticated
-});
-
-const favoriteGenre = movies => {
-  const genreList = [].concat.apply(
-    [],
-    movies.map(genres => genres.movieGenre)
-  );
-
-  let counts = genreList.reduce((a, c) => {
-    a[c] = (a[c] || 0) + 1;
-    return a;
-  }, {});
-
-  let maxCount = Math.max(...Object.values(counts));
-  let mostFrequent = Object.keys(counts).filter(k => counts[k] === maxCount);
-
-  return mostFrequent;
-};
-
-export default connect(
-  mapStateToProps,
-  { getMovies, deleteMovie }
-)(WatchList);
-*/

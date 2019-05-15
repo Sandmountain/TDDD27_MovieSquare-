@@ -21,55 +21,9 @@ import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
-const styles = theme => ({
-  root: {
-    width: "100%"
-  },
-  heading: {
-    fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular
-  },
-  column: {
-    flexBasis: "10%"
-  },
-  column2: {
-    flexBasis: "90%"
-  },
-  helper: {
-    borderLeft: `2px solid ${theme.palette.divider}`,
-    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
-  },
-  content: {
-    margin: 0
-  },
-  fabText: {
-    cursor: "default",
-    marginLeft: "10px",
-    marginRight: "2px"
-  },
-  Avatar: {
-    margin: 10,
-    width: 60,
-    height: 60
-  }
-});
-
 class WatchList extends Component {
   state = {
     clickedMovieId: ""
-  };
-  componentDidMount() {
-    this.props.getMovies(this.props.userID);
-  }
-
-  onDeleteClick = id => {
-    this.props.deleteMovie(this.props.userID, id);
-  };
-
-  goToMovie = (event, id) => {
-    this.props.setMovieID(id);
-
-    event.stopPropagation();
   };
 
   render() {
@@ -201,23 +155,21 @@ class WatchList extends Component {
       </Fragment>
     );
   }
+  componentDidMount() {
+    console.log("loading");
+    this.props.getMovies(this.props.userID);
+  }
+
+  onDeleteClick = id => {
+    this.props.deleteMovie(this.props.userID, id);
+  };
+
+  goToMovie = (event, id) => {
+    this.props.setMovieID(id);
+
+    event.stopPropagation();
+  };
 }
-
-WatchList.propTypes = {
-  getMovies: PropTypes.func.isRequired,
-  movie: PropTypes.object.isRequired,
-  setMovieID: PropTypes.func.isRequired,
-  id: PropTypes.number,
-  classes: PropTypes.object.isRequired,
-  userID: PropTypes.string
-};
-
-const mapStateToProps = state => ({
-  movie: state.movie,
-  id: state.movieID.id,
-  isAuthenticated: state.auth.isAuthenticated,
-  userID: state.auth.userID
-});
 
 const favoriteGenre = movies => {
   if (movies) {
@@ -237,6 +189,55 @@ const favoriteGenre = movies => {
     return mostFrequent;
   } else return null;
 };
+
+const styles = theme => ({
+  root: {
+    width: "100%"
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular
+  },
+  column: {
+    flexBasis: "10%"
+  },
+  column2: {
+    flexBasis: "90%"
+  },
+  helper: {
+    borderLeft: `2px solid ${theme.palette.divider}`,
+    padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`
+  },
+  content: {
+    margin: 0
+  },
+  fabText: {
+    cursor: "default",
+    marginLeft: "10px",
+    marginRight: "2px"
+  },
+  Avatar: {
+    margin: 10,
+    width: 60,
+    height: 60
+  }
+});
+
+WatchList.propTypes = {
+  getMovies: PropTypes.func.isRequired,
+  movie: PropTypes.object.isRequired,
+  setMovieID: PropTypes.func.isRequired,
+  //id: PropTypes.number,
+  classes: PropTypes.object.isRequired,
+  userID: PropTypes.string
+};
+
+const mapStateToProps = state => ({
+  movie: state.movie,
+  id: state.movieID.id,
+  isAuthenticated: state.auth.isAuthenticated,
+  userID: state.auth.userID
+});
 
 export default connect(
   mapStateToProps,

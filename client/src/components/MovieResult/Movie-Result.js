@@ -23,13 +23,6 @@ class ImageResults extends Component {
     imageLoading: true
   };
 
-  handleImageLoaded() {
-    this.setState({ imageLoading: false });
-  }
-  handleImageError() {
-    console.log("No image");
-  }
-
   addToWatchList = img => {
     let genres = [];
 
@@ -70,18 +63,6 @@ class ImageResults extends Component {
     }
 
     //TODO: Change the star to filled...?
-  };
-
-  idToString = img => {
-    var genres;
-    for (var i = 0; i < img.genre_ids.length; i++) {
-      for (var j = 0; i < this.state.genres.length; j++) {
-        if (img.genre_ids === this.state.genres[i].id)
-          genres[i] = this.state.genres[i].name;
-      }
-    }
-
-    return genres;
   };
 
   render() {
@@ -147,15 +128,6 @@ class ImageResults extends Component {
       //Spinner here probably
     }
     return <div>{imageListContent}</div>;
-  }
-
-  //getting ids from database (could possibly be done localy instead)
-  componentDidMount() {
-    this.props.getMovies(this.props.userID);
-    axios
-      .get(`${this.state.apiUrl}?api_key=${this.state.apiKey}&language=en-US`)
-      .then(res => this.setState({ genres: res.data.genres }))
-      .catch(err => console.log(err));
   }
 }
 

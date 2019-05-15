@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { getSearchResults } from "../../actions/searchAction";
 
 import { Link } from "react-router-dom";
-import { Redirect } from "react-router";
+import { withRouter } from "react-router";
 import { createHashHistory } from "history";
 
 const homeLink = props => <Link to="/home" {...props} />;
@@ -54,7 +54,9 @@ class SearchField extends Component {
     this.setState({ [e.target.name]: e.target.value });
 
     if (e.keyCode === 13) {
+      //move to /home
       this.props.getSearchResults(this.state.searchText);
+      this.props.history.push("/home");
     }
   };
   onButtonPress = () => {
@@ -94,7 +96,9 @@ const mapStateToProps = state => ({
   isSearching: state.loading
 });
 
-export default connect(
-  mapStateToProps,
-  { getSearchResults }
-)(SearchField);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { getSearchResults }
+  )(SearchField)
+);

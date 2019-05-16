@@ -116,10 +116,11 @@ class MovieInfo extends Component {
                   ))}{" "}
                   {this.state.data.runtime ? (
                     <Fragment> | {this.state.data.runtime} min </Fragment>
-                  ) : null}
-                  |{" "}
+                  ) : null}{" "}
                   {this.state.data.spoken_languages.map((item, index) => (
-                    <span key={uuid()}>{(index ? ", " : "") + item.name}</span>
+                    <span key={uuid()}>
+                      {(index ? ", " : "| ") + item.name}
+                    </span>
                   ))}
                 </Typography>
                 <Grid container justify="flex-end" direction="column">

@@ -42,7 +42,7 @@ class WatchList extends Component {
               ? movies.map(
                   ({
                     _id,
-                    movieTitle,
+                    originalTitle,
                     imgURL,
                     movieOverview,
                     movieRating,
@@ -71,7 +71,7 @@ class WatchList extends Component {
                           >
                             <Avatar
                               size="medium"
-                              alt={movieTitle}
+                              alt={originalTitle}
                               style={{ cursor: "pointer" }}
                               src={`http://image.tmdb.org/t/p/w185/${imgURL}`}
 
@@ -80,7 +80,7 @@ class WatchList extends Component {
                           </IconButton>
                         </Link>
                         <Typography style={{ marginLeft: 10, marginTop: 15 }}>
-                          {movieTitle}
+                          {originalTitle}
                         </Typography>
 
                         <Typography

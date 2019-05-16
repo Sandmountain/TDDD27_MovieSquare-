@@ -23,40 +23,40 @@ router.get("/userID/:id", async (req, res) => {
 // @access Public
 router.post("/userID/", async (req, res) => {
   //Creates the movie from the schema model
-  console.log("hello");
 
   const { userID, movie } = req.body;
 
   const user = await userWatchlist.findOne({ userID: userID });
+  //add check if in list
+  //if (user.watchlist.findOne({ movieID: movie.id })) console.log("in list");
+
   if (user) {
     const newMovie = new Movie({
-      movieID: movie.movieID,
-      movieTitle: movie.movieTitle,
-      imgURL: movie.imgURL,
-      movieGenre: movie.movieGenre,
-      movieName: movie.movieName,
-      originalTitle: movie.movieTitle,
-      backdropURL: movie.backdropURL,
+      movieID: movie.id,
+      movieTitle: movie.title,
+      imgURL: movie.poster_path,
+      movieGenre: movie.genre_ids,
+      originalTitle: movie.original_title,
+      backdropURL: movie.backdrop_path,
       movieOverview: movie.overview,
-      movieRating: movie.rating,
-      movieLanguage: movie.language,
-      releaseDate: movie.releaseDate
+      movieRating: movie.vote_average,
+      movieLanguage: movie.original_language,
+      releaseDate: movie.release_date
     });
     user.watchlist.push(newMovie);
     await user.save();
   } else {
     const newMovie = new Movie({
-      movieID: movie.movieID,
-      movieTitle: movie.movieTitle,
-      imgURL: movie.imgURL,
-      movieGenre: movie.movieGenre,
-      movieName: movie.movieName,
-      originalTitle: movie.movieTitle,
-      backdropURL: movie.backdropURL,
+      movieID: movie.id,
+      movieTitle: movie.title,
+      imgURL: movie.poster_path,
+      movieGenre: movie.genre_ids,
+      originalTitle: movie.original_title,
+      backdropURL: movie.backdrop_path,
       movieOverview: movie.overview,
-      movieRating: movie.rating,
-      movieLanguage: movie.language,
-      releaseDate: movie.releaseDate
+      movieRating: movie.vote_average,
+      movieLanguage: movie.original_language,
+      releaseDate: movie.release_date
     });
     const newUserWatchlist = new userWatchlist({
       userID: userID,
@@ -105,17 +105,16 @@ router.post("/userID/history", async (req, res) => {
 
   if (user) {
     const newMovie = new Movie({
-      movieID: movie.movieID,
-      movieTitle: movie.movieTitle,
-      imgURL: movie.imgURL,
-      movieGenre: movie.movieGenre,
-      movieName: movie.movieName,
-      originalTitle: movie.movieTitle,
-      backdropURL: movie.backdropURL,
+      movieID: movie.id,
+      movieTitle: movie.title,
+      imgURL: movie.poster_path,
+      movieGenre: movie.genre_ids,
+      originalTitle: movie.original_title,
+      backdropURL: movie.backdrop_path,
       movieOverview: movie.overview,
-      movieRating: movie.rating,
-      movieLanguage: movie.language,
-      releaseDate: movie.releaseDate
+      movieRating: movie.vote_average,
+      movieLanguage: movie.original_language,
+      releaseDate: movie.release_date
     });
     user.history.push(newMovie);
     user.save();

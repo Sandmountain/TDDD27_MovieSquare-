@@ -32,9 +32,8 @@ class Search extends Component {
                     ) : (
                       <Typography
                         color="primary"
+                        align="center"
                         style={{
-                          position: "relative",
-                          left: "50%",
                           marginTop: 100
                         }}
                       >
@@ -50,11 +49,6 @@ class Search extends Component {
         </Grid>
       </div>
     );
-  }
-  componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevProps.results !== this.props.results) {
-      console.log("did Update");
-    }
   }
 }
 

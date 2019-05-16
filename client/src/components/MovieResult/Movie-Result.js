@@ -24,44 +24,7 @@ class ImageResults extends Component {
   };
 
   addToWatchList = img => {
-    let genres = [];
-
-    //Function for Finding the genres for each movie from their id
-    for (let i = 0; i < img.genre_ids.length; i++) {
-      for (let j = 0; j < this.state.genres.length; j++) {
-        if (img.genre_ids[i] === this.state.genres[j].id) {
-          genres.push(this.state.genres[j].name);
-        }
-      }
-    }
-    const newMovie = {
-      movieID: img.id,
-      imgURL: img.poster_path ? img.poster_path : require("./error.png"),
-      movieTitle: img.original_title,
-      title: img.title,
-      backdropURL: img.backdrop_path,
-      overview: img.overview,
-      rating: img.vote_average,
-      language: img.original_language,
-      releaseDate: img.release_date,
-      movieGenre: genres
-    };
-
-    //Add item via addItem Action if not in the wwatchlist
-    if (this.props.movie.movies.length < 0) {
-      if (
-        this.props.movie.movies.filter(
-          movies => movies.movieTitle === img.original_title
-        ).length > 0
-      ) {
-        console.log("exists");
-      }
-    } else {
-      console.log("Should add movie");
-
-      this.props.addMovie(this.props.userID, newMovie);
-    }
-
+    this.props.addMovie(this.props.userID, img);
     //TODO: Change the star to filled...?
   };
 

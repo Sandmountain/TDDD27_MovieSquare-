@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 //Redux
 import { connect } from "react-redux";
 import { addMovie, getMovies } from "../../actions/userWatchlistAction";
-import axios from "axios";
 
 class ImageResults extends Component {
   state = {
@@ -25,7 +24,12 @@ class ImageResults extends Component {
 
   addToWatchList = img => {
     this.props.addMovie(this.props.userID, img);
-    //TODO: Change the star to filled...?
+    if (this.props.images) {
+      console.log("sucess");
+    } else {
+      console.log("not success");
+    }
+    //this.props.getMovies(this.props.userID);
   };
 
   render() {
@@ -61,7 +65,7 @@ class ImageResults extends Component {
                     this.setState({ imageLoading: false });
                     //Could give endless loop if not: e.target.onerror = null;
                     e.onError = null;
-                    e.target.src = require("./error.png");
+                    e.target.src = require("../../images/error.png");
                   }}
                 />
               </Link>
@@ -99,7 +103,6 @@ ImageResults.propTypes = {
   getMovies: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
   setMovieID: PropTypes.func.isRequired,
-  id: PropTypes.string,
   userID: PropTypes.string
 };
 

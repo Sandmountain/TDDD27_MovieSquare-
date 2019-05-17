@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Grid, Typography, Divider, Icon, Fab, Paper } from "@material-ui/core";
+import { Grid, Typography, Divider, Icon, Fab } from "@material-ui/core";
 import SimilarMovies from "./SimiliarMovies";
 import BottomNavBar from "./BottomNavBar";
 import PropTypes from "prop-types";
@@ -36,7 +36,8 @@ class MovieInfo extends Component {
       raitings: [],
       genres: [],
       isLoading: true,
-      open: false
+      open: false,
+      isReload: true
     };
   }
 
@@ -70,7 +71,7 @@ class MovieInfo extends Component {
                 this.onerror = null;
               }}
             />
-            <Grid container>
+            <Grid container direction="row">
               <Grid item sm={3} className={classes.foreGroundImage}>
                 <img
                   alt="img"
@@ -84,9 +85,45 @@ class MovieInfo extends Component {
                   }`}
                   onError={e => {
                     this.onerror = null;
-                    e.target.src = require("./error.png");
+                    e.target.src = require("../../images/error.png");
                   }}
                 />
+                {this.state.data.tagline ? (
+                  <Fragment>
+                    <Divider style={{ marginTop: "5px" }} />
+                    <Typography
+                      color="inherit"
+                      variant="inherit"
+                      style={{ fontStyle: "italic" }}
+                    >
+                      "{this.state.data.tagline}..."
+                    </Typography>
+                  </Fragment>
+                ) : (
+                  <div />
+                )}
+                <Grid item style={{ paddingTop: 10 }}>
+                  <Typography color="primary" variant="body2">
+                    {typeof this.state.raitings[0] !== "undefined" ? (
+                      <img
+                        style={{ height: 26 }}
+                        src={require("../../images/imdb.png")}
+                        alt="imdb"
+                      />
+                    ) : null}
+                    {typeof this.state.raitings[0] !== "undefined"
+                      ? " " + this.state.raitings[0].Value
+                      : null}
+                  </Typography>
+                </Grid>
+                <Grid item style={{ paddingTop: 2 }}>
+                  <Typography color="primary" variant="body2">
+                    {displayTomatoIcon(this.state.raitings)}{" "}
+                    {typeof this.state.raitings[1] !== "undefined"
+                      ? this.state.raitings[1].Value
+                      : null}
+                  </Typography>
+                </Grid>
               </Grid>
               <Grid item sm={9} className={classes.foreGroundImage}>
                 <Typography
@@ -97,14 +134,12 @@ class MovieInfo extends Component {
                 >
                   {this.state.data.title}
                 </Typography>
-
                 {this.state.data.release_date ? (
                   <Typography color="inherit" variant="subtitle2" gutterBottom>
                     {" "}
                     Released {this.state.data.release_date}
                   </Typography>
                 ) : null}
-
                 <Typography
                   color="inherit"
                   align="right"
@@ -123,44 +158,8 @@ class MovieInfo extends Component {
                     </span>
                   ))}
                 </Typography>
-                <Grid container justify="flex-end" direction="column">
-                  <Grid item>
-                    <Typography
-                      color="primary"
-                      variant="subtitle2"
-                      align="right"
-                    >
-                      {typeof this.state.raitings[0] !== "undefined"
-                        ? this.state.raitings[0].Value
-                        : null}{" "}
-                      {typeof this.state.raitings[0] !== "undefined" ? (
-                        <img
-                          style={{ height: 26 }}
-                          src={require("./images/imdb.png")}
-                        />
-                      ) : null}
-                    </Typography>
-                  </Grid>
-                  <Grid item style={{ paddingTop: 2 }}>
-                    <Typography
-                      color="primary"
-                      variant="subtitle2"
-                      align="right"
-                    >
-                      {typeof this.state.raitings[1] !== "undefined"
-                        ? this.state.raitings[1].Value
-                        : null}{" "}
-                      {displayTomatoIcon(this.state.raitings)}
-                    </Typography>
-                  </Grid>
-                </Grid>
-                <div
-                  style={{
-                    position: "relative",
-                    top: "-45px",
-                    marginTop: "10px"
-                  }}
-                >
+
+                <div>
                   <Fab
                     size="medium"
                     color="secondary"
@@ -174,6 +173,10 @@ class MovieInfo extends Component {
                     size="small"
                     color="primary"
                     aria-label="Edit"
+                    onClick={() => {
+                      console.log(this.state.data);
+                      addMovieToDb();
+                    }}
                     className={classes.fabButtons}
                   >
                     <Icon>playlist_add</Icon>
@@ -220,19 +223,17 @@ class MovieInfo extends Component {
                     />
                   </div>
                 </Modal>
-
+                <Divider style={{ marginBottom: "20px" }} />
                 {this.state.data.overview.length > 0 ? (
                   <Typography color="inherit" variant="h6">
                     {" "}
                     Overview{" "}
                   </Typography>
                 ) : null}
-
                 <Typography color="inherit" variant="body1">
                   {this.state.data.overview}
                 </Typography>
                 <Divider style={{ marginBottom: "20px" }} />
-
                 <Grid item sm={12}>
                   <Typography color="inherit" variant="body1">
                     {credit.Directors.length > 0 ? <b>Director(s): </b> : null}
@@ -252,20 +253,6 @@ class MovieInfo extends Component {
                       return (index ? ", " : "") + cred.name;
                     })}
                   </Typography>
-                  {this.state.data.tagline ? (
-                    <Fragment>
-                      <Divider style={{ marginTop: "20px" }} />
-                      <Typography
-                        color="inherit"
-                        variant="inherit"
-                        style={{ paddingLeft: "50px", fontStyle: "italic" }}
-                      >
-                        "{this.state.data.tagline}..."
-                      </Typography>
-                    </Fragment>
-                  ) : (
-                    <div />
-                  )}
                 </Grid>
               </Grid>
             </Grid>
@@ -275,7 +262,7 @@ class MovieInfo extends Component {
             <Divider style={{ paddingTop: 3 }} />
             {this.state.data.similar ? (
               <SimilarMovies
-                similiar={this.state.data.similar}
+                similar={this.state.data.similar}
                 style={{ overflow: "hide" }}
               />
             ) : (
@@ -309,10 +296,15 @@ class MovieInfo extends Component {
   componentWillMount() {
     this.props.getMovieID();
   }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.id !== this.props.id) {
+      this.getMovieInfo();
+    }
+  }
 
   getMovieInfo = () => {
     let movieID = this.props.id;
-    if (movieID !== "") {
+    if (movieID !== "" && typeof movieID !== "undefined") {
       axios
         .get(
           `${config.themovieDB.movieURL}/${movieID}?api_key=${
@@ -321,7 +313,6 @@ class MovieInfo extends Component {
         )
         .then(res => {
           this.setState({ data: res.data });
-
           axios
             .get(
               `http://www.omdbapi.com/?apikey=6f9b4562&i=${
@@ -335,23 +326,53 @@ class MovieInfo extends Component {
               } else {
                 this.setState({ isLoading: false });
               }
-            });
-        });
+            })
+            .catch(error => {});
+        })
+        .catch(error => {});
     }
     /*
     
       */
   };
 }
+const addMovieToDb = () => {
+  if (typeof this.state.data != "undefiend") {
+    const movieToAdd = this.state.data;
+    /*const test = {
+      a: 1,
+      b: 2
+    };
+    //movieToAdd.push({ genres_id: test });*/
+    delete Object.assign(movieToAdd, { ["genres_ids"]: movieToAdd["genres"] })[
+      "genres"
+    ];
+    // movieToAdd.push({ genres_id });
+
+    //Fixa så att det inte crashar när man lägger till
+    console.log(movieToAdd);
+  }
+
+  //this.props.addMovie(this.props.userID, this.state.data);
+};
+
 const displayTomatoIcon = value => {
   if (typeof value[1] !== "undefined") {
     if (value[1].Value.slice(0, 2) > 50) {
       return (
-        <img style={{ height: 26 }} src={require("./images/tomato.png")} />
+        <img
+          style={{ height: 26 }}
+          src={require("../../images/tomato.png")}
+          alt={"tomato"}
+        />
       );
     } else {
       return (
-        <img style={{ height: 26 }} src={require("./images/rotten.png")} />
+        <img
+          style={{ height: 26 }}
+          src={require("../../images/rotten.png")}
+          alt="rotten"
+        />
       );
     }
   }
@@ -428,7 +449,6 @@ MovieInfo.propTypes = {
   classes: PropTypes.object.isRequired,
   movie: PropTypes.object.isRequired,
   setMovieID: PropTypes.func.isRequired,
-  id: PropTypes.string,
   userID: PropTypes.string
 };
 

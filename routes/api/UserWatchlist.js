@@ -27,43 +27,47 @@ router.post("/userID/", async (req, res) => {
   const { userID, movie } = req.body;
 
   const user = await userWatchlist.findOne({ userID: userID });
-  //add check if in list
-  //if (user.watchlist.findOne({ movieID: movie.id })) console.log("in list");
-
-  if (user) {
-    const newMovie = new Movie({
-      movieID: movie.id,
-      movieTitle: movie.title,
-      imgURL: movie.poster_path,
-      movieGenre: movie.genre_ids,
-      originalTitle: movie.original_title,
-      backdropURL: movie.backdrop_path,
-      movieOverview: movie.overview,
-      movieRating: movie.vote_average,
-      movieLanguage: movie.original_language,
-      releaseDate: movie.release_date
-    });
-    user.watchlist.push(newMovie);
-    await user.save();
+  if (
+    user.watchlist.filter(e => e.movieID === movie.id.toString()).length > 0
+  ) {
+    //Handle already in list
+    console.log(movie.id);
   } else {
-    const newMovie = new Movie({
-      movieID: movie.id,
-      movieTitle: movie.title,
-      imgURL: movie.poster_path,
-      movieGenre: movie.genre_ids,
-      originalTitle: movie.original_title,
-      backdropURL: movie.backdrop_path,
-      movieOverview: movie.overview,
-      movieRating: movie.vote_average,
-      movieLanguage: movie.original_language,
-      releaseDate: movie.release_date
-    });
-    const newUserWatchlist = new userWatchlist({
-      userID: userID,
-      watchlist: [newMovie]
-    });
+    if (user) {
+      const newMovie = new Movie({
+        movieID: movie.id,
+        movieTitle: movie.title,
+        imgURL: movie.poster_path,
+        movieGenre: movie.genre_ids,
+        originalTitle: movie.original_title,
+        backdropURL: movie.backdrop_path,
+        movieOverview: movie.overview,
+        movieRating: movie.vote_average,
+        movieLanguage: movie.original_language,
+        releaseDate: movie.release_date
+      });
+      user.watchlist.push(newMovie);
+      await user.save();
+    } else {
+      const newMovie = new Movie({
+        movieID: movie.id,
+        movieTitle: movie.title,
+        imgURL: movie.poster_path,
+        movieGenre: movie.genre_ids,
+        originalTitle: movie.original_title,
+        backdropURL: movie.backdrop_path,
+        movieOverview: movie.overview,
+        movieRating: movie.vote_average,
+        movieLanguage: movie.original_language,
+        releaseDate: movie.release_date
+      });
+      const newUserWatchlist = new userWatchlist({
+        userID: userID,
+        watchlist: [newMovie]
+      });
 
-    newUserWatchlist.save().then(UserWatchlist => res.json(UserWatchlist));
+      newUserWatchlist.save().then(UserWatchlist => res.json(UserWatchlist));
+    }
   }
 });
 

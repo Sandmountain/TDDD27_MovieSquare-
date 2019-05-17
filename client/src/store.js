@@ -4,14 +4,13 @@ import rootReducer from "./reducers";
 import jwtDecode from "jwt-decode";
 
 const jwtToken = localStorage.getItem("JWT_TOKEN");
-
-const decodedToken = jwtDecode(jwtToken);
+const decodedToken = jwtToken ? jwtDecode(jwtToken) : "";
 
 const initalState = {
   auth: {
     token: jwtToken,
     isAuthenticated: jwtToken ? true : false,
-    userID: decodedToken._id
+    userID: jwtToken ? decodedToken._id : ""
   }
 };
 

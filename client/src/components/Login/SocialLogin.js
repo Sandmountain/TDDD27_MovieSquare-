@@ -50,7 +50,12 @@ class SocialLogin extends Component {
       <div className="SocialLogin">
         {this.props.isAuthenticated ? (
           <Fragment>
-            <Button component={homeLink} color="inherit">
+            <Button
+              className="btnProceed"
+              variant="outlined"
+              component={homeLink}
+              color="secondary"
+            >
               Proceed to MovieSquare
             </Button>
           </Fragment>

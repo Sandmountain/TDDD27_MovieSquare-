@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Component } from "react";
 import {
   GridListTile,
   GridListTileBar,
@@ -8,53 +8,92 @@ import {
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import uuid from "uuid";
+import { addMovie } from "../../actions/userWatchlistAction";
 
-function SimiliarMovies(similar) {
-  //cellHeight="auto"
-  let similarResults;
+import { Link } from "react-router-dom";
+//Redux
+import { connect } from "react-redux";
+import { setMovieID, getMovieID } from "../../actions/movieInfoAction";
 
-  similar.similiar
-    ? (similarResults = similar.similiar.results.slice(0, 5))
-    : (similarResults = null);
+class SimiliarMovies extends Component {
+  render() {
+    //const similar
+    // {this.props.similar ?  { similar } = this.props.similar : null }
 
-  return similar.similiar ? (
-    <div>
-      <GridList cols={5}>
-        {similarResults.map(img => (
-          <GridListTile key={uuid()}>
-            {img.poster_path ? (
-              <img
-                src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
-                alt=""
-                onError={e => {
-                  this.onerror = null;
-                  e.target.src = require("./error.png");
-                }}
-              />
-            ) : (
-              <img src={require("./error.png")} alt="" />
-            )}
-            <GridListTileBar
-              title={img.title}
-              key={img.id}
-              subtitle={<span>Year: {img.release_date}</span>}
-              actionIcon={
-                <IconButton color="secondary">
-                  <Icon>playlist_add</Icon>
-                </IconButton>
-              }
-            />
-          </GridListTile>
-        ))}
-      </GridList>
-    </div>
-  ) : (
-    <div />
-  );
+    let similarResults;
+    this.props.similar
+      ? (similarResults = this.props.similar.results.slice(0, 5))
+      : (similarResults = null);
+    return (
+      <div>
+        {this.props.similar ? (
+          <div>
+            <GridList cols={5}>
+              {similarResults.map(img => (
+                <GridListTile key={uuid()}>
+                  <Link
+                    to={{
+                      pathname: `/movieInfo/${img.id}`
+                    }}
+                  >
+                    {img.poster_path ? (
+                      <img
+                        src={`http://image.tmdb.org/t/p/w185/${
+                          img.poster_path
+                        }`}
+                        alt=""
+                        onError={e => {
+                          this.onerror = null;
+                          e.target.src = require("../../images/error.png");
+                        }}
+                        onClick={() => {
+                          this.props.setMovieID(img.id);
+                          //forceUpdate();
+                        }}
+                      />
+                    ) : (
+                      <img src={require("../../images/error.png")} alt="" />
+                    )}
+
+                    <GridListTileBar
+                      title={img.title}
+                      key={img.id}
+                      subtitle={<span>Year: {img.release_date}</span>}
+                      actionIcon={
+                        <IconButton
+                          color="secondary"
+                          onClick={() =>
+                            this.props.addMovie(this.props.userID, img)
+                          }
+                        >
+                          <Icon>playlist_add</Icon>
+                        </IconButton>
+                      }
+                    />
+                  </Link>
+                </GridListTile>
+              ))}
+            </GridList>
+          </div>
+        ) : (
+          <div />
+        )}
+      </div>
+    );
+  }
 }
 
 SimiliarMovies.propTypes = {
-  similar: PropTypes.array
+  similar: PropTypes.object
 };
 
-export default SimiliarMovies;
+const mapStateToProps = state => ({
+  movie: state.movie,
+  id: state.movieID.id,
+  userID: state.auth.userID
+});
+
+export default connect(
+  mapStateToProps,
+  { setMovieID, getMovieID, addMovie }
+)(SimiliarMovies);

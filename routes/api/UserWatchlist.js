@@ -23,47 +23,51 @@ router.get("/userID/:id", async (req, res) => {
 // @access Public
 router.post("/userID/", async (req, res) => {
   //Creates the movie from the schema model
-  console.log("hello");
 
   const { userID, movie } = req.body;
 
   const user = await userWatchlist.findOne({ userID: userID });
-  if (user) {
-    const newMovie = new Movie({
-      movieID: movie.movieID,
-      movieTitle: movie.movieTitle,
-      imgURL: movie.imgURL,
-      movieGenre: movie.movieGenre,
-      movieName: movie.movieName,
-      originalTitle: movie.movieTitle,
-      backdropURL: movie.backdropURL,
-      movieOverview: movie.overview,
-      movieRating: movie.rating,
-      movieLanguage: movie.language,
-      releaseDate: movie.releaseDate
-    });
-    user.watchlist.push(newMovie);
-    await user.save();
+  if (
+    user.watchlist.filter(e => e.movieID === movie.id.toString()).length > 0
+  ) {
+    //Handle already in list
+    console.log(movie.id);
   } else {
-    const newMovie = new Movie({
-      movieID: movie.movieID,
-      movieTitle: movie.movieTitle,
-      imgURL: movie.imgURL,
-      movieGenre: movie.movieGenre,
-      movieName: movie.movieName,
-      originalTitle: movie.movieTitle,
-      backdropURL: movie.backdropURL,
-      movieOverview: movie.overview,
-      movieRating: movie.rating,
-      movieLanguage: movie.language,
-      releaseDate: movie.releaseDate
-    });
-    const newUserWatchlist = new userWatchlist({
-      userID: userID,
-      watchlist: [newMovie]
-    });
+    if (user) {
+      const newMovie = new Movie({
+        movieID: movie.id,
+        movieTitle: movie.title,
+        imgURL: movie.poster_path,
+        movieGenre: movie.genre_ids,
+        originalTitle: movie.original_title,
+        backdropURL: movie.backdrop_path,
+        movieOverview: movie.overview,
+        movieRating: movie.vote_average,
+        movieLanguage: movie.original_language,
+        releaseDate: movie.release_date
+      });
+      user.watchlist.push(newMovie);
+      await user.save();
+    } else {
+      const newMovie = new Movie({
+        movieID: movie.id,
+        movieTitle: movie.title,
+        imgURL: movie.poster_path,
+        movieGenre: movie.genre_ids,
+        originalTitle: movie.original_title,
+        backdropURL: movie.backdrop_path,
+        movieOverview: movie.overview,
+        movieRating: movie.vote_average,
+        movieLanguage: movie.original_language,
+        releaseDate: movie.release_date
+      });
+      const newUserWatchlist = new userWatchlist({
+        userID: userID,
+        watchlist: [newMovie]
+      });
 
-    newUserWatchlist.save().then(UserWatchlist => res.json(UserWatchlist));
+      newUserWatchlist.save().then(UserWatchlist => res.json(UserWatchlist));
+    }
   }
 });
 
@@ -105,17 +109,16 @@ router.post("/userID/history", async (req, res) => {
 
   if (user) {
     const newMovie = new Movie({
-      movieID: movie.movieID,
-      movieTitle: movie.movieTitle,
-      imgURL: movie.imgURL,
-      movieGenre: movie.movieGenre,
-      movieName: movie.movieName,
-      originalTitle: movie.movieTitle,
-      backdropURL: movie.backdropURL,
+      movieID: movie.id,
+      movieTitle: movie.title,
+      imgURL: movie.poster_path,
+      movieGenre: movie.genre_ids,
+      originalTitle: movie.original_title,
+      backdropURL: movie.backdrop_path,
       movieOverview: movie.overview,
-      movieRating: movie.rating,
-      movieLanguage: movie.language,
-      releaseDate: movie.releaseDate
+      movieRating: movie.vote_average,
+      movieLanguage: movie.original_language,
+      releaseDate: movie.release_date
     });
     user.history.push(newMovie);
     user.save();

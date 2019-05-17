@@ -24,8 +24,6 @@ export default function(state = initialState, action) {
         movies: state.movies.filter(movie => movie._id !== action.payload)
       };
     case ADD_MOVIE:
-      console.log("Inside add_movie reducer");
-
       return {
         ...state,
         movies: [action.payload, ...state.movies]

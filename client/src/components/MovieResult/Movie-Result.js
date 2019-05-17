@@ -13,7 +13,6 @@ import { Link } from "react-router-dom";
 //Redux
 import { connect } from "react-redux";
 import { addMovie, getMovies } from "../../actions/userWatchlistAction";
-import axios from "axios";
 
 class ImageResults extends Component {
   state = {
@@ -23,65 +22,14 @@ class ImageResults extends Component {
     imageLoading: true
   };
 
-  handleImageLoaded() {
-    this.setState({ imageLoading: false });
-  }
-  handleImageError() {
-    console.log("No image");
-  }
-
   addToWatchList = img => {
-    let genres = [];
-
-    //Function for Finding the genres for each movie from their id
-    for (let i = 0; i < img.genre_ids.length; i++) {
-      for (let j = 0; j < this.state.genres.length; j++) {
-        if (img.genre_ids[i] === this.state.genres[j].id) {
-          genres.push(this.state.genres[j].name);
-        }
-      }
-    }
-    const newMovie = {
-      movieID: img.id,
-      imgURL: img.poster_path ? img.poster_path : require("./error.png"),
-      movieTitle: img.original_title,
-      title: img.title,
-      backdropURL: img.backdrop_path,
-      overview: img.overview,
-      rating: img.vote_average,
-      language: img.original_language,
-      releaseDate: img.release_date,
-      movieGenre: genres
-    };
-
-    //Add item via addItem Action if not in the wwatchlist
-    if (this.props.movie.movies.length < 0) {
-      if (
-        this.props.movie.movies.filter(
-          movies => movies.movieTitle === img.original_title
-        ).length > 0
-      ) {
-        console.log("exists");
-      }
+    this.props.addMovie(this.props.userID, img);
+    if (this.props.images) {
+      console.log("sucess");
     } else {
-      console.log("Should add movie");
-
-      this.props.addMovie(this.props.userID, newMovie);
+      console.log("not success");
     }
-
-    //TODO: Change the star to filled...?
-  };
-
-  idToString = img => {
-    var genres;
-    for (var i = 0; i < img.genre_ids.length; i++) {
-      for (var j = 0; i < this.state.genres.length; j++) {
-        if (img.genre_ids === this.state.genres[i].id)
-          genres[i] = this.state.genres[i].name;
-      }
-    }
-
-    return genres;
+    //this.props.getMovies(this.props.userID);
   };
 
   render() {
@@ -117,7 +65,7 @@ class ImageResults extends Component {
                     this.setState({ imageLoading: false });
                     //Could give endless loop if not: e.target.onerror = null;
                     e.onError = null;
-                    e.target.src = require("./error.png");
+                    e.target.src = require("../../images/error.png");
                   }}
                 />
               </Link>
@@ -148,15 +96,6 @@ class ImageResults extends Component {
     }
     return <div>{imageListContent}</div>;
   }
-
-  //getting ids from database (could possibly be done localy instead)
-  componentDidMount() {
-    this.props.getMovies(this.props.userID);
-    axios
-      .get(`${this.state.apiUrl}?api_key=${this.state.apiKey}&language=en-US`)
-      .then(res => this.setState({ genres: res.data.genres }))
-      .catch(err => console.log(err));
-  }
 }
 
 ImageResults.propTypes = {
@@ -164,7 +103,6 @@ ImageResults.propTypes = {
   getMovies: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
   setMovieID: PropTypes.func.isRequired,
-  id: PropTypes.string,
   userID: PropTypes.string
 };
 

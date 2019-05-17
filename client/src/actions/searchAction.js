@@ -1,5 +1,4 @@
 import axios from "axios";
-import config from "../config.json";
 import { GET_SEARCH_RESULTS, LOADING_RESULTS } from "./types";
 
 export const getSearchResults = query => dispatch => {

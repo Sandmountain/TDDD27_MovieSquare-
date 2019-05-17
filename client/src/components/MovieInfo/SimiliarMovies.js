@@ -29,6 +29,7 @@ class SimiliarMovies extends Component {
         {this.props.similar ? (
           <div>
             <GridList cols={5}>
+              >
               {similarResults.map(img => (
                 <GridListTile key={uuid()}>
                   <Link
@@ -38,6 +39,7 @@ class SimiliarMovies extends Component {
                   >
                     {img.poster_path ? (
                       <img
+                        style={{ width: "100%", heigh: "100%" }}
                         src={`http://image.tmdb.org/t/p/w185/${
                           img.poster_path
                         }`}

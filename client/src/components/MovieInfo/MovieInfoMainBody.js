@@ -22,13 +22,13 @@ export default class MovieInfoMainBody extends Component {
 const styles = {
   inlineMainBody: {
     width: "100%",
-    minHeight: "1000px",
+    minHeight: "700px",
     padding: 4,
     backgroundColor: "white"
   },
   MainBody: {
     width: "100%",
-    minHeight: "1000px",
+    minHeight: "700px",
     padding: "10px"
   },
   root: {

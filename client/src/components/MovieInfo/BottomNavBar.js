@@ -6,6 +6,10 @@ import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
 import Icon from "@material-ui/core/Icon";
 
+//Components
+import Reviews from "./Reviews";
+import MovieClips from "./MovieClips";
+
 const styles = theme => ({
   root: {
     minWidth: "100%"
@@ -28,8 +32,9 @@ class BottomNavBar extends Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, movieData } = this.props;
     const { value } = this.state;
+
     return (
       <div>
         <BottomNavigation
@@ -68,7 +73,7 @@ class BottomNavBar extends Component {
           />
           <BottomNavigationAction
             label="Actors"
-            value="folder"
+            value="actors"
             classes={{
               root: classes.actionItemStyles,
               selected: classes.selected
@@ -76,8 +81,24 @@ class BottomNavBar extends Component {
             icon={<Icon>recent_actors</Icon>}
           />
         </BottomNavigation>
+        <DisplayContent tabInfo={value} movieData={movieData} />
       </div>
     );
+  }
+}
+
+function DisplayContent(props) {
+  const value = props.tabInfo;
+  const data = props.movieData;
+  //console.log(data);
+  if (value === "actors") {
+    return <p> WoW Folder </p>;
+  } else if (value === "comment") {
+    return <p> WoW comment </p>;
+  } else if (value === "reviews") {
+    return <Reviews reviewData={data.reviews} />;
+  } else if (value === "movies") {
+    return <MovieClips movieClips={data.videos.results} />;
   }
 }
 

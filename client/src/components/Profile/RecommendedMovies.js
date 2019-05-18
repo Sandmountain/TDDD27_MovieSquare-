@@ -14,7 +14,8 @@ import {
   GridListTileBar,
   IconButton,
   Icon,
-  withStyles
+  withStyles,
+  CircularProgress
 } from "@material-ui/core";
 
 const styles = {
@@ -41,6 +42,8 @@ const styles = {
 
 class RecommendedMovies extends Component {
   state = {
+    isLoading: true,
+    imageLoading: true,
     movieRecData: []
   };
 
@@ -67,53 +70,74 @@ class RecommendedMovies extends Component {
           }&append_to_response=recommendations`
         )
         .then(res => {
-          this.setState({ movieRecData: res.data });
+          if (res.data.recommendations.results.length > 0) {
+            this.setState({ movieRecData: res.data });
+            this.setState({ isLoading: false });
+          } else {
+            axios
+              .get(
+                `https://api.themoviedb.org/3/discover/movie?api_key=${
+                  config.themovieDB.apiKey
+                }&primary_release_year=2019&sort_by=revenue.desc`
+              )   //Primary release year can be removed for getting of all time
+              .then(res => {
+                this.setState({ movieRecData: res.data });
+                this.setState({ isLoading: false });
+              })
+              .catch(error => {});
+          }
         })
         .catch(error => {});
     }
-    //console.log(this.state.movieRecData.recommendations);
   };
 
   render() {
-    const { classes, movies } = this.props;
-    //console.log(movies);
-    console.log(this.state.movieRecData.recommendations);
+    const { classes } = this.props;
 
     return (
       <Fragment>
-        {this.state.movieRecData.recommendations.results ? (
-          <Grid className={classes.rootGridListRecommended}>
-            <GridList className={classes.gridList} cols={2.5}>
-              {this.state.movieRecData.recommendations.results.map(img => (
-                <GridListTile key={uuid()}>
-                  <img
-                    src={
-                      config.themovieDB.imageUrl +
-                      config.themovieDB.imageSizes +
-                      img.poster_path
-                    }
-                    alt={img.title}
-                  />
-                  <GridListTileBar
-                    title={img.title}
-                    classes={{
-                      root: classes.titleBar,
-                      title: classes.title
-                    }}
-                    actionIcon={
-                      <IconButton>
-                        <Icon>playlist_add</Icon>
-                      </IconButton>
-                    }
-                  />
-                </GridListTile>
-              ))}
-            </GridList>
-          </Grid>
-        ) : null}
+        {!this.state.isLoading ? (
+          this.returnDivInTime(classes)
+        ) : (
+          <CircularProgress style={{ marginLeft: "50%" }} />
+        )}
       </Fragment>
     );
   }
+  returnDivInTime = classes => {
+    /* If there are no recomended videos for a specific show the most popilar movies */
+    const recomended =
+      typeof this.state.movieRecData.recommendations !== "undefined"
+        ? this.state.movieRecData.recommendations.results
+        : this.state.movieRecData.results;
+
+    return recomended.length > 0 ? (
+      <Grid className={classes.rootGridListRecommended}>
+        <GridList cols={4.5} className={classes.gridList} cellHeight="auto">
+          >
+          {recomended.map(img => (
+            <GridListTile key={uuid()}>
+              <img
+                src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
+                alt={img.title}
+                style={{ height: "100%", width: "100%" }}
+              />
+              <GridListTileBar
+                title={img.title}
+                actionIcon={
+                  <IconButton>
+                    <Icon>playlist_add</Icon>
+                  </IconButton>
+                }
+              />
+            </GridListTile>
+          ))}
+        </GridList>
+      </Grid>
+    ) : (
+      <p> No recommended... jacny detta är inte bra </p>
+    );
+  };
 }
 
 RecommendedMovies.propTypes = {

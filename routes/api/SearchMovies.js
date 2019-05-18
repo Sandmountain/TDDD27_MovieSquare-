@@ -13,12 +13,12 @@ router.get("/search", async (req, res) => {
         axios.get(
           `${config.themovieDB.apiUrl}?api_key=${
             config.themovieDB.apiKey
-          }&query=${query}&sort_by=popularity.desc&page=1`
+          }&query=${query}&sort_by=revenue.desc&page=1`
         ),
         axios.get(
           `${config.themovieDB.apiUrl}?api_key=${
             config.themovieDB.apiKey
-          }&query=${query}&sort_by=popularity.desc&page=2`
+          }&query=${query}&sort_by=revenue.desc&page=2`
         )
       ])
       .then(

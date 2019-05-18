@@ -85,7 +85,7 @@ class Profile extends Component {
                     marginTop: "20px"
                   }}
                 />
-                <Grid continer className={classes.theLists}>
+                <Grid container className={classes.theLists}>
                   <Grid item xs={6}>
                     <Typography
                       className={classes.typoColor}

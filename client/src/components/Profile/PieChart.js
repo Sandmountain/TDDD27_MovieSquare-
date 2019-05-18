@@ -14,7 +14,7 @@ class PieChart extends Component {
 
   componentDidMount() {
     this.props.getMovies(this.props.userID);
-    console.log("Getting movies");
+    //console.log("Getting movies");
   }
 
   componentDidUpdate(prevProps) {
@@ -26,7 +26,7 @@ class PieChart extends Component {
   }
 
   drawChart() {
-    console.log("Should draw pieChart");
+    //console.log("Should draw pieChart");
 
     var color = d3
       .scaleOrdinal()
@@ -132,7 +132,7 @@ const favoriteGenre = movies => {
       key: Object.keys(favoriteGenreFreq)[i],
       val: d
     }));
-    console.log("dataArray", dataArray[1].key);
+    //console.log("dataArray", dataArray[1].key);
 
     return dataArray;
   } else return null;

@@ -50,7 +50,7 @@ class MovieInfo extends Component {
       }
     };
     const { classes } = this.props;
-    console.log(this.state);
+    //console.log(this.state);
     //this.props.getMovieID();
 
     if (!this.state.isLoading) {

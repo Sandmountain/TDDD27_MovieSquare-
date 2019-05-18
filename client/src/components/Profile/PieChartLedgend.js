@@ -120,7 +120,7 @@ const favoriteGenre = movies => {
       key: Object.keys(favoriteGenreFreq)[i],
       val: d
     }));
-    console.log("dataArray", dataArray[1].key);
+    //console.log("dataArray", dataArray[1].key);
 
     return dataArray;
   } else return null;

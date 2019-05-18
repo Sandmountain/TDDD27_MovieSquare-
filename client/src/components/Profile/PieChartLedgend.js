@@ -1,9 +1,32 @@
 import React, { Component } from "react";
+import { getMovies } from "../../actions/userWatchlistAction";
 import * as d3 from "d3";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 
 class PieChartLedgend extends Component {
+  static propTypes = {
+    userID: PropTypes.string.isRequired,
+    getMovies: PropTypes.func.isRequired,
+    movies: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired
+  };
+
   componentDidMount() {
-    this.drawChart();
+    this.props.getMovies(this.props.userID);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.loading !== this.props.loading) {
+      if (!this.props.loading) {
+        this.drawChart();
+        console.log("Here comes the movies!");
+
+        console.log(this.props.movies);
+        console.log(this.props.movies[1]);
+        console.log(this.props.movies[1].movieID);
+      }
+    }
   }
 
   drawChart() {
@@ -18,13 +41,8 @@ class PieChartLedgend extends Component {
         "#1E88E5",
         "#1976D2"
       ]);
-    //const data = [12, 5, 6, 6, 9, 10];
 
-    const data = [
-      { label: "one", value: 20 },
-      { label: "two", value: 50 },
-      { label: "three", value: 30 }
-    ];
+    const data = favoriteGenre(this.props.movies);
 
     const width = 300;
     const height = 300;
@@ -52,14 +70,14 @@ class PieChartLedgend extends Component {
       .append("rect")
       .attr("width", 20)
       .attr("height", 20)
-      .attr("fill", function(i) {
+      .attr("fill", function(d, i) {
         return color(i);
       });
 
     legend
       .append("text")
       .text(function(d) {
-        return d.value + " %  " + d.label;
+        return d.key + ": " + d.val;
       })
       .attr("fill", "black")
       .style("font-size", 12)
@@ -71,4 +89,50 @@ class PieChartLedgend extends Component {
     return <div id={"#PieChartLedgend"} />;
   }
 }
-export default PieChartLedgend;
+
+const favoriteGenre = movies => {
+  if (movies) {
+    // Tar ut de olika genrerna från varje film och lägger de i en gemensam array.
+    const genreList = [].concat.apply(
+      [],
+      movies.map(genres => genres.movieGenre)
+    );
+
+    // Räknar antalet gånger varje genre förekommer.
+    let counts = genreList.reduce((a, c) => {
+      a[c] = (a[c] || 0) + 1;
+      return a;
+    }, {});
+
+    // Returnerar genren som förekommer flest gånger.
+    let maxCount = Math.max(...Object.values(counts));
+
+    // Retunerar de genrerna som förekommer flest gånger.
+    let mostFrequent = Object.keys(counts).filter(k => counts[k] === maxCount);
+
+    const favoriteGenreFreq = mostFrequent.reduce((acc, elem) => {
+      acc[elem] = maxCount;
+      return acc;
+    }, {});
+
+    const tempArray = Object.values(favoriteGenreFreq);
+    const dataArray = tempArray.map((d, i) => ({
+      key: Object.keys(favoriteGenreFreq)[i],
+      val: d
+    }));
+    console.log("dataArray", dataArray[1].key);
+
+    return dataArray;
+  } else return null;
+};
+
+const mapStateToProps = state => ({
+  movies: state.movie.movies,
+  userID: state.auth.userID,
+  loading: state.movie.loading
+});
+
+export default connect(
+  mapStateToProps,
+  { getMovies }
+)(PieChartLedgend);

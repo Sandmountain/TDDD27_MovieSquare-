@@ -5,23 +5,29 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 
 class PieChart extends Component {
-  state = {
-    isLoading: true
-  };
-
   static propTypes = {
     userID: PropTypes.string.isRequired,
     getMovies: PropTypes.func.isRequired,
-    movies: PropTypes.object.isRequired
+    movies: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired
   };
 
   componentDidMount() {
     this.props.getMovies(this.props.userID);
-    console.log(this.props.movies);
-    this.drawChart();
+    console.log("Getting movies");
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.loading !== this.props.loading) {
+      if (!this.props.loading) {
+        this.drawChart();
+      }
+    }
   }
 
   drawChart() {
+    console.log("Should draw pieChart");
+
     var color = d3
       .scaleOrdinal()
       .range([
@@ -33,8 +39,9 @@ class PieChart extends Component {
         "#1E88E5",
         "#1976D2"
       ]);
-    //const data = [12, 5, 6, 6, 9, 10];
+
     const favGenre = favoriteGenre(this.props.movies);
+    console.log("favGenre", favGenre);
 
     const width = 300;
     const height = 300;
@@ -83,13 +90,13 @@ class PieChart extends Component {
       })
       .attr("text-anchor", "middle")
       .text(function(d, i) {
-        return d[i].key;
+        return favGenre[i].key;
       });
   }
 
   render() {
-    const { movies } = this.props.movies;
-    console.log(movies);
+    console.log("this.props.loading", this.props.loading);
+    console.log("movies", this.props.movies);
 
     return <div id={"#PieChart"} />;
   }
@@ -125,14 +132,16 @@ const favoriteGenre = movies => {
       key: Object.keys(favoriteGenreFreq)[i],
       val: d
     }));
+    console.log("dataArray", dataArray[1].key);
 
     return dataArray;
   } else return null;
 };
 
 const mapStateToProps = state => ({
-  movies: state.movie,
-  userID: state.auth.userID
+  movies: state.movie.movies,
+  userID: state.auth.userID,
+  loading: state.movie.loading
 });
 
 export default connect(

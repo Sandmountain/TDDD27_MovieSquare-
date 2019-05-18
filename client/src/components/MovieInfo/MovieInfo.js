@@ -36,8 +36,7 @@ class MovieInfo extends Component {
       raitings: [],
       genres: [],
       isLoading: true,
-      open: false,
-      isReload: true
+      open: false
     };
   }
 
@@ -57,7 +56,6 @@ class MovieInfo extends Component {
     if (!this.state.isLoading) {
       const credit = returnVIP(this.state.data.credits);
       const { results } = this.state.data.videos;
-
       return (
         <Fragment>
           <Grid item className={classes.mainGrid}>
@@ -111,18 +109,26 @@ class MovieInfo extends Component {
                         alt="imdb"
                       />
                     ) : null}
-                    {typeof this.state.raitings[0] !== "undefined"
-                      ? " " + this.state.raitings[0].Value
-                      : null}
+                    <b>
+                      {typeof this.state.raitings[0] !== "undefined"
+                        ? " " + this.state.raitings[0].Value
+                        : null}
+                    </b>
                   </Typography>
                 </Grid>
                 <Grid item style={{ paddingTop: 2 }}>
                   <Typography color="primary" variant="body2">
                     {displayTomatoIcon(this.state.raitings)}{" "}
-                    {typeof this.state.raitings[1] !== "undefined"
-                      ? this.state.raitings[1].Value
-                      : null}
+                    <b>
+                      {typeof this.state.raitings[1] !== "undefined"
+                        ? this.state.raitings[1].Value.slice(0, 2)
+                        : null}
+                    </b>
+                    %
                   </Typography>
+                </Grid>
+                <Grid item style={{ paddingTop: 2 }}>
+                  {displayMetaCritics(this.state.raitings)}{" "}
                 </Grid>
               </Grid>
               <Grid item sm={9} className={classes.foreGroundImage}>
@@ -174,8 +180,8 @@ class MovieInfo extends Component {
                     color="primary"
                     aria-label="Edit"
                     onClick={() => {
-                      console.log(this.state.data);
-                      addMovieToDb();
+                      //console.log(this.state.data);
+                      this.addMovieToDb(this.state.data, this.props.userID);
                     }}
                     className={classes.fabButtons}
                   >
@@ -272,17 +278,13 @@ class MovieInfo extends Component {
           </Grid>
 
           <Grid item sm={12}>
-            <BottomNavBar />
+            <BottomNavBar movieData={this.state.data} />
           </Grid>
         </Fragment>
       );
     } else {
       return <div />;
     }
-  }
-  _onReady(event) {
-    // access to player in all event handlers via event.target
-    //event.target.pauseVideo();
   }
 
   handleOpen = () => {
@@ -309,7 +311,7 @@ class MovieInfo extends Component {
         .get(
           `${config.themovieDB.movieURL}/${movieID}?api_key=${
             config.themovieDB.apiKey
-          }&append_to_response=credits,videos,similar`
+          }&append_to_response=credits,videos,similar,reviews`
         )
         .then(res => {
           this.setState({ data: res.data });
@@ -331,29 +333,46 @@ class MovieInfo extends Component {
         })
         .catch(error => {});
     }
-    /*
-    
-      */
+  };
+  addMovieToDb = (movie, userID) => {
+    if (typeof movie !== "undefiend") {
+      const newMovie = {};
+      //Changing the object to fit the action. Outside movieinfo.js movies have different genres structur.
+      delete Object.assign(newMovie, movie, {
+        ["genre_ids"]: movie["genres"]
+      })["genres"];
+      this.props.addMovie(userID, newMovie);
+    }
   };
 }
-const addMovieToDb = () => {
-  if (typeof this.state.data != "undefiend") {
-    const movieToAdd = this.state.data;
-    /*const test = {
-      a: 1,
-      b: 2
-    };
-    //movieToAdd.push({ genres_id: test });*/
-    delete Object.assign(movieToAdd, { ["genres_ids"]: movieToAdd["genres"] })[
-      "genres"
-    ];
-    // movieToAdd.push({ genres_id });
 
-    //Fixa så att det inte crashar när man lägger till
-    console.log(movieToAdd);
+const displayMetaCritics = value => {
+  if (typeof value[2] !== "undefined") {
+    let backgroundColor;
+    if (value[2].Value.slice(0, 2) > 60) {
+      backgroundColor = "#6c3";
+    } else if (value[2].Value.slice(0, 2) > 39) {
+      backgroundColor = "#fc3";
+    } else {
+      backgroundColor = "#f00";
+    }
+
+    return (
+      <div
+        style={{
+          padding: 2,
+          height: "26px",
+          width: "26px",
+          borderRadius: "3px",
+          backgroundColor: backgroundColor
+        }}
+      >
+        <Typography style={{ height: "100%", width: "100%" }} align="center">
+          {value[2].Value.slice(0, 2)}
+        </Typography>
+      </div>
+    );
   }
-
-  //this.props.addMovie(this.props.userID, this.state.data);
 };
 
 const displayTomatoIcon = value => {

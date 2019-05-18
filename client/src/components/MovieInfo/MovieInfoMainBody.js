@@ -6,7 +6,12 @@ export default class MovieInfoMainBody extends Component {
   render() {
     return (
       <Fragment>
-        <Grid container justify="center" alignItems="center">
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          style={{ marginBottom: "15px" }}
+        >
           <Grid item sm={8}>
             <Paper style={styles.MainBody}>
               <Paper style={styles.inlineMainBody}>

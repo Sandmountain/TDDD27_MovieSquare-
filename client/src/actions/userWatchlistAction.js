@@ -12,7 +12,6 @@ export const getMovies = userID => dispatch => {
   });
 };
 export const addMovie = (userID, movie) => dispatch => {
-  console.log(movie);
   for (let i = 0; i < movie.genre_ids.length; i++) {
     for (let j = 0; j < genres.genres.length; j++) {
       if (movie.genre_ids[i] === genres.genres[j].id) {
@@ -20,7 +19,7 @@ export const addMovie = (userID, movie) => dispatch => {
       }
     }
   }
-  console.log(movie);
+
   const movieObject = {
     movie: movie,
     userID: userID

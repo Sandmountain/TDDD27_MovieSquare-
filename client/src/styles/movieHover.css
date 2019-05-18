@@ -1,0 +1,47 @@
+.vignette img {
+  display: block;
+}
+.vignette:hover:after {
+  /*Solid Border*/
+  border: 4px solid #ffc400;
+  pointer-events: none;
+  /*Vignette */
+  -moz-box-shadow: inset 0 0 5em rgba(0, 0, 0, 0.336);
+  -webkit-box-shadow: inset 0 0 5em rgba(0, 0, 0, 0.411);
+  box-shadow: inset 0 0 5em rgb(0, 0, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  content: "";
+}
+
+.vignette:hover a {
+  opacity: 1;
+  top: 0;
+  z-index: 500;
+}
+/* added */
+.vignette:hover a span {
+  top: 50%;
+  position: absolute;
+  left: 0;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+/* added */
+.vignette a {
+  pointer-events: none;
+  display: block;
+  position: absolute;
+  top: -100%;
+  opacity: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  text-align: center;
+  color: inherit;
+}

@@ -27,7 +27,7 @@ class Reviews extends Component {
                 </Typography>
                 <Typography
                   style={{
-                    marginLeft: "33.33%"
+                    marginLeft: "auto"
                   }}
                   color="secondary"
                 >

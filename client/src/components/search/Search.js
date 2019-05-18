@@ -9,7 +9,12 @@ class Search extends Component {
     const { results, loading } = this.props.results;
     return (
       <div>
-        <Grid container justify="center" alignItems="center">
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          style={{ marginBottom: "15px" }}
+        >
           <Grid item sm={8}>
             <Paper style={styles.MainBody}>
               <Paper style={styles.inlineMainBody}>
@@ -17,7 +22,6 @@ class Search extends Component {
                   <MovieResult images={results} />
                 ) : (
                   <Fragment>
-                    {/* Make a nice component for no results*/}
                     {loading ? (
                       <Fragment>
                         <CircularProgress
@@ -53,12 +57,6 @@ class Search extends Component {
 }
 
 const styles = {
-  root: {
-    marginTop: "30px",
-    marginBottom: "2px",
-    display: "flex",
-    alignItems: "center"
-  },
   inputField: {
     paddingLeft: 20,
     width: 600,

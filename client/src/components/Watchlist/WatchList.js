@@ -6,6 +6,11 @@ import {
   Icon,
   Avatar,
   Divider,
+  ExpansionPanel,
+  ExpansionPanelSummary,
+  ExpansionPanelDetails,
+  ExpansionPanelActions,
+  Typography,
   CircularProgress
 } from "@material-ui/core";
 import { getMovies, deleteMovie } from "../../actions/userWatchlistAction";
@@ -14,12 +19,6 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelActions from "@material-ui/core/ExpansionPanelActions";
-
-import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 class WatchList extends Component {
@@ -37,7 +36,12 @@ class WatchList extends Component {
         <h3>{favGenre + " "} </h3>
         */}
 
-        <Grid container justify="center" alignItems="center">
+        <Grid
+          container
+          justify="center"
+          alignItems="center"
+          style={{ marginBottom: "15px" }}
+        >
           <Grid item sm={8}>
             {this.props.movie.loading ? (
               <CircularProgress
@@ -173,7 +177,6 @@ class WatchList extends Component {
     );
   }
   componentDidMount() {
-    console.log("loading");
     this.props.getMovies(this.props.userID);
   }
 

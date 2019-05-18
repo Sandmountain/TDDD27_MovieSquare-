@@ -50,12 +50,13 @@ class MovieInfo extends Component {
       }
     };
     const { classes } = this.props;
-
+    console.log(this.state);
     //this.props.getMovieID();
 
     if (!this.state.isLoading) {
       const credit = returnVIP(this.state.data.credits);
       const { results } = this.state.data.videos;
+
       return (
         <Fragment>
           <Grid item className={classes.mainGrid}>
@@ -109,22 +110,21 @@ class MovieInfo extends Component {
                         alt="imdb"
                       />
                     ) : null}
-                    <b>
+                    <strong>
                       {typeof this.state.raitings[0] !== "undefined"
                         ? " " + this.state.raitings[0].Value
                         : null}
-                    </b>
+                    </strong>
                   </Typography>
                 </Grid>
                 <Grid item style={{ paddingTop: 2 }}>
                   <Typography color="primary" variant="body2">
                     {displayTomatoIcon(this.state.raitings)}{" "}
-                    <b>
+                    <strong>
                       {typeof this.state.raitings[1] !== "undefined"
-                        ? this.state.raitings[1].Value.slice(0, 2)
+                        ? this.state.raitings[1].Value.slice(0, 2) + "%"
                         : null}
-                    </b>
-                    %
+                    </strong>
                   </Typography>
                 </Grid>
                 <Grid item style={{ paddingTop: 2 }}>
@@ -173,7 +173,7 @@ class MovieInfo extends Component {
                     variant="extended"
                     className={classes.fabButtons}
                   >
-                    <b>{this.state.data.vote_average}</b>
+                    <strong>{this.state.data.vote_average}</strong>
                   </Fab>
                   <Fab
                     size="small"
@@ -242,19 +242,23 @@ class MovieInfo extends Component {
                 <Divider style={{ marginBottom: "20px" }} />
                 <Grid item sm={12}>
                   <Typography color="inherit" variant="body1">
-                    {credit.Directors.length > 0 ? <b>Director(s): </b> : null}
+                    {credit.Directors.length > 0 ? (
+                      <strong>Director(s): </strong>
+                    ) : null}
                     {credit.Directors.map((cred, index) => {
                       return (index ? ", " : "") + cred.name;
                     })}
                   </Typography>
                   <Typography color="inherit" variant="body1">
-                    {credit.Writers.length > 0 ? <b>Writer(s): </b> : null}
+                    {credit.Writers.length > 0 ? (
+                      <strong>Writer(s): </strong>
+                    ) : null}
                     {credit.Writers.map((cred, index) => {
                       return (index ? ", " : "") + cred.name;
                     })}
                   </Typography>
                   <Typography color="inherit" variant="body1">
-                    {credit.Cast.length > 0 ? <b>Cast: </b> : null}
+                    {credit.Cast.length > 0 ? <strong>Cast: </strong> : null}
                     {credit.Cast.map((cred, index) => {
                       return (index ? ", " : "") + cred.name;
                     })}

@@ -27,7 +27,7 @@ class NavBar extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="fixed">
           <Toolbar>
             <IconButton
               className={classes.menuButton}
@@ -88,7 +88,7 @@ const styles = {
   },
   root: {
     flexGrow: 1,
-    marginBottom: 80
+    marginBottom: 140
   },
   grow: {
     flexGrow: 1

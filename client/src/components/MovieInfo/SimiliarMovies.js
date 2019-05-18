@@ -14,6 +14,7 @@ import { Link } from "react-router-dom";
 //Redux
 import { connect } from "react-redux";
 import { setMovieID, getMovieID } from "../../actions/movieInfoAction";
+import "../../styles/movieHover.css";
 
 class SimiliarMovies extends Component {
   render() {
@@ -37,26 +38,28 @@ class SimiliarMovies extends Component {
                       pathname: `/movieInfo/${img.id}`
                     }}
                   >
-                    {img.poster_path ? (
-                      <img
-                        style={{ width: "100%", heigh: "100%" }}
-                        src={`http://image.tmdb.org/t/p/w185/${
-                          img.poster_path
-                        }`}
-                        alt=""
-                        onError={e => {
-                          this.onerror = null;
-                          e.target.src = require("../../images/error.png");
-                        }}
-                        onClick={() => {
-                          this.props.setMovieID(img.id);
-                          //forceUpdate();
-                        }}
-                      />
-                    ) : (
-                      <img src={require("../../images/error.png")} alt="" />
-                    )}
-
+                    <div className="vignette">
+                      {img.poster_path ? (
+                        <img
+                          style={{ width: "100%", heigh: "100%" }}
+                          src={`http://image.tmdb.org/t/p/w185/${
+                            img.poster_path
+                          }`}
+                          className="moviePoster"
+                          alt=""
+                          onError={e => {
+                            this.onerror = null;
+                            e.target.src = require("../../images/error.png");
+                          }}
+                          onClick={() => {
+                            this.props.setMovieID(img.id);
+                            //forceUpdate();
+                          }}
+                        />
+                      ) : (
+                        <img src={require("../../images/error.png")} alt="" />
+                      )}
+                    </div>
                     <GridListTileBar
                       title={img.title}
                       key={img.id}

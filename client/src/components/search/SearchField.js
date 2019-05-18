@@ -68,8 +68,6 @@ class SearchField extends Component {
 
 const styles = {
   root: {
-    marginTop: "30px",
-    marginBottom: "2px",
     display: "flex",
     alignItems: "center"
   },

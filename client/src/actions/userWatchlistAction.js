@@ -24,6 +24,7 @@ export const addMovie = (userID, movie) => dispatch => {
     movie: movie,
     userID: userID
   };
+
   axios.post("/api/UserWatchlist/userID", movieObject).then(res => {
     dispatch({
       type: ADD_MOVIE,
@@ -36,12 +37,12 @@ export const deleteMovie = (userID, id) => dispatch => {
     .delete(`/api/UserWatchlist/userID/`, {
       data: { userID: userID, id: id }
     })
-    .then(res =>
+    .then(res => {
       dispatch({
         type: DELETE_MOVIE,
         payload: id
-      })
-    );
+      });
+    });
 };
 export const setMoviesLoading = () => {
   return {

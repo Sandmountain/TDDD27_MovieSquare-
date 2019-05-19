@@ -8,13 +8,16 @@ const watchlist = require("./routes/api/watchlist");
 const users = require("./routes/api/users");
 const userWatchlist = require("./routes/api/UserWatchlist");
 const searchMovies = require("./routes/api/SearchMovies");
+const searchMovieInfo = require("./routes/api/SearchMovieInfo");
+const bodyParser = require("body-parser");
 
 const app = express();
 
 app.use(cors());
 
-//Body parser middleware
-app.use(express.json());
+//Body parser middleware (set limit to fix payload too large errors)
+app.use(express.json({ limit: "10mb", extended: true }));
+app.use(express.urlencoded({ limit: "10mb", extended: true }));
 
 //Getting mongo URI
 const dbConfig = config.get("mongoURI");
@@ -28,6 +31,7 @@ mongoose
 app.use("/api/watchlist", watchlist);
 app.use("/api/users", users);
 app.use("/api/SearchMovies", searchMovies);
+app.use("/api/SearchMovieInfo", searchMovieInfo);
 app.use("/api/UserWatchlist", userWatchlist);
 
 const PORT = process.env.PORT || 5000;

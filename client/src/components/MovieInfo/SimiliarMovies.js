@@ -4,11 +4,12 @@ import {
   GridListTileBar,
   Icon,
   IconButton,
-  GridList
+  GridList,
+  Snackbar
 } from "@material-ui/core";
 import PropTypes from "prop-types";
 import uuid from "uuid";
-import { addMovie } from "../../actions/userWatchlistAction";
+import { addMovie, getMovies } from "../../actions/userWatchlistAction";
 
 import { Link } from "react-router-dom";
 //Redux
@@ -17,10 +18,11 @@ import { setMovieID, getMovieID } from "../../actions/movieInfoAction";
 import "../../styles/movieHover.css";
 
 class SimiliarMovies extends Component {
+  state = {
+    addedMovie: "",
+    showInfo: false
+  };
   render() {
-    //const similar
-    // {this.props.similar ?  { similar } = this.props.similar : null }
-
     let similarResults;
     this.props.similar
       ? (similarResults = this.props.similar.results.slice(0, 5))
@@ -67,9 +69,14 @@ class SimiliarMovies extends Component {
                       actionIcon={
                         <IconButton
                           color="secondary"
-                          onClick={() =>
-                            this.props.addMovie(this.props.userID, img)
-                          }
+                          onClick={() => {
+                            this.props.addMovie(this.props.userID, img);
+                            this.props.getMovies(this.props.userID);
+                            this.setState({
+                              showInfo: true,
+                              addedMovie: img.original_title
+                            });
+                          }}
                         >
                           <Icon>playlist_add</Icon>
                         </IconButton>
@@ -83,8 +90,22 @@ class SimiliarMovies extends Component {
         ) : (
           <div />
         )}
+        <Snackbar
+          message={
+            <span id="message-id">
+              Added <strong>{this.state.addedMovie}</strong> to the watchlist
+            </span>
+          }
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          open={this.state.showInfo}
+          autoHideDuration={3000}
+          onClose={() => this.handleClose()}
+        />
       </div>
     );
+  }
+  handleClose() {
+    this.setState({ showInfo: false });
   }
 }
 
@@ -94,11 +115,11 @@ SimiliarMovies.propTypes = {
 
 const mapStateToProps = state => ({
   movie: state.movie,
-  id: state.movieID.id,
+  id: state.movieInfo.id,
   userID: state.auth.userID
 });
 
 export default connect(
   mapStateToProps,
-  { setMovieID, getMovieID, addMovie }
+  { setMovieID, getMovieID, addMovie, getMovies }
 )(SimiliarMovies);

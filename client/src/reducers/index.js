@@ -9,6 +9,6 @@ import searchReducer from "./searchReducer";
 export default combineReducers({
   movie: watchListReducer,
   results: searchReducer,
-  movieID: movieInfoReducer,
+  movieInfo: movieInfoReducer,
   auth: authReducer
 });

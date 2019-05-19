@@ -9,6 +9,7 @@ import Icon from "@material-ui/core/Icon";
 //Components
 import Reviews from "./Reviews";
 import MovieClips from "./MovieClips";
+import MovieActors from "./MovieActors";
 
 const styles = theme => ({
   root: {
@@ -90,9 +91,9 @@ class BottomNavBar extends Component {
 function DisplayContent(props) {
   const value = props.tabInfo;
   const data = props.movieData;
-  //console.log(data);
+
   if (value === "actors") {
-    return <p> WoW Folder </p>;
+    return <MovieActors actors={data.credits.cast} />;
   } else if (value === "comment") {
     return <p> WoW comment </p>;
   } else if (value === "reviews") {

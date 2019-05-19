@@ -5,13 +5,13 @@ import { Provider } from "react-redux";
 //** Original **/
 import NavBar from "./components/Navbar/NavBar";
 import Search from "./components/Search/Search";
-
-import store from "./store";
 import WatchList from "./components/Watchlist/WatchList";
 import LoginPage from "./components/Login/LoginPage";
 import Profile from "./components/Profile/Profile";
 import ParentComponent from "./components/HOCs/jwtAuthGuard";
 import MovieInfoMainBody from "./components/MovieInfo/MovieInfoMainBody";
+
+import store from "./store";
 
 class App extends Component {
   render() {

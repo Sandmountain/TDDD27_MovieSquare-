@@ -18,13 +18,13 @@
   content: "";
 }
 
-.vignette:hover a {
+.vignette:hover div {
   opacity: 1;
   top: 0;
   z-index: 500;
 }
 /* added */
-.vignette:hover a span {
+.vignette:hover div span {
   top: 50%;
   position: absolute;
   left: 0;
@@ -33,7 +33,7 @@
 }
 
 /* added */
-.vignette a {
+.vignette div {
   pointer-events: none;
   display: block;
   position: absolute;

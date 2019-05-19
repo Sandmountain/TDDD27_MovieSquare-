@@ -1,22 +1,13 @@
 import React, { Component, Fragment } from "react";
-import {
-  Grid,
-  Typography,
-  Divider,
-  Icon,
-  Fab,
-  CircularProgress
-} from "@material-ui/core";
+import { Grid, Typography, Divider, Icon, Fab } from "@material-ui/core";
 import SimilarMovies from "./SimiliarMovies";
 import BottomNavBar from "./BottomNavBar";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
-import {
-  getMovieID,
-  setMovieID,
-  getMovieInfo
-} from "../../actions/movieInfoAction";
-import { addMovie, getMovies } from "../../actions/userWatchlistAction";
+import config from "../../config.json";
+import axios from "axios";
+import { getMovieID, setMovieID } from "../../actions/movieInfoAction";
+import { addMovie } from "../../actions/userWatchlistAction";
 import { connect } from "react-redux";
 import YouTube from "react-youtube";
 import uuid from "uuid";
@@ -41,7 +32,10 @@ class MovieInfo extends Component {
     super(props);
     this.getMovieInfo();
     this.state = {
+      data: [],
+      raitings: [],
       genres: [],
+      isLoading: true,
       open: false
     };
   }
@@ -56,18 +50,20 @@ class MovieInfo extends Component {
       }
     };
     const { classes } = this.props;
+    //console.log(this.state);
+    //this.props.getMovieID();
 
-    if (!this.props.movieInfo.loadingMovieInfo) {
-      const movieInfo = this.props.movieInfo.movieInfoResults;
-      const videoClips = movieInfo.videos.results;
-      const raitings = this.props.movieInfo.raitings;
-      const credit = returnVIP(movieInfo.credits);
+    if (!this.state.isLoading) {
+      const credit = returnVIP(this.state.data.credits);
+      const { results } = this.state.data.videos;
 
       return (
         <Fragment>
           <Grid item className={classes.mainGrid}>
             <img
-              src={`http://image.tmdb.org/t/p/w1280/${movieInfo.backdrop_path}`}
+              src={`http://image.tmdb.org/t/p/w1280/${
+                this.state.data.backdrop_path
+              }`}
               alt="img"
               className={classes.backdropStyle}
               onError={e => {
@@ -84,14 +80,14 @@ class MovieInfo extends Component {
                     boxShadow: "0px 0px 5px 1px rgba(0,0,0,0.75)"
                   }}
                   src={`http://image.tmdb.org/t/p/w185/${
-                    movieInfo.poster_path
+                    this.state.data.poster_path
                   }`}
                   onError={e => {
                     this.onerror = null;
                     e.target.src = require("../../images/error.png");
                   }}
                 />
-                {movieInfo.tagline ? (
+                {this.state.data.tagline ? (
                   <Fragment>
                     <Divider style={{ marginTop: "5px" }} />
                     <Typography
@@ -99,7 +95,7 @@ class MovieInfo extends Component {
                       variant="inherit"
                       style={{ fontStyle: "italic" }}
                     >
-                      "{movieInfo.tagline}..."
+                      "{this.state.data.tagline}..."
                     </Typography>
                   </Fragment>
                 ) : (
@@ -107,7 +103,7 @@ class MovieInfo extends Component {
                 )}
                 <Grid item style={{ paddingTop: 10 }}>
                   <Typography color="primary" variant="body2">
-                    {typeof raitings[0] !== "undefined" ? (
+                    {typeof this.state.raitings[0] !== "undefined" ? (
                       <img
                         style={{ height: 26 }}
                         src={require("../../images/imdb.png")}
@@ -115,24 +111,24 @@ class MovieInfo extends Component {
                       />
                     ) : null}
                     <strong>
-                      {typeof raitings[0] !== "undefined"
-                        ? " " + raitings[0].Value
+                      {typeof this.state.raitings[0] !== "undefined"
+                        ? " " + this.state.raitings[0].Value
                         : null}
                     </strong>
                   </Typography>
                 </Grid>
                 <Grid item style={{ paddingTop: 2 }}>
                   <Typography color="primary" variant="body2">
-                    {displayTomatoIcon(raitings)}{" "}
+                    {displayTomatoIcon(this.state.raitings)}{" "}
                     <strong>
-                      {typeof raitings[1] !== "undefined"
-                        ? raitings[1].Value.slice(0, 2) + "%"
+                      {typeof this.state.raitings[1] !== "undefined"
+                        ? this.state.raitings[1].Value.slice(0, 2) + "%"
                         : null}
                     </strong>
                   </Typography>
                 </Grid>
                 <Grid item style={{ paddingTop: 2 }}>
-                  {displayMetaCritics(raitings)}{" "}
+                  {displayMetaCritics(this.state.raitings)}{" "}
                 </Grid>
               </Grid>
               <Grid item sm={9} className={classes.foreGroundImage}>
@@ -142,12 +138,12 @@ class MovieInfo extends Component {
                   display="block"
                   style={{ opacity: 1, zIndex: "2" }}
                 >
-                  {movieInfo.title}
+                  {this.state.data.title}
                 </Typography>
-                {movieInfo.release_date ? (
+                {this.state.data.release_date ? (
                   <Typography color="inherit" variant="subtitle2" gutterBottom>
                     {" "}
-                    Released {movieInfo.release_date}
+                    Released {this.state.data.release_date}
                   </Typography>
                 ) : null}
                 <Typography
@@ -156,13 +152,13 @@ class MovieInfo extends Component {
                   variant="subtitle2"
                   gutterBottom
                 >
-                  {movieInfo.genres.map((item, index) => (
+                  {this.state.data.genres.map((item, index) => (
                     <span key={uuid()}>{(index ? ", " : "") + item.name}</span>
                   ))}{" "}
-                  {movieInfo.runtime ? (
-                    <Fragment> | {movieInfo.runtime} min </Fragment>
+                  {this.state.data.runtime ? (
+                    <Fragment> | {this.state.data.runtime} min </Fragment>
                   ) : null}{" "}
-                  {movieInfo.spoken_languages.map((item, index) => (
+                  {this.state.data.spoken_languages.map((item, index) => (
                     <span key={uuid()}>
                       {(index ? ", " : "| ") + item.name}
                     </span>
@@ -177,15 +173,15 @@ class MovieInfo extends Component {
                     variant="extended"
                     className={classes.fabButtons}
                   >
-                    <strong>{movieInfo.vote_average}</strong>
+                    <strong>{this.state.data.vote_average}</strong>
                   </Fab>
                   <Fab
                     size="small"
                     color="primary"
                     aria-label="Edit"
                     onClick={() => {
-                      //console.log(movieInfo);
-                      this.addMovieToDb(movieInfo, this.props.userID);
+                      //console.log(this.state.data);
+                      this.addMovieToDb(this.state.data, this.props.userID);
                     }}
                     className={classes.fabButtons}
                   >
@@ -193,9 +189,11 @@ class MovieInfo extends Component {
                   </Fab>
                   <a
                     href={
-                      movieInfo.homepage
-                        ? movieInfo.homepage
-                        : `https://www.imdb.com/title/${movieInfo.imdb_id}`
+                      this.state.data.homepage
+                        ? this.state.data.homepage
+                        : `https://www.imdb.com/title/${
+                            this.state.data.imdb_id
+                          }`
                     }
                     style={{ textDecoration: "none" }}
                   >
@@ -225,21 +223,21 @@ class MovieInfo extends Component {
                 >
                   <div className={classes.paperModal}>
                     <YouTube
-                      videoId={videoClips[0] ? videoClips[0].key : "0"}
+                      videoId={results[0] ? results[0].key : "0"}
                       opts={opts}
                       onReady={this._onReady}
                     />
                   </div>
                 </Modal>
                 <Divider style={{ marginBottom: "20px" }} />
-                {movieInfo.overview.length > 0 ? (
+                {this.state.data.overview.length > 0 ? (
                   <Typography color="inherit" variant="h6">
                     {" "}
                     Overview{" "}
                   </Typography>
                 ) : null}
                 <Typography color="inherit" variant="body1">
-                  {movieInfo.overview}
+                  {this.state.data.overview}
                 </Typography>
                 <Divider style={{ marginBottom: "20px" }} />
                 <Grid item sm={12}>
@@ -272,9 +270,9 @@ class MovieInfo extends Component {
           <Divider />
           <Grid item sm={12}>
             <Divider style={{ paddingTop: 3 }} />
-            {movieInfo.similar ? (
+            {this.state.data.similar ? (
               <SimilarMovies
-                similar={movieInfo.similar}
+                similar={this.state.data.similar}
                 style={{ overflow: "hide" }}
               />
             ) : (
@@ -284,14 +282,12 @@ class MovieInfo extends Component {
           </Grid>
 
           <Grid item sm={12}>
-            <BottomNavBar movieData={movieInfo} />
+            <BottomNavBar movieData={this.state.data} />
           </Grid>
         </Fragment>
       );
     } else {
-      return (
-        <CircularProgress style={{ marginTop: "20%", marginLeft: "50%" }} />
-      );
+      return <div />;
     }
   }
 
@@ -315,19 +311,41 @@ class MovieInfo extends Component {
   getMovieInfo = () => {
     let movieID = this.props.id;
     if (movieID !== "" && typeof movieID !== "undefined") {
-      this.props.getMovieInfo(movieID);
+      axios
+        .get(
+          `${config.themovieDB.movieURL}/${movieID}?api_key=${
+            config.themovieDB.apiKey
+          }&append_to_response=credits,videos,similar,reviews`
+        )
+        .then(res => {
+          this.setState({ data: res.data });
+          axios
+            .get(
+              `http://www.omdbapi.com/?apikey=6f9b4562&i=${
+                this.state.data.imdb_id
+              }`
+            )
+            .then(res => {
+              if (res.data.Response !== "False") {
+                this.setState({ raitings: res.data.Ratings });
+                this.setState({ isLoading: false });
+              } else {
+                this.setState({ isLoading: false });
+              }
+            })
+            .catch(error => {});
+        })
+        .catch(error => {});
     }
   };
-
   addMovieToDb = (movie, userID) => {
-    if (movie !== "undefiend") {
+    if (typeof movie !== "undefiend") {
       const newMovie = {};
       //Changing the object to fit the action. Outside movieinfo.js movies have different genres structur.
       delete Object.assign(newMovie, movie, {
-        genre_ids: movie["genres"]
+        ["genre_ids"]: movie["genres"]
       })["genres"];
       this.props.addMovie(userID, newMovie);
-      this.props.getMovies(userID);
     }
   };
 }
@@ -458,14 +476,12 @@ MovieInfo.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  id: state.movieInfo.id,
-  isLoading: state.movieInfo.loadingMovieInfo,
-  movieInfo: state.movieInfo,
+  id: state.movieID.id,
   movie: state.movie,
   userID: state.auth.userID
 });
 
 export default connect(
   mapStateToProps,
-  { getMovieInfo, getMovieID, addMovie, getMovies, setMovieID }
+  { getMovieID, addMovie, setMovieID }
 )(withStyles(styles)(MovieInfo));

@@ -4,7 +4,7 @@ const router = express.Router();
 const axios = require("axios");
 const config = require("config");
 
-router.get("/search", async (req, res) => {
+router.get("/search/", async (req, res) => {
   const query = req.query.name;
 
   if (query.length > 0) {

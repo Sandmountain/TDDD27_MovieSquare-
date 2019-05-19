@@ -11,6 +11,8 @@ export const AUTH_ERROR = "AUTH_ERROR";
 //MovieID
 export const GET_MOVIEINFO_ID = "GET_MOVIEINFO_ID";
 export const SET_MOVIEINFO_ID = "SET_MOVIEINFO_ID";
+export const GET_MOVIEINFO = "GET_MOVIEINFO";
+export const LOADING_INFO = "LOADING_INFO";
 
 //Search Query
 export const GET_SEARCH_RESULTS = "GET_SEARCH_RESULTS";

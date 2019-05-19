@@ -5,7 +5,6 @@ import { getMovies } from "../../actions/userWatchlistAction";
 import axios from "axios";
 import uuid from "uuid";
 import config from "../../config.json";
-import { Link } from "react-router-dom";
 
 import {
   Grid,
@@ -15,38 +14,87 @@ import {
   IconButton,
   Icon,
   withStyles,
-  CircularProgress
+  CircularProgress,
+  Snackbar
 } from "@material-ui/core";
-
-const styles = {
-  rootGridListRecommended: {
-    display: "flex",
-    width: "100%",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
-    backgroundColor: "white"
-  },
-  gridList: {
-    flexWrap: "nowrap",
-    transform: "translateZ(0)"
-  },
-  title: {
-    color: "white"
-  },
-  titleBar: {
-    background:
-      "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
-  }
-};
 
 class RecommendedMovies extends Component {
   state = {
     isLoading: true,
     imageLoading: true,
-    movieRecData: []
+    movieRecData: [],
+    addedMovie: "",
+    showInfo: false
   };
 
+  render() {
+    const { classes } = this.props;
+
+    return (
+      <Fragment>
+        {!this.state.isLoading ? (
+          this.returnDivInTime(classes)
+        ) : (
+          <CircularProgress style={{ marginLeft: "50%" }} />
+        )}
+        <Snackbar
+          message={
+            <span id="message-id">
+              Added <strong>{this.state.addedMovie}</strong> to the watchlist
+            </span>
+          }
+          anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+          open={this.state.showInfo}
+          autoHideDuration={3000}
+          onClose={() => this.handleClose()}
+        />
+      </Fragment>
+    );
+  }
+  returnDivInTime = classes => {
+    /* If there are no recomended videos for a specific show the most popilar movies */
+    const recomended =
+      typeof this.state.movieRecData.recommendations !== "undefined"
+        ? this.state.movieRecData.recommendations.results
+        : this.state.movieRecData.results;
+
+    return recomended.length > 0 ? (
+      <Grid className={classes.rootGridListRecommended}>
+        <GridList cols={6.5} className={classes.gridList} cellHeight="auto">
+          >
+          {recomended.map(img => (
+            <GridListTile key={uuid()}>
+              <img
+                src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
+                alt={img.title}
+                style={{ height: "100%", width: "100%" }}
+              />
+              <GridListTileBar
+                title={img.title}
+                actionIcon={
+                  <IconButton
+                    onClick={() => {
+                      this.setState({
+                        showInfo: true,
+                        addedMovie: img.original_title
+                      });
+                    }}
+                  >
+                    <Icon>playlist_add</Icon>
+                  </IconButton>
+                }
+              />
+            </GridListTile>
+          ))}
+        </GridList>
+      </Grid>
+    ) : (
+      <p> No recommended... jacny detta är inte bra </p>
+    );
+  };
+  handleClose() {
+    this.setState({ showInfo: false });
+  }
   componentDidMount() {
     this.props.getMovies(this.props.userID);
   }
@@ -79,7 +127,7 @@ class RecommendedMovies extends Component {
                 `https://api.themoviedb.org/3/discover/movie?api_key=${
                   config.themovieDB.apiKey
                 }&primary_release_year=2019&sort_by=revenue.desc`
-              )   //Primary release year can be removed for getting of all time
+              ) //Primary release year can be removed for getting of all time
               .then(res => {
                 this.setState({ movieRecData: res.data });
                 this.setState({ isLoading: false });
@@ -90,55 +138,29 @@ class RecommendedMovies extends Component {
         .catch(error => {});
     }
   };
-
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <Fragment>
-        {!this.state.isLoading ? (
-          this.returnDivInTime(classes)
-        ) : (
-          <CircularProgress style={{ marginLeft: "50%" }} />
-        )}
-      </Fragment>
-    );
-  }
-  returnDivInTime = classes => {
-    /* If there are no recomended videos for a specific show the most popilar movies */
-    const recomended =
-      typeof this.state.movieRecData.recommendations !== "undefined"
-        ? this.state.movieRecData.recommendations.results
-        : this.state.movieRecData.results;
-
-    return recomended.length > 0 ? (
-      <Grid className={classes.rootGridListRecommended}>
-        <GridList cols={4.5} className={classes.gridList} cellHeight="auto">
-          >
-          {recomended.map(img => (
-            <GridListTile key={uuid()}>
-              <img
-                src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
-                alt={img.title}
-                style={{ height: "100%", width: "100%" }}
-              />
-              <GridListTileBar
-                title={img.title}
-                actionIcon={
-                  <IconButton>
-                    <Icon>playlist_add</Icon>
-                  </IconButton>
-                }
-              />
-            </GridListTile>
-          ))}
-        </GridList>
-      </Grid>
-    ) : (
-      <p> No recommended... jacny detta är inte bra </p>
-    );
-  };
 }
+
+const styles = {
+  rootGridListRecommended: {
+    display: "flex",
+    width: "100%",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
+    overflow: "hidden",
+    backgroundColor: "white"
+  },
+  gridList: {
+    flexWrap: "nowrap",
+    transform: "translateZ(0)"
+  },
+  title: {
+    color: "white"
+  },
+  titleBar: {
+    background:
+      "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)"
+  }
+};
 
 RecommendedMovies.propTypes = {
   classes: PropTypes.object.isRequired,

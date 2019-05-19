@@ -1,19 +1,17 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import {
-  IconButton,
   GridList,
   GridListTile,
   GridListTileBar,
-  Icon,
-  Grid
+  Typography
 } from "@material-ui/core";
 import { withStyles } from "@material-ui/core/styles";
 import Modal from "@material-ui/core/Modal";
 import PropTypes from "prop-types";
 import YouTube from "react-youtube";
 import "../../styles/movieHover.css";
-import ExpandMoreIcon from "@material-ui/icons/";
 import PlayCircleOutline from "@material-ui/icons/PlayCircleOutlineOutlined";
+
 class MovieClips extends Component {
   state = {
     imageLoading: true,
@@ -28,52 +26,64 @@ class MovieClips extends Component {
     const { classes } = this.props;
 
     return (
-      <GridList cols={length} cellHeight="auto" style={{ marginTop: "3px" }}>
-        {movieClip.map((img, index) => (
-          <GridListTile key={img.id}>
-            <div className="vignette">
-              <img
-                style={
-                  !this.state.imageLoading
-                    ? { cursor: "pointer", height: "100%", width: "100%" }
-                    : { display: "none", height: "100%", width: "100%" }
-                }
-                className="imageDiv"
-                src={`https://img.youtube.com/vi/${img.key}/0.jpg`}
-                alt="Movie Poster"
-                onLoad={() => this.setState({ imageLoading: false })}
-                onClick={() => {
-                  this.handleOpen();
-                  this.setState({ youTubeKey: img.key });
-                }}
-                onError={e => {
-                  this.setState({ imageLoading: false });
+      <div className={classes.root}>
+        {movieClip.length > 0 ? (
+          <GridList cols={length} cellHeight="auto" style={{ marginTop: 0 }}>
+            {movieClip.map(img => (
+              <GridListTile key={img.id}>
+                <div className="vignette">
+                  <img
+                    style={
+                      !this.state.imageLoading
+                        ? { cursor: "pointer", height: "100%", width: "100%" }
+                        : { display: "none", height: "100%", width: "100%" }
+                    }
+                    className="imageDiv"
+                    src={`https://img.youtube.com/vi/${img.key}/0.jpg`}
+                    alt="Movie Poster"
+                    onLoad={() => this.setState({ imageLoading: false })}
+                    onClick={() => {
+                      this.handleOpen();
+                      this.setState({ youTubeKey: img.key });
+                    }}
+                    onError={e => {
+                      this.setState({ imageLoading: false });
 
-                  e.onError = null;
-                  e.target.src = require("../../images/error.png");
-                }}
-              />
-              <a href="#">
-                <span>
-                  <PlayCircleOutline
-                    className={classes.playIcon}
-                    fontSize="large"
+                      e.onError = null;
+                      e.target.src = require("../../images/error.png");
+                    }}
                   />
-                </span>
-              </a>
-            </div>
-            <GridListTileBar
-              title={img.length}
-              style={{ height: "35px" }}
-              key={img.id}
-              subtitle={
-                <span>
-                  <strong>{img.name}</strong>
-                </span>
-              }
-            />
-          </GridListTile>
-        ))}
+                  <div className="playIcon">
+                    <span>
+                      <PlayCircleOutline
+                        className={classes.playIcon}
+                        fontSize="large"
+                      />
+                    </span>
+                  </div>
+                </div>
+                <GridListTileBar
+                  title={img.length}
+                  style={{ height: "35px" }}
+                  key={img.id}
+                  subtitle={
+                    <span>
+                      <strong>{img.name}</strong>
+                    </span>
+                  }
+                />
+              </GridListTile>
+            ))}
+          </GridList>
+        ) : (
+          <Typography
+            align="center"
+            color="inherit"
+            style={{ paddingTop: 20, paddingBottom: 20 }}
+          >
+            No movie clips
+          </Typography>
+        )}
 
         <Modal
           open={this.state.open}
@@ -94,7 +104,7 @@ class MovieClips extends Component {
             />
           </div>
         </Modal>
-      </GridList>
+      </div>
     );
   }
 
@@ -108,6 +118,10 @@ class MovieClips extends Component {
 }
 
 const styles = theme => ({
+  root: {
+    minWidth: "100%",
+    marginTop: "2px"
+  },
   paperModal: {
     position: "absolute",
     outline: "none",

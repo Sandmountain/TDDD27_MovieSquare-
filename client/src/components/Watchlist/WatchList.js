@@ -254,7 +254,7 @@ WatchList.propTypes = {
 
 const mapStateToProps = state => ({
   movie: state.movie,
-  id: state.movieID.id,
+  id: state.movieInfo.id,
   isAuthenticated: state.auth.isAuthenticated,
   userID: state.auth.userID
 });

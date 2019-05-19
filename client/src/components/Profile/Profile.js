@@ -20,37 +20,6 @@ import PieChart from "./PieChart";
 import PieChartLedgend from "./PieChartLedgend";
 import RecommendedMovies from "./RecommendedMovies";
 
-const styles = {
-  inlineMainBody: {
-    width: "100%",
-    minHeight: "1000px",
-    padding: 4,
-    backgroundColor: "white"
-  },
-  MainBody: {
-    width: "100%",
-    minHeight: "1000px",
-    padding: "10px"
-  },
-  root: {
-    marginTop: "30px",
-    marginBottom: "2px",
-    display: "flex",
-    alignItems: "center"
-  },
-  typoColor: {
-    color: "black"
-  },
-  theLists: {
-    display: "flex"
-  },
-  movieList: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: "grey"
-  }
-};
-
 class Profile extends Component {
   render() {
     const { classes } = this.props;
@@ -153,6 +122,36 @@ class Profile extends Component {
     );
   }
 }
+const styles = {
+  inlineMainBody: {
+    width: "100%",
+    minHeight: "1000px",
+    padding: 4,
+    backgroundColor: "white"
+  },
+  MainBody: {
+    width: "100%",
+    minHeight: "1000px",
+    padding: "10px"
+  },
+  root: {
+    marginTop: "30px",
+    marginBottom: "2px",
+    display: "flex",
+    alignItems: "center"
+  },
+  typoColor: {
+    color: "black"
+  },
+  theLists: {
+    display: "flex"
+  },
+  movieList: {
+    width: "100%",
+    maxWidth: 360,
+    backgroundColor: "grey"
+  }
+};
 
 Profile.propTypes = {
   classes: PropTypes.object.isRequired

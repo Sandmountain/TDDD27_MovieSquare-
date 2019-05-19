@@ -8,8 +8,9 @@ import {
   MuiThemeProvider,
   CssBaseline
 } from "@material-ui/core";
-import { red, amber, grey } from "@material-ui/core/colors";
+import { amber, grey } from "@material-ui/core/colors";
 
+//Creates the theme used on the page
 const theme = createMuiTheme({
   typography: {
     useNextVariants: true
@@ -22,9 +23,6 @@ const theme = createMuiTheme({
       main: amber.A400,
       light: amber[200],
       dark: amber[800]
-    },
-    background: {
-      default: red
     },
     type: "dark"
   },
@@ -47,6 +45,7 @@ const theme = createMuiTheme({
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <CssBaseline />
+
     <App />
   </MuiThemeProvider>,
   document.getElementById("root")

@@ -1,14 +1,6 @@
 import React, { Component, Fragment } from "react";
-import {
-  Card,
-  CardHeader,
-  Typography,
-  Grid,
-  Avatar,
-  IconButton
-} from "@material-ui/core";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import PropTypes from "prop-types";
+import { Card, CardHeader, Typography, Grid, Avatar } from "@material-ui/core";
+
 import uuid from "uuid";
 class MovieActors extends Component {
   state = {
@@ -16,15 +8,14 @@ class MovieActors extends Component {
   };
   render() {
     const cast = this.props.actors.slice(0, 24);
-    const { classes } = this.props;
-    console.log(cast);
+
     //
     return (
       <div style={styles.root}>
         {cast.length > 0 ? (
           <Grid container style={{ marginTop: 4 }}>
             {cast.map(actor => (
-              <Grid item style={{ width: "100%" }}>
+              <Grid item style={{ width: "100%" }} key={uuid()}>
                 <Card square={true} style={styles.card} key={uuid()}>
                   <CardHeader
                     style={{ padding: 8 }}
@@ -64,10 +55,6 @@ const styles = {
   card: {
     marginBottom: "4px"
   }
-};
-
-MovieActors.propTypes = {
-  classes: PropTypes.object.isRequired
 };
 
 export default MovieActors;

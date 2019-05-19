@@ -5,7 +5,8 @@ import {
   Divider,
   Icon,
   Fab,
-  CircularProgress
+  CircularProgress,
+  Snackbar
 } from "@material-ui/core";
 import SimilarMovies from "./SimiliarMovies";
 import BottomNavBar from "./BottomNavBar";
@@ -42,7 +43,9 @@ class MovieInfo extends Component {
     this.getMovieInfo();
     this.state = {
       genres: [],
-      open: false
+      open: false,
+      showInfo: false,
+      addedMovie: ""
     };
   }
 
@@ -286,6 +289,17 @@ class MovieInfo extends Component {
           <Grid item sm={12}>
             <BottomNavBar movieData={movieInfo} />
           </Grid>
+          <Snackbar
+            message={
+              <span id="message-id">
+                Added <strong>{this.state.addedMovie}</strong> to the watchlist
+              </span>
+            }
+            anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+            open={this.state.showInfo}
+            autoHideDuration={3000}
+            onClose={() => this.handleClose()}
+          />
         </Fragment>
       );
     } else {
@@ -295,13 +309,9 @@ class MovieInfo extends Component {
     }
   }
 
-  handleOpen = () => {
-    this.setState({ open: true });
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
+  handleClose() {
+    this.setState({ showInfo: false });
+  }
 
   componentWillMount() {
     this.props.getMovieID();
@@ -328,6 +338,10 @@ class MovieInfo extends Component {
       })["genres"];
       this.props.addMovie(userID, newMovie);
       this.props.getMovies(userID);
+      this.setState({
+        showInfo: true,
+        addedMovie: movie.original_title
+      });
     }
   };
 }

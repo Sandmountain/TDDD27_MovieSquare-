@@ -1,5 +1,13 @@
 import axios from "axios";
-import { GET_MOVIES, ADD_MOVIE, DELETE_MOVIE, MOVIES_LOADING } from "./types";
+import {
+  GET_MOVIES,
+  ADD_MOVIE,
+  DELETE_MOVIE,
+  MOVIES_LOADING,
+  GET_HISTORY,
+  ADD_HISTORY,
+  DELETE_HISTORY
+} from "./types";
 import genres from "../components/MovieResult/Genres.json";
 
 export const getMovies = userID => dispatch => {
@@ -48,4 +56,42 @@ export const setMoviesLoading = () => {
   return {
     type: MOVIES_LOADING
   };
+};
+
+// History Actions
+export const getHistory = userID => dispatch => {
+  dispatch(setMoviesLoading());
+  axios.get(`/api/UserWatchlist/userID/history/${userID}`).then(res => {
+    dispatch({
+      type: GET_HISTORY,
+      payload: res.data
+    });
+  });
+};
+
+export const addHistory = (userID, movie) => dispatch => {
+  const movieObject = {
+    movie: movie,
+    userID: userID
+  };
+
+  axios.post("/api/UserWatchlist/userID/history", movieObject).then(res => {
+    dispatch({
+      type: ADD_HISTORY,
+      payload: res.data
+    });
+  });
+};
+
+export const deleteHistory = (userID, id) => dispatch => {
+  axios
+    .delete(`/api/UserWatchlist/userID/history/`, {
+      data: { userID: userID, id: id }
+    })
+    .then(res => {
+      dispatch({
+        type: DELETE_HISTORY,
+        payload: id
+      });
+    });
 };

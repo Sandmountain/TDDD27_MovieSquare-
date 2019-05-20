@@ -20,14 +20,14 @@ class PieChart extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.loading !== this.props.loading) {
       if (!this.props.loading) {
-        this.drawChart();
+        if (this.props.movies) {
+          this.drawChart();
+        }
       }
     }
   }
 
   drawChart() {
-    //console.log("Should draw pieChart");
-
     var color = d3
       .scaleOrdinal()
       .range([
@@ -109,6 +109,7 @@ const favoriteGenre = movies => {
       [],
       movies.map(genres => genres.movieGenre)
     );
+    console.log(genreList);
 
     // Räknar antalet gånger varje genre förekommer.
     let counts = genreList.reduce((a, c) => {
@@ -132,7 +133,7 @@ const favoriteGenre = movies => {
       key: Object.keys(favoriteGenreFreq)[i],
       val: d
     }));
-    //console.log("dataArray", dataArray[1].key);
+    console.log("dataArray", dataArray);
 
     return dataArray;
   } else return null;

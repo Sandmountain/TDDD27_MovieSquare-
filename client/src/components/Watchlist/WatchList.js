@@ -11,9 +11,14 @@ import {
   ExpansionPanelDetails,
   ExpansionPanelActions,
   Typography,
-  CircularProgress
+  CircularProgress,
+  Snackbar
 } from "@material-ui/core";
-import { getMovies, deleteMovie } from "../../actions/userWatchlistAction";
+import {
+  getMovies,
+  deleteMovie,
+  addHistory
+} from "../../actions/userWatchlistAction";
 import { setMovieID } from "../../actions/movieInfoAction";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -23,12 +28,16 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 class WatchList extends Component {
   state = {
-    clickedMovieId: ""
+    clickedMovieId: "",
+    showInfo: false,
+    addedMovie: ""
   };
 
   render() {
     const { movies } = this.props.movie;
     const { classes } = this.props;
+    console.log("movies", movies);
+
     return (
       <Fragment>
         {/* 
@@ -54,121 +63,132 @@ class WatchList extends Component {
             ) : (
               <Fragment>
                 {movies
-                  ? movies.map(
-                      ({
-                        _id,
-                        originalTitle,
-                        imgURL,
-                        movieOverview,
-                        movieRating,
-                        date,
-                        movieID
-                      }) => (
-                        <ExpansionPanel key={_id}>
-                          <ExpansionPanelSummary
-                            //className={classes.content}
-                            style={{ cursor: "default" }}
-                            expandIcon={
-                              <Fragment>
-                                <ExpandMoreIcon />
-                              </Fragment>
-                            }
-                          >
-                            <Link
-                              to={{
-                                pathname: `/movieInfo/${
-                                  this.state.clickedMovieId
-                                }`
-                              }}
-                            >
-                              <IconButton
-                                //component={movieInfoLink}
-                                style={{ padding: 5 }}
-                                onClick={() => this.props.setMovieID(movieID)}
-                              >
-                                <Avatar
-                                  size="medium"
-                                  alt={originalTitle}
-                                  style={{ cursor: "pointer" }}
-                                  src={`http://image.tmdb.org/t/p/w185/${imgURL}`}
-
-                                  // onClick={e => this.goToMovie()}
-                                />
-                              </IconButton>
-                            </Link>
-                            <Typography
-                              style={{ marginLeft: 10, marginTop: 15 }}
-                            >
-                              {originalTitle}
-                            </Typography>
-
-                            <Typography
-                              style={{
-                                fontStyle: "italic",
-                                position: "absolute",
-                                right: "35px",
-                                textAlign: "right",
-                                paddingTop: "15px",
-                                color: "grey",
-                                width: "50%"
-                              }}
-                            >
-                              Added {date > 1 ? date.slice(0, 10) : date}
-                            </Typography>
-                          </ExpansionPanelSummary>
-                          <Divider />
-                          <ExpansionPanelDetails
-                            style={{
-                              paddingRight: 0,
-                              paddingBottom: 0
+                  ? movies.map(movie => (
+                      <ExpansionPanel key={movie._id}>
+                        <ExpansionPanelSummary
+                          //className={classes.content}
+                          style={{ cursor: "default" }}
+                          expandIcon={
+                            <Fragment>
+                              <ExpandMoreIcon />
+                            </Fragment>
+                          }
+                        >
+                          <Link
+                            to={{
+                              pathname: `/movieInfo/${
+                                this.state.clickedMovieId
+                              }`
                             }}
                           >
-                            <Typography className={classes.column2}>
-                              {movieOverview
-                                ? movieOverview
-                                : "No further information about this movie"}
-                            </Typography>
-
-                            <ExpansionPanelActions
-                              className={classes.column}
-                              style={{ paddingTop: 0, paddingBottom: 0 }}
+                            <IconButton
+                              //component={movieInfoLink}
+                              style={{ padding: 5 }}
+                              onClick={() =>
+                                this.props.setMovieID(movie.movieID)
+                              }
                             >
-                              <Fab
-                                size="small"
-                                color="secondary"
-                                aria-label="Edit"
-                                className={classes.fabText}
-                              >
-                                <b>{movieRating !== "0" ? movieRating : "?"}</b>
-                              </Fab>
-                            </ExpansionPanelActions>
-                          </ExpansionPanelDetails>
+                              <Avatar
+                                size="medium"
+                                alt={movie.originalTitle}
+                                style={{ cursor: "pointer" }}
+                                src={`http://image.tmdb.org/t/p/w185/${
+                                  movie.imgURL
+                                }`}
+
+                                // onClick={e => this.goToMovie()}
+                              />
+                            </IconButton>
+                          </Link>
+                          <Typography style={{ marginLeft: 10, marginTop: 15 }}>
+                            {movie.originalTitle}
+                          </Typography>
+
+                          <Typography
+                            style={{
+                              fontStyle: "italic",
+                              position: "absolute",
+                              right: "35px",
+                              textAlign: "right",
+                              paddingTop: "15px",
+                              color: "grey",
+                              width: "50%"
+                            }}
+                          >
+                            Added{" "}
+                            {movie.date > 1
+                              ? movie.date.slice(0, 10)
+                              : movie.date}
+                          </Typography>
+                        </ExpansionPanelSummary>
+                        <Divider />
+                        <ExpansionPanelDetails
+                          style={{
+                            paddingRight: 0,
+                            paddingBottom: 0
+                          }}
+                        >
+                          <Typography className={classes.column2}>
+                            {movie.movieOverview
+                              ? movie.movieOverview
+                              : "No further information about this movie"}
+                          </Typography>
 
                           <ExpansionPanelActions
-                            style={{
-                              padding: 0,
-                              paddingBottom: 5,
-                              paddingRight: 6
-                            }}
+                            className={classes.column}
+                            style={{ paddingTop: 0, paddingBottom: 0 }}
                           >
-                            <Icon />
-                            <IconButton
+                            <Fab
+                              size="small"
                               color="secondary"
-                              onClick={this.onDeleteClick.bind(this, _id)}
+                              aria-label="Edit"
+                              className={classes.fabText}
                             >
-                              <Icon>playlist_add_check </Icon>
-                            </IconButton>
-                            <IconButton
-                              color="secondary"
-                              onClick={this.onDeleteClick.bind(this, _id)}
-                            >
-                              <Icon>delete </Icon>
-                            </IconButton>
+                              <b>
+                                {movie.movieRating !== "0"
+                                  ? movie.movieRating
+                                  : "?"}
+                              </b>
+                            </Fab>
                           </ExpansionPanelActions>
-                        </ExpansionPanel>
-                      )
-                    )
+                        </ExpansionPanelDetails>
+
+                        <ExpansionPanelActions
+                          style={{
+                            padding: 0,
+                            paddingBottom: 5,
+                            paddingRight: 6
+                          }}
+                        >
+                          <Icon />
+                          <IconButton
+                            color="secondary"
+                            onClick={this.onClick_addHistory.bind(this, movie)}
+                          >
+                            <Icon>playlist_add_check </Icon>
+                          </IconButton>
+                          <IconButton
+                            color="secondary"
+                            onClick={this.onDeleteClick.bind(this, movie._id)}
+                          >
+                            <Icon>delete </Icon>
+                          </IconButton>
+                        </ExpansionPanelActions>
+                      </ExpansionPanel>
+                    ))
                   : null}
+
+                <Snackbar
+                  message={
+                    <span id="message-id">
+                      Added <strong>{this.state.addedMovie}</strong> to history
+                    </span>
+                  }
+                  anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+                  open={this.state.showInfo}
+                  autoHideDuration={3000}
+                  onClose={() => this.handleClose()}
+                />
               </Fragment>
             )}
           </Grid>
@@ -183,6 +203,16 @@ class WatchList extends Component {
   onDeleteClick = id => {
     this.props.deleteMovie(this.props.userID, id);
   };
+
+  onClick_addHistory = movie => {
+    this.props.addHistory(this.props.userID, movie);
+    this.setState({ showInfo: true, addedMovie: movie.originalTitle });
+    this.props.deleteMovie(this.props.userID, movie._id);
+  };
+
+  handleClose() {
+    this.setState({ showInfo: false });
+  }
 
   goToMovie = (event, id) => {
     this.props.setMovieID(id);
@@ -245,6 +275,7 @@ const styles = theme => ({
 
 WatchList.propTypes = {
   getMovies: PropTypes.func.isRequired,
+  addHistory: PropTypes.func.isRequired,
   movie: PropTypes.object.isRequired,
   setMovieID: PropTypes.func.isRequired,
   //id: PropTypes.number,
@@ -261,5 +292,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getMovies, deleteMovie, setMovieID }
+  { getMovies, deleteMovie, setMovieID, addHistory }
 )(withStyles(styles)(WatchList));

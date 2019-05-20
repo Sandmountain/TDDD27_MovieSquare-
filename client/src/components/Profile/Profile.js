@@ -1,24 +1,11 @@
 import React, { Component, Fragment } from "react";
-import {
-  Grid,
-  Paper,
-  withStyles,
-  Divider,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Avatar
-} from "@material-ui/core";
-
-import ImageIcon from "@material-ui/icons/Image";
-import WorkIcon from "@material-ui/icons/Work";
-import BeachAccessIcon from "@material-ui/icons/BeachAccess";
+import { Grid, Paper, withStyles, Divider } from "@material-ui/core";
 
 import PropTypes from "prop-types";
 import PieChart from "./PieChart";
 import PieChartLedgend from "./PieChartLedgend";
 import RecommendedMovies from "./RecommendedMovies";
+import TheLists from "./TheLists";
 
 class Profile extends Component {
   render() {
@@ -54,66 +41,7 @@ class Profile extends Component {
                     marginTop: "20px"
                   }}
                 />
-                <Grid container className={classes.theLists}>
-                  <Grid item xs={6}>
-                    <Typography
-                      className={classes.typoColor}
-                      variant="h2"
-                      gutterBottom
-                    >
-                      Watchlist
-                    </Typography>
-                    <List className={classes.movieList}>
-                      <ListItem>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                        <ListItemText primary="Photos" />
-                      </ListItem>
-                      <ListItem>
-                        <Avatar>
-                          <WorkIcon />
-                        </Avatar>
-                        <ListItemText primary="Work" />
-                      </ListItem>
-                      <ListItem>
-                        <Avatar>
-                          <BeachAccessIcon />
-                        </Avatar>
-                        <ListItemText primary="Vacation" />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography
-                      className={classes.typoColor}
-                      variant="h2"
-                      gutterBottom
-                    >
-                      History
-                    </Typography>
-                    <List className={classes.movieList}>
-                      <ListItem>
-                        <Avatar>
-                          <ImageIcon />
-                        </Avatar>
-                        <ListItemText primary="Photos" />
-                      </ListItem>
-                      <ListItem>
-                        <Avatar>
-                          <WorkIcon />
-                        </Avatar>
-                        <ListItemText primary="Work" />
-                      </ListItem>
-                      <ListItem>
-                        <Avatar>
-                          <BeachAccessIcon />
-                        </Avatar>
-                        <ListItemText primary="Vacation" />
-                      </ListItem>
-                    </List>
-                  </Grid>
-                </Grid>
+                <TheLists />
               </Paper>
             </Paper>
           </Grid>
@@ -139,17 +67,6 @@ const styles = {
     marginBottom: "2px",
     display: "flex",
     alignItems: "center"
-  },
-  typoColor: {
-    color: "black"
-  },
-  theLists: {
-    display: "flex"
-  },
-  movieList: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: "grey"
   }
 };
 

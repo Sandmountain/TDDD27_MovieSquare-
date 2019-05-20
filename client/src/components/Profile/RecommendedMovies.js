@@ -52,7 +52,8 @@ class RecommendedMovies extends Component {
     );
   }
   returnDivInTime = classes => {
-    /* If there are no recomended videos for a specific show the most popilar movies */
+    /* If there are no recomended videos for a specific show the most popular movies */
+
     const recomended =
       typeof this.state.movieRecData.recommendations !== "undefined"
         ? this.state.movieRecData.recommendations.results
@@ -102,7 +103,9 @@ class RecommendedMovies extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.loading !== this.props.loading) {
       if (!this.props.loading) {
-        this.getMovieInfo(this.props.movies);
+        if (this.props.movies.length > 0) {
+          this.getMovieInfo(this.props.movies);
+        }
       }
     }
   }

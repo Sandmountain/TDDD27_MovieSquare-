@@ -1,7 +1,14 @@
+// WatchList
 export const GET_MOVIES = "GET_MOVIES";
 export const ADD_MOVIE = "ADD_MOVIE";
 export const DELETE_MOVIE = "DELETE_MOVIE";
 export const MOVIES_LOADING = "MOVIES_LOADING";
+
+// History (Watchlist)
+export const GET_HISTORY = "GET_HISTORY";
+export const ADD_HISTORY = "ADD_HISTORY";
+export const DELETE_HISTORY = "DELETE_HISTORY";
+
 // Auth
 export const AUTH_LOGIN_SUCCESS = "AUTH_LOGIN_SUCCESS";
 export const AUTH_LOGOUT_SUCCESS = "AUTH_LOGOUT_SUCCESS";

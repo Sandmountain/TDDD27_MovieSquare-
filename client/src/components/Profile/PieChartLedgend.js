@@ -19,12 +19,9 @@ class PieChartLedgend extends Component {
   componentDidUpdate(prevProps) {
     if (prevProps.loading !== this.props.loading) {
       if (!this.props.loading) {
-        this.drawChart();
-        console.log("Here comes the movies!");
-
-        console.log(this.props.movies);
-        console.log(this.props.movies[1]);
-        console.log(this.props.movies[1].movieID);
+        if (this.props.movies) {
+          this.drawChart();
+        }
       }
     }
   }

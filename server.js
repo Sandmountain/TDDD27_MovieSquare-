@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const config = require("config");
 const cors = require("cors");
 
-const watchlist = require("./routes/api/watchlist");
 const users = require("./routes/api/users");
 const userWatchlist = require("./routes/api/UserWatchlist");
 const searchMovies = require("./routes/api/SearchMovies");
@@ -14,6 +13,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+//Facebook/google doens't like re-routing domains.
 app.use(cors());
 
 //Body parser middleware (set limit to fix payload too large errors)
@@ -29,7 +29,6 @@ mongoose
   .then(() => console.log("MongoDB connected..."))
   .catch(err => console.log(err));
 
-app.use("/api/watchlist", watchlist);
 app.use("/api/users", users);
 app.use("/api/SearchMovies", searchMovies);
 app.use("/api/SearchMovieInfo", searchMovieInfo);

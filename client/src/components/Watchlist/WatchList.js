@@ -115,7 +115,7 @@ class WatchList extends Component {
                             }}
                           >
                             Added{" "}
-                            {movie.date > 1
+                            {movie.date.length > 1
                               ? movie.date.slice(0, 10)
                               : movie.date}
                           </Typography>

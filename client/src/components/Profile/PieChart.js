@@ -107,10 +107,17 @@ class PieChart extends Component {
 const favoriteGenre = movies => {
   if (movies) {
     // Tar ut de olika genrerna från varje film och lägger de i en gemensam array.
+
+    console.log(movies);
     const genreList = [].concat.apply(
       [],
-      movies.map(genres => genres.movieGenre)
+      movies.map((genres, index) =>
+        typeof genres.movieGenre[index] === "string"
+          ? genres.movieGenre
+          : genres.movieGenre[index].name
+      )
     );
+
     console.log(genreList);
 
     // Räknar antalet gånger varje genre förekommer.

@@ -9,6 +9,7 @@ import {
   DELETE_HISTORY,
   NEW_MOVIE_ADDED
 } from "./types";
+
 import genres from "../components/MovieResult/Genres.json";
 
 export const getMovies = userID => dispatch => {

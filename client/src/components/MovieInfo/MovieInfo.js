@@ -45,6 +45,7 @@ class MovieInfo extends Component {
       genres: [],
       open: false,
       showInfo: false,
+      openModal: false,
       addedMovie: ""
     };
   }
@@ -78,6 +79,7 @@ class MovieInfo extends Component {
               }}
             />
             <Grid container direction="row">
+              {/* Movie Left Grid (Poster, tagline and scores) */}
               <Grid item sm={3} className={classes.foreGroundImage}>
                 <img
                   alt="img"
@@ -108,6 +110,7 @@ class MovieInfo extends Component {
                 ) : (
                   <div />
                 )}
+                {/* Rating starts here */}
                 <Grid item style={{ paddingTop: 10 }}>
                   <Typography color="primary" variant="body2">
                     {typeof raitings[0] !== "undefined" ? (
@@ -138,6 +141,7 @@ class MovieInfo extends Component {
                   {displayMetaCritics(raitings)}{" "}
                 </Grid>
               </Grid>
+              {/* Main info starts here */}
               <Grid item sm={9} className={classes.foreGroundImage}>
                 <Typography
                   color="primary"
@@ -159,6 +163,7 @@ class MovieInfo extends Component {
                   variant="subtitle2"
                   gutterBottom
                 >
+                  {/* Right-aligned movie info */}
                   {movieInfo.genres.map((item, index) => (
                     <span key={uuid()}>{(index ? ", " : "") + item.name}</span>
                   ))}{" "}
@@ -171,7 +176,7 @@ class MovieInfo extends Component {
                     </span>
                   ))}
                 </Typography>
-
+                {/* Main buttons here */}
                 <div>
                   <Fab
                     size="medium"
@@ -216,15 +221,16 @@ class MovieInfo extends Component {
                     color="primary"
                     aria-label="Edit"
                     className={classes.fabButtons}
-                    onClick={this.handleOpen}
+                    onClick={this.handleModalOpen}
                   >
                     <Icon>play_arrow</Icon>
                   </Fab>
                 </div>
+                {/* Modal for the trailer */}
                 <Modal
-                  open={this.state.open}
-                  onClose={this.handleClose}
-                  onBackdropClick={this.handleClose}
+                  open={this.state.openModal}
+                  onClose={this.handleModalClose}
+                  onBackdropClick={this.handleModalClose}
                 >
                   <div className={classes.paperModal}>
                     <YouTube
@@ -234,6 +240,7 @@ class MovieInfo extends Component {
                     />
                   </div>
                 </Modal>
+                {/* Main text */}
                 <Divider style={{ marginBottom: "20px" }} />
                 {movieInfo.overview.length > 0 ? (
                   <Typography color="inherit" variant="h6">
@@ -245,6 +252,8 @@ class MovieInfo extends Component {
                   {movieInfo.overview}
                 </Typography>
                 <Divider style={{ marginBottom: "20px" }} />
+
+                {/* Directors, writers and cast */}
                 <Grid item sm={12}>
                   <Typography color="inherit" variant="body1">
                     {credit.Directors.length > 0 ? (
@@ -309,9 +318,15 @@ class MovieInfo extends Component {
     }
   }
 
-  handleClose() {
+  handleModalOpen = () => {
+    this.setState({ openModal: true });
+  };
+  handleModalClose = () => {
+    this.setState({ openModal: false });
+  };
+  handleClose = () => {
     this.setState({ showInfo: false });
-  }
+  };
 
   componentWillMount() {
     this.props.getMovieID();
@@ -332,10 +347,14 @@ class MovieInfo extends Component {
   addMovieToDb = (movie, userID) => {
     if (movie !== "undefiend") {
       const newMovie = {};
-      //Changing the object to fit the action. Outside movieinfo.js movies have different genres structur.
+
+      //Changing the name of the movie object to fit the action . Outside movieinfo.js movies have different genres structur.
+      //genres becomes genre_ids;
+
       delete Object.assign(newMovie, movie, {
         genre_ids: movie["genres"]
       })["genres"];
+
       this.props.addMovie(userID, newMovie);
       this.props.getMovies(userID);
       this.setState({

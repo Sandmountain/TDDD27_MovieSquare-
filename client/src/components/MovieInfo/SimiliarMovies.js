@@ -62,27 +62,27 @@ class SimiliarMovies extends Component {
                         <img src={require("../../images/error.png")} alt="" />
                       )}
                     </div>
-                    <GridListTileBar
-                      title={img.title}
-                      key={img.id}
-                      subtitle={<span>Year: {img.release_date}</span>}
-                      actionIcon={
-                        <IconButton
-                          color="secondary"
-                          onClick={() => {
-                            this.props.addMovie(this.props.userID, img);
-                            this.props.getMovies(this.props.userID);
-                            this.setState({
-                              showInfo: true,
-                              addedMovie: img.original_title
-                            });
-                          }}
-                        >
-                          <Icon>playlist_add</Icon>
-                        </IconButton>
-                      }
-                    />
                   </Link>
+                  <GridListTileBar
+                    title={img.title}
+                    key={img.id}
+                    subtitle={<span>Year: {img.release_date}</span>}
+                    actionIcon={
+                      <IconButton
+                        color="secondary"
+                        onClick={() => {
+                          this.props.addMovie(this.props.userID, img);
+                          this.props.getMovies(this.props.userID);
+                          this.setState({
+                            showInfo: true,
+                            addedMovie: img.original_title
+                          });
+                        }}
+                      >
+                        <Icon>playlist_add</Icon>
+                      </IconButton>
+                    }
+                  />
                 </GridListTile>
               ))}
             </GridList>

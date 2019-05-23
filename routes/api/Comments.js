@@ -65,7 +65,7 @@ router.get("/movieID/:id", async (req, res) => {
       });
 
       await newMovieComments.save();
-      res.status(200).json({ msg: "Wey new movieComment array!" });
+      res.status(200).json(newMovieComments);
     }
   } catch (error) {
     res.status(400).json(error);

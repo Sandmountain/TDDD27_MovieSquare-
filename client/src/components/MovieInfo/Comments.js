@@ -43,8 +43,6 @@ class Comments extends Component {
             id="standard-multiline-flexible"
             label="Comment"
             placeholder="Enter comment"
-            // multiline
-            // rowsMax="4"
             value={this.state.commentText}
             onChange={this.handleChange}
             onKeyDown={e => {
@@ -57,7 +55,7 @@ class Comments extends Component {
           />
         </Grid>
         {typeof comments !== "undefined" && comments.length ? (
-          <Grid container style={{ marginTop: 4 }}>
+          <Grid container>
             {comments.map(comment => (
               <Grid item style={{ width: "100%" }} key={uuid()}>
                 <Card square={true} style={styles.card} key={uuid()}>
@@ -107,9 +105,7 @@ const styles = {
   root: {
     minWidth: "100%"
   },
-  card: {
-    marginBottom: "4px"
-  },
+
   textField: {
     width: "100%",
     marginRight: 8,

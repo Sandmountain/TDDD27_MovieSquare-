@@ -27,11 +27,7 @@ class Profile extends Component {
         <PieChartLedgend />
         <Grid container justify="center" alignItems="center">
           <Typography color="secondary" variant="h1" gutterBottom>
-            {`This is ${
-              decodedToken.facebook
-                ? decodedToken.facebook.name
-                : decodedToken.google.name
-            } profile!`}
+            {`This is ${selectName(decodedToken)} profile!`}
           </Typography>
         </Grid>
 
@@ -56,6 +52,17 @@ class Profile extends Component {
     );
   }
 }
+
+const selectName = decodedToken => {
+  if (decodedToken.facebook) {
+    return decodedToken.facebook.name;
+  } else if (decodedToken.google) {
+    return decodedToken.google.name;
+  } else {
+    return "name";
+  }
+};
+
 const styles = {
   inlineMainBody: {
     width: "100%",

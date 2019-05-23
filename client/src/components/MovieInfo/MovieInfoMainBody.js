@@ -24,6 +24,7 @@ export default class MovieInfoMainBody extends Component {
     );
   }
 }
+
 const styles = {
   inlineMainBody: {
     width: "100%",

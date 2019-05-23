@@ -1,7 +1,7 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
-const GoogleStrategy = require("passport-google-plus-token"); // Placeholde while testing backend functionality, going to change to passport-google-oauth2
-const FacebookStrategy = require("passport-facebook-token"); // Placeholde while testingbackend functionality, going to change to passport-facebook
+const GoogleStrategy = require("passport-google-plus-token");
+const FacebookStrategy = require("passport-facebook-token");
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt = require("passport-jwt").ExtractJwt;
 
@@ -55,7 +55,7 @@ passport.use(
           return done(null, false, { msg: "No user with that email" });
         }
 
-        // Checking the the password is valid
+        // Checking the the password is valid in model
         const isMatch = await user.isValidPassword(password);
 
         // If password is not
@@ -80,6 +80,7 @@ passport.use(
       clientID: config.get("facebook.clientID"),
       clientSecret: config.get("facebook.clientSecret")
     },
+    //If validated...
     async (accessToken, refreshToken, profile, done) => {
       try {
         const user = await User.findOne({ "facebook.id": profile.id });

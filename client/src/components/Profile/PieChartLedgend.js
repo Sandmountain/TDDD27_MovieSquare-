@@ -95,7 +95,11 @@ const favoriteGenre = movies => {
     // Tar ut de olika genrerna från varje film och lägger de i en gemensam array.
     const genreList = [].concat.apply(
       [],
-      movies.map(genres => genres.movieGenre)
+      movies.map((genres, index) =>
+        typeof genres.movieGenre[index] === "string"
+          ? genres.movieGenre
+          : genres.movieGenre[index].name
+      )
     );
 
     // Räknar antalet gånger varje genre förekommer.

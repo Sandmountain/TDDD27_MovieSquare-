@@ -27,16 +27,18 @@ class PieChartLedgend extends Component {
   }
 
   drawChart() {
+    d3.selectAll(".pieChartLedgend-svg").remove();
+
     var color = d3
       .scaleOrdinal()
       .range([
-        "#BBDEFB",
-        "#90CAF9",
-        "#64B5F6",
-        "#42A5F5",
-        "#2196F3",
-        "#1E88E5",
-        "#1976D2"
+        "#ffecb3",
+        "#ffe082",
+        "#ffd54f",
+        "#ffca28",
+        "#ffc107",
+        "#ffb300",
+        "#ffa000"
       ]);
 
     const data = favoriteGenre(this.props.movies);
@@ -50,6 +52,7 @@ class PieChartLedgend extends Component {
       .data([data])
       .attr("width", width)
       .attr("height", height)
+      .attr("class", "pieChartLedgend-svg")
       .append("g");
 
     const ledgends = svg.append("g").attr("transform", "translate(170,-15)");

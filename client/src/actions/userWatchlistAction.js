@@ -6,7 +6,8 @@ import {
   MOVIES_LOADING,
   GET_HISTORY,
   ADD_HISTORY,
-  DELETE_HISTORY
+  DELETE_HISTORY,
+  NEW_MOVIE_ADDED
 } from "./types";
 import genres from "../components/MovieResult/Genres.json";
 
@@ -55,6 +56,12 @@ export const deleteMovie = (userID, id) => dispatch => {
 export const setMoviesLoading = () => {
   return {
     type: MOVIES_LOADING
+  };
+};
+
+export const newMovieUpdate = () => {
+  return {
+    type: NEW_MOVIE_ADDED
   };
 };
 

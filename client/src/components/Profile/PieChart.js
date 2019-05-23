@@ -28,16 +28,17 @@ class PieChart extends Component {
   }
 
   drawChart() {
+    d3.selectAll(".pieChart-svg").remove();
     var color = d3
       .scaleOrdinal()
       .range([
-        "#BBDEFB",
-        "#90CAF9",
-        "#64B5F6",
-        "#42A5F5",
-        "#2196F3",
-        "#1E88E5",
-        "#1976D2"
+        "#ffecb3",
+        "#ffe082",
+        "#ffd54f",
+        "#ffca28",
+        "#ffc107",
+        "#ffb300",
+        "#ffa000"
       ]);
 
     const favGenre = favoriteGenre(this.props.movies);
@@ -53,6 +54,7 @@ class PieChart extends Component {
       .data([favGenre])
       .attr("width", width)
       .attr("height", height)
+      .attr("class", "pieChart-svg")
       .append("g")
       .attr("transform", "translate(" + radius + "," + radius + ")");
 

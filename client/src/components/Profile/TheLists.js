@@ -13,6 +13,7 @@ import {
   IconButton
 } from "@material-ui/core";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import uuid from "uuid";
 import {
   getMovies,
@@ -21,6 +22,7 @@ import {
   addHistory,
   deleteHistory
 } from "../../actions/userWatchlistAction";
+import { setMovieID } from "../../actions/movieInfoAction";
 import config from "../../config.json";
 
 class WatchList extends Component {
@@ -28,6 +30,7 @@ class WatchList extends Component {
     this.props.getMovies(this.props.userID);
     this.props.getHistory(this.props.userID);
   }
+
   onDeleteClick = id => {
     this.props.deleteMovie(this.props.userID, id);
   };
@@ -38,7 +41,11 @@ class WatchList extends Component {
 
   render() {
     const { classes, movies, history } = this.props;
+    if (this.props.newMovieAdded) {
+      console.log("Inside theLists");
 
+      this.props.getMovies(this.props.userID);
+    }
     console.log(movies);
     return (
       <Grid container className={classes.theLists}>
@@ -51,16 +58,27 @@ class WatchList extends Component {
               ? history.map(movie => (
                   <Fragment>
                     <ListItem key={uuid()}>
-                      <Avatar
-                        size="medium"
-                        alt={movie.originalTitle}
-                        style={{ cursor: "pointer" }}
-                        src={
-                          config.themovieDB.imageUrl +
-                          config.themovieDB.imageSizes +
-                          movie.imgURL
-                        }
-                      />
+                      <Link
+                        to={{
+                          pathname: `/movieInfo/${movie.movieID}`
+                        }}
+                      >
+                        <IconButton
+                          style={{ padding: 5 }}
+                          onClick={() => this.props.setMovieID(movie.movieID)}
+                        >
+                          <Avatar
+                            size="medium"
+                            alt={movie.originalTitle}
+                            style={{ cursor: "pointer" }}
+                            src={
+                              config.themovieDB.imageUrl +
+                              config.themovieDB.imageSizes +
+                              movie.imgURL
+                            }
+                          />
+                        </IconButton>
+                      </Link>
                       <ListItemText primary={movie.originalTitle} />
                       <IconButton
                         color="secondary"
@@ -84,16 +102,27 @@ class WatchList extends Component {
               ? movies.map(movie => (
                   <Fragment>
                     <ListItem key={uuid()}>
-                      <Avatar
-                        size="medium"
-                        alt={movie.originalTitle}
-                        style={{ cursor: "pointer" }}
-                        src={
-                          config.themovieDB.imageUrl +
-                          config.themovieDB.imageSizes +
-                          movie.imgURL
-                        }
-                      />
+                      <Link
+                        to={{
+                          pathname: `/movieInfo/${movie.movieID}`
+                        }}
+                      >
+                        <IconButton
+                          style={{ padding: 5 }}
+                          onClick={() => this.props.setMovieID(movie.movieID)}
+                        >
+                          <Avatar
+                            size="medium"
+                            alt={movie.originalTitle}
+                            style={{ cursor: "pointer" }}
+                            src={
+                              config.themovieDB.imageUrl +
+                              config.themovieDB.imageSizes +
+                              movie.imgURL
+                            }
+                          />
+                        </IconButton>
+                      </Link>
                       <ListItemText primary={movie.originalTitle} />
                       <IconButton
                         color="secondary"
@@ -123,7 +152,7 @@ const styles = {
   movieList: {
     width: "100%",
     maxWidth: 360,
-    backgroundColor: "grey"
+    backgroundColor: "#424242"
   }
 };
 
@@ -134,16 +163,19 @@ WatchList.propTypes = {
   history: PropTypes.array.isRequired,
   deleteMovie: PropTypes.func.isRequired,
   getMovies: PropTypes.func.isRequired,
-  getHistory: PropTypes.func.isRequired
+  getHistory: PropTypes.func.isRequired,
+  newMovieAdded: PropTypes.bool.isRequired,
+  setMovieID: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   userID: state.auth.userID,
   movies: state.movie.movies,
-  history: state.movie.history
+  history: state.movie.history,
+  newMovieAdded: state.movie.newMovieAdded
 });
 
 export default connect(
   mapStateToProps,
-  { getMovies, deleteMovie, getHistory, addHistory, deleteHistory }
+  { getMovies, deleteMovie, getHistory, addHistory, deleteHistory, setMovieID }
 )(withStyles(styles)(WatchList));

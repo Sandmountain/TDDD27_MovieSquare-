@@ -9,6 +9,7 @@ const users = require("./routes/api/users");
 const userWatchlist = require("./routes/api/UserWatchlist");
 const searchMovies = require("./routes/api/SearchMovies");
 const searchMovieInfo = require("./routes/api/SearchMovieInfo");
+const comments = require("./routes/api/Comments");
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -33,6 +34,7 @@ app.use("/api/users", users);
 app.use("/api/SearchMovies", searchMovies);
 app.use("/api/SearchMovieInfo", searchMovieInfo);
 app.use("/api/UserWatchlist", userWatchlist);
+app.use("/api/comments", comments);
 
 const PORT = process.env.PORT || 5000;
 

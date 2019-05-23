@@ -5,13 +5,15 @@ import {
   MOVIES_LOADING,
   GET_HISTORY,
   ADD_HISTORY,
-  DELETE_HISTORY
+  DELETE_HISTORY,
+  NEW_MOVIE_ADDED
 } from "../actions/types";
 
 const initialState = {
   movies: [],
   history: [],
-  loading: false
+  loading: false,
+  newMovieAdded: false
 };
 
 export default function(state = initialState, action) {
@@ -20,7 +22,8 @@ export default function(state = initialState, action) {
       return {
         ...state,
         movies: action.payload,
-        loading: false
+        loading: false,
+        newMovieAdded: false
       };
     case DELETE_MOVIE:
       return {
@@ -36,6 +39,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         loading: true
+      };
+    case NEW_MOVIE_ADDED:
+      return {
+        ...state,
+        newMovieAdded: true
       };
     // History
     case GET_HISTORY:

@@ -3,6 +3,7 @@ export const GET_MOVIES = "GET_MOVIES";
 export const ADD_MOVIE = "ADD_MOVIE";
 export const DELETE_MOVIE = "DELETE_MOVIE";
 export const MOVIES_LOADING = "MOVIES_LOADING";
+export const NEW_MOVIE_ADDED = "NEW_MOVIE_ADDED";
 
 // History (Watchlist)
 export const GET_HISTORY = "GET_HISTORY";
@@ -15,12 +16,19 @@ export const AUTH_LOGOUT_SUCCESS = "AUTH_LOGOUT_SUCCESS";
 export const AUTH_REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const AUTH_ERROR = "AUTH_ERROR";
 
-//MovieID
+// MovieID
 export const GET_MOVIEINFO_ID = "GET_MOVIEINFO_ID";
 export const SET_MOVIEINFO_ID = "SET_MOVIEINFO_ID";
 export const GET_MOVIEINFO = "GET_MOVIEINFO";
 export const LOADING_INFO = "LOADING_INFO";
 
-//Search Query
+// Search Query
 export const GET_SEARCH_RESULTS = "GET_SEARCH_RESULTS";
 export const LOADING_RESULTS = "LOADING_RESULTS";
+
+// Comment
+export const GET_COMMENTS = "GET_COMMENTS";
+export const ADD_COMMENT = "ADD_COMMENT";
+export const DELETE_COMMENT = "DELETE_COMMENT";
+export const LOADING_COMMENT = "LOADING_COMMENT";
+export const LOADING_ADDED_COMMENT = "LOADING_ADDED_COMMENT";

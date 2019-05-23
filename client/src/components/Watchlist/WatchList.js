@@ -14,6 +14,7 @@ import {
   CircularProgress,
   Snackbar
 } from "@material-ui/core";
+import uuid from "uuid";
 import {
   getMovies,
   deleteMovie,
@@ -36,7 +37,7 @@ class WatchList extends Component {
   render() {
     const { movies } = this.props.movie;
     const { classes } = this.props;
-    console.log("movies", movies);
+    //console.log("movies", movies);
 
     return (
       <Fragment>
@@ -64,7 +65,7 @@ class WatchList extends Component {
               <Fragment>
                 {movies
                   ? movies.map(movie => (
-                      <ExpansionPanel key={movie._id}>
+                      <ExpansionPanel key={uuid()}>
                         <ExpansionPanelSummary
                           //className={classes.content}
                           style={{ cursor: "default" }}
@@ -76,9 +77,7 @@ class WatchList extends Component {
                         >
                           <Link
                             to={{
-                              pathname: `/movieInfo/${
-                                this.state.clickedMovieId
-                              }`
+                              pathname: `/movieInfo/${movie.movieID}`
                             }}
                           >
                             <IconButton

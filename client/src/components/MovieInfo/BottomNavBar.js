@@ -10,6 +10,7 @@ import Icon from "@material-ui/core/Icon";
 import Reviews from "./Reviews";
 import MovieClips from "./MovieClips";
 import MovieActors from "./MovieActors";
+import Comments from "./Comments";
 
 const styles = theme => ({
   root: {
@@ -95,7 +96,7 @@ function DisplayContent(props) {
   if (value === "actors") {
     return <MovieActors actors={data.credits.cast} />;
   } else if (value === "comment") {
-    return <p> WoW comment </p>;
+    return <Comments movieID={data.id} />;
   } else if (value === "reviews") {
     return <Reviews reviewData={data.reviews} />;
   } else if (value === "movies") {

@@ -1,10 +1,17 @@
 import React, { Component, Fragment } from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
-import { getMovies } from "../../actions/userWatchlistAction";
+import {
+  getMovies,
+  addMovie,
+  newMovieUpdate
+} from "../../actions/userWatchlistAction";
+import { setMovieID } from "../../actions/movieInfoAction";
 import axios from "axios";
 import uuid from "uuid";
+import { Link } from "react-router-dom";
 import config from "../../config.json";
+import "../../styles/movieHover.css";
 
 import {
   Grid,
@@ -65,21 +72,30 @@ class RecommendedMovies extends Component {
           >
           {recomended.map(img => (
             <GridListTile key={uuid()}>
-              <img
-                src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
-                alt={img.title}
-                style={{ height: "100%", width: "100%" }}
-              />
+              <Link
+                to={{
+                  pathname: `/movieInfo/${img.id}`
+                }}
+              >
+                <div className="vignette">
+                  <img
+                    src={`http://image.tmdb.org/t/p/w185/${img.poster_path}`}
+                    alt={img.title}
+                    style={{ height: "100%", width: "100%" }}
+                    onClick={() => {
+                      console.log("img(movie)", img);
+
+                      this.props.setMovieID(img.id);
+                    }}
+                  />
+                </div>
+              </Link>
               <GridListTileBar
                 title={img.title}
                 actionIcon={
                   <IconButton
-                    onClick={() => {
-                      this.setState({
-                        showInfo: true,
-                        addedMovie: img.original_title
-                      });
-                    }}
+                    color="secondary"
+                    onClick={this.onClick_addWatchList.bind(this, img)}
                   >
                     <Icon>playlist_add</Icon>
                   </IconButton>
@@ -90,9 +106,19 @@ class RecommendedMovies extends Component {
         </GridList>
       </Grid>
     ) : (
-      <p> No recommended... jacny detta är inte bra </p>
+      <p>
+        No recommended... should not get here. Look into the problem. Probably
+        loading/axios issue
+      </p>
     );
   };
+
+  onClick_addWatchList = async movie => {
+    await this.props.addMovie(this.props.userID, movie);
+    this.setState({ showInfo: true, addedMovie: movie.title });
+    this.props.newMovieUpdate();
+  };
+
   handleClose() {
     this.setState({ showInfo: false });
   }
@@ -169,6 +195,7 @@ RecommendedMovies.propTypes = {
   classes: PropTypes.object.isRequired,
   userID: PropTypes.string.isRequired,
   getMovies: PropTypes.func.isRequired,
+  addMovie: PropTypes.func.isRequired,
   movies: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired
 };
@@ -181,5 +208,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { getMovies }
+  { getMovies, addMovie, newMovieUpdate, setMovieID }
 )(withStyles(styles)(RecommendedMovies));

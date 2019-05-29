@@ -7,15 +7,19 @@ import {
 import axios from "axios";
 
 export const getMovieInfo = id => dispatch => {
-  dispatch(setLoadingMovieInfo());
-  axios
-    .get("/api/SearchMovieInfo/search/", { params: { name: id } })
-    .then(res => {
-      dispatch({
-        type: GET_MOVIEINFO,
-        payload: res.data
+  try {
+    dispatch(setLoadingMovieInfo());
+    axios
+      .get("/api/SearchMovieInfo/search/", { params: { name: id } })
+      .then(res => {
+        dispatch({
+          type: GET_MOVIEINFO,
+          payload: res.data
+        });
       });
-    });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const getMovieID = () => dispatch => {

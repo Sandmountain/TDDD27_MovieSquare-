@@ -18,7 +18,6 @@ class Profile extends Component {
   render() {
     const jwtToken = localStorage.getItem("JWT_TOKEN");
     const decodedToken = jwtToken ? jwtDecode(jwtToken) : "";
-    console.log("decodedToken", decodedToken);
 
     const { classes } = this.props;
     return (
@@ -26,8 +25,8 @@ class Profile extends Component {
         <PieChart />
         <PieChartLedgend />
         <Grid container justify="center" alignItems="center">
-          <Typography color="secondary" variant="h1" gutterBottom>
-            {`This is ${selectName(decodedToken)} profile!`}
+          <Typography color="secondary" variant="h4" gutterBottom>
+            {`This is ${selectName(decodedToken)}'s profile!`}
           </Typography>
         </Grid>
 
@@ -35,12 +34,17 @@ class Profile extends Component {
           <Grid item sm={8}>
             <Paper style={styles.MainBody}>
               <Paper style={styles.inlineMainBody}>
-                <Typography color="primary" variant="h3" gutterBottom>
-                  This is your favorite genre/s:
+                <Typography color="primary" variant="h5" gutterBottom>
+                  <strong>This is your favorite genre/s:</strong>
                 </Typography>
+
                 <div id="PieChartDiv" />
                 <div id="PieChartLedgendDiv" />
+
                 <Divider className={classes.dividerStyle} />
+                <Typography color="primary" variant="h6" gutterBottom>
+                  Recommended Movies
+                </Typography>
                 <RecommendedMovies />
                 <Divider className={classes.dividerStyle} />
                 <TheLists />
@@ -66,13 +70,12 @@ const selectName = decodedToken => {
 const styles = {
   inlineMainBody: {
     width: "100%",
-    minHeight: "1000px",
+    minHeight: "700px",
     padding: 4,
     backgroundColor: "white"
   },
   MainBody: {
     width: "100%",
-    minHeight: "1000px",
     padding: "10px"
   },
   root: {
@@ -82,7 +85,8 @@ const styles = {
     alignItems: "center"
   },
   dividerStyle: {
-    borderBottom: "2px solid black",
+    borderBottom: "1px solid",
+    color: "#343a40",
     marginBottom: "20px",
     marginTop: "20px"
   }

@@ -13,46 +13,58 @@ import {
 import genres from "../components/MovieResult/Genres.json";
 
 export const getMovies = userID => dispatch => {
-  dispatch(setMoviesLoading());
-  axios.get(`/api/UserWatchlist/userID/${userID}`).then(res => {
-    dispatch({
-      type: GET_MOVIES,
-      payload: res.data
-    });
-  });
-};
-export const addMovie = (userID, movie) => dispatch => {
-  for (let i = 0; i < movie.genre_ids.length; i++) {
-    for (let j = 0; j < genres.genres.length; j++) {
-      if (movie.genre_ids[i] === genres.genres[j].id) {
-        movie.genre_ids[i] = genres.genres[j].name;
-      }
-    }
-  }
-
-  const movieObject = {
-    movie: movie,
-    userID: userID
-  };
-
-  axios.post("/api/UserWatchlist/userID", movieObject).then(res => {
-    dispatch({
-      type: ADD_MOVIE,
-      payload: res.data
-    });
-  });
-};
-export const deleteMovie = (userID, id) => dispatch => {
-  axios
-    .delete(`/api/UserWatchlist/userID/`, {
-      data: { userID: userID, id: id }
-    })
-    .then(res => {
+  try {
+    dispatch(setMoviesLoading());
+    axios.get(`/api/UserWatchlist/userID/${userID}`).then(res => {
       dispatch({
-        type: DELETE_MOVIE,
-        payload: id
+        type: GET_MOVIES,
+        payload: res.data
       });
     });
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const addMovie = (userID, movie) => dispatch => {
+  try {
+    for (let i = 0; i < movie.genre_ids.length; i++) {
+      for (let j = 0; j < genres.genres.length; j++) {
+        if (movie.genre_ids[i] === genres.genres[j].id) {
+          movie.genre_ids[i] = genres.genres[j].name;
+        }
+      }
+    }
+
+    const movieObject = {
+      movie: movie,
+      userID: userID
+    };
+
+    axios.post("/api/UserWatchlist/userID", movieObject).then(res => {
+      dispatch({
+        type: ADD_MOVIE,
+        payload: res.data
+      });
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+export const deleteMovie = (userID, id) => dispatch => {
+  try {
+    axios
+      .delete(`/api/UserWatchlist/userID/`, {
+        data: { userID: userID, id: id }
+      })
+      .then(res => {
+        dispatch({
+          type: DELETE_MOVIE,
+          payload: id
+        });
+      });
+  } catch (err) {
+    console.log(err);
+  }
 };
 export const setMoviesLoading = () => {
   return {
@@ -68,38 +80,50 @@ export const newMovieUpdate = () => {
 
 // History Actions
 export const getHistory = userID => dispatch => {
-  dispatch(setMoviesLoading());
-  axios.get(`/api/UserWatchlist/userID/history/${userID}`).then(res => {
-    dispatch({
-      type: GET_HISTORY,
-      payload: res.data
+  try {
+    dispatch(setMoviesLoading());
+    axios.get(`/api/UserWatchlist/userID/history/${userID}`).then(res => {
+      dispatch({
+        type: GET_HISTORY,
+        payload: res.data
+      });
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const addHistory = (userID, movie) => dispatch => {
-  const movieObject = {
-    movie: movie,
-    userID: userID
-  };
+  try {
+    const movieObject = {
+      movie: movie,
+      userID: userID
+    };
 
-  axios.post("/api/UserWatchlist/userID/history", movieObject).then(res => {
-    dispatch({
-      type: ADD_HISTORY,
-      payload: res.data
+    axios.post("/api/UserWatchlist/userID/history", movieObject).then(res => {
+      dispatch({
+        type: ADD_HISTORY,
+        payload: res.data
+      });
     });
-  });
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 export const deleteHistory = (userID, id) => dispatch => {
-  axios
-    .delete(`/api/UserWatchlist/userID/history/`, {
-      data: { userID: userID, id: id }
-    })
-    .then(res => {
-      dispatch({
-        type: DELETE_HISTORY,
-        payload: id
+  try {
+    axios
+      .delete(`/api/UserWatchlist/userID/history/`, {
+        data: { userID: userID, id: id }
+      })
+      .then(res => {
+        dispatch({
+          type: DELETE_HISTORY,
+          payload: id
+        });
       });
-    });
+  } catch (err) {
+    console.log(err);
+  }
 };

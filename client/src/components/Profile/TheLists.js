@@ -26,34 +26,19 @@ import { setMovieID } from "../../actions/movieInfoAction";
 import config from "../../config.json";
 
 class WatchList extends Component {
-  componentDidMount() {
-    this.props.getMovies(this.props.userID);
-    this.props.getHistory(this.props.userID);
-  }
-
-  onDeleteClick = id => {
-    this.props.deleteMovie(this.props.userID, id);
-  };
-
-  onDeleteHistory = id => {
-    this.props.deleteHistory(this.props.userID, id);
-  };
-
   render() {
     const { classes, movies, history } = this.props;
     if (this.props.newMovieAdded) {
-      console.log("Inside theLists");
-
       this.props.getMovies(this.props.userID);
     }
-    console.log(movies);
+
     return (
       <Grid container className={classes.theLists}>
         <Grid item xs={6}>
-          <Typography className={classes.typoColor} variant="h2" gutterBottom>
+          <Typography className={classes.typoColor} variant="h5" gutterBottom>
             History
           </Typography>
-          <List className={classes.movieList}>
+          <List className={classes.historyList}>
             {history
               ? history.map(movie => (
                   <Fragment>
@@ -87,14 +72,14 @@ class WatchList extends Component {
                         <Icon>delete </Icon>
                       </IconButton>
                     </ListItem>
-                    <Divider variant="inset" component="li" />
+                    <Divider />
                   </Fragment>
                 ))
               : null}
           </List>
         </Grid>
         <Grid item xs={6} ml={5}>
-          <Typography className={classes.typoColor} variant="h2" gutterBottom>
+          <Typography className={classes.typoColor} variant="h5" gutterBottom>
             Watchlist
           </Typography>
           <List className={classes.movieList}>
@@ -126,12 +111,18 @@ class WatchList extends Component {
                       <ListItemText primary={movie.originalTitle} />
                       <IconButton
                         color="secondary"
+                        onClick={this.onClick_addHistory.bind(this, movie)}
+                      >
+                        <Icon>playlist_add_check </Icon>
+                      </IconButton>
+                      <IconButton
+                        color="secondary"
                         onClick={this.onDeleteClick.bind(this, movie._id)}
                       >
                         <Icon>delete </Icon>
                       </IconButton>
                     </ListItem>
-                    <Divider variant="inset" component="li" />
+                    <Divider />
                   </Fragment>
                 ))
               : null}
@@ -140,6 +131,24 @@ class WatchList extends Component {
       </Grid>
     );
   }
+
+  onClick_addHistory = movie => {
+    this.props.addHistory(this.props.userID, movie);
+    this.props.deleteMovie(this.props.userID, movie._id);
+    this.props.getHistory(this.props.userID);
+  };
+  componentDidMount() {
+    this.props.getMovies(this.props.userID);
+    this.props.getHistory(this.props.userID);
+  }
+
+  onDeleteClick = id => {
+    this.props.deleteMovie(this.props.userID, id);
+  };
+
+  onDeleteHistory = id => {
+    this.props.deleteHistory(this.props.userID, id);
+  };
 }
 
 const styles = {
@@ -149,9 +158,15 @@ const styles = {
   theLists: {
     display: "flex"
   },
+  historyList: {
+    padding: 0,
+
+    marginRight: "2px",
+    backgroundColor: "#424242"
+  },
   movieList: {
-    width: "100%",
-    maxWidth: 360,
+    padding: 0,
+    marginLeft: "2px",
     backgroundColor: "#424242"
   }
 };

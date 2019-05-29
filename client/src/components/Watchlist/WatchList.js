@@ -215,7 +215,6 @@ class WatchList extends Component {
 
   goToMovie = (event, id) => {
     this.props.setMovieID(id);
-
     event.stopPropagation();
   };
 }

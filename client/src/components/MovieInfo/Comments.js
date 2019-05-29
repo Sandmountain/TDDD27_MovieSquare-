@@ -30,12 +30,6 @@ class Comments extends Component {
       this.props.getComments(this.props.movieID);
     }
 
-    console.log("moiveID -> comments", this.props.movieID);
-
-    console.log("Comments", this.props.comments);
-
-    console.log("this.state.commentText", this.state.commentText);
-
     return (
       <div style={styles.root}>
         <Grid container style={styles.commentFieldGrid}>
@@ -118,7 +112,7 @@ const styles = {
 };
 Comments.propTypes = {
   getComments: PropTypes.func.isRequired,
-  comments: PropTypes.array.isRequired,
+  comments: PropTypes.array,
   loading: PropTypes.bool.isRequired,
   newComment: PropTypes.bool.isRequired
 };

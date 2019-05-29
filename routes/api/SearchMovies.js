@@ -4,10 +4,14 @@ const router = express.Router();
 const axios = require("axios");
 const config = require("config");
 
+// @route  POST api/SerachMovie/search
+// @desc   Search the theMovieDB for movies
+// @access Public
 router.get("/search/", async (req, res) => {
   const query = req.query.name;
 
   if (query.length > 0) {
+    //Makes a double axios call to because we only get 20movies in respons. This way we get a max of 40.
     axios
       .all([
         axios.get(

@@ -2,7 +2,6 @@ import axios from "axios";
 import {
   GET_COMMENTS,
   ADD_COMMENT,
-  DELETE_COMMENT,
   LOADING_COMMENT,
   LOADING_ADDED_COMMENT
 } from "./types";
@@ -12,8 +11,6 @@ export const getComments = movieID => async dispatch => {
   try {
     dispatch(setCommentsLoading());
     const res = await axios.get(`/api/comments/movieID/${movieID}`);
-
-    console.log("res -> getComments", res);
 
     await dispatch({
       type: GET_COMMENTS,
@@ -28,6 +25,7 @@ export const addComment = (commentText, movieID) => async dispatch => {
   try {
     const jwtToken = localStorage.getItem("JWT_TOKEN");
     const decodedToken = jwtToken ? jwtDecode(jwtToken) : "";
+
     const commentObj = {
       userID: decodedToken._id,
       userName: decodedToken.facebook

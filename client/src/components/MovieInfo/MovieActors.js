@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Card, CardHeader, Typography, Grid, Avatar } from "@material-ui/core";
 
 import uuid from "uuid";

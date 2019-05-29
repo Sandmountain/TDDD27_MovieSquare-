@@ -14,7 +14,6 @@ class PieChart extends Component {
 
   componentDidMount() {
     this.props.getMovies(this.props.userID);
-    //console.log("Getting movies");
   }
 
   componentDidUpdate(prevProps) {
@@ -42,7 +41,6 @@ class PieChart extends Component {
       ]);
 
     const favGenre = favoriteGenre(this.props.movies);
-    console.log("favGenre", favGenre);
 
     const width = 300;
     const height = 300;
@@ -97,9 +95,6 @@ class PieChart extends Component {
   }
 
   render() {
-    console.log("this.props.loading", this.props.loading);
-    console.log("movies", this.props.movies);
-
     return <div id={"#PieChart"} />;
   }
 }
@@ -108,17 +103,16 @@ const favoriteGenre = movies => {
   if (movies) {
     // Tar ut de olika genrerna från varje film och lägger de i en gemensam array.
 
-    console.log(movies);
     const genreList = [].concat.apply(
       [],
       movies.map((genres, index) =>
         typeof genres.movieGenre[index] === "string"
           ? genres.movieGenre
-          : genres.movieGenre[index].name
+          : genres.movieGenre[0].name
+          ? genres.movieGenre.map(genre => genre.name)
+          : null
       )
     );
-
-    console.log(genreList);
 
     // Räknar antalet gånger varje genre förekommer.
     let counts = genreList.reduce((a, c) => {
@@ -142,7 +136,6 @@ const favoriteGenre = movies => {
       key: Object.keys(favoriteGenreFreq)[i],
       val: d
     }));
-    console.log("dataArray", dataArray);
 
     return dataArray;
   } else return null;

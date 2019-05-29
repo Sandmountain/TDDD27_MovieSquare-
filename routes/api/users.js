@@ -15,6 +15,9 @@ signToken = user => {
   });
 };
 
+// @route  POST api/user/local/signin
+// @desc   Logging in using a local user
+// @access Public
 router.post(
   "/local/signin",
   validateBody(schemas.localUserSchema),
@@ -25,6 +28,9 @@ router.post(
   }
 );
 
+// @route  POST api/user/local/register
+// @desc   Register a local user
+// @access Public
 router.post(
   "/local/register",
   validateBody(schemas.localUserSchema),
@@ -60,6 +66,9 @@ router.post(
   }
 );
 
+// @route  POST api/user/oauth/facebook
+// @desc   logging in with facebook
+// @access Public
 router.post(
   "/oauth/facebook",
   passport.authenticate("facebook", { session: false }),
@@ -71,6 +80,9 @@ router.post(
   }
 );
 
+// @route  POST api/user/oauth/google
+// @desc   logging in with google
+// @access Public
 router.post(
   "/oauth/google",
   passport.authenticate("google", { session: false }),
@@ -80,7 +92,9 @@ router.post(
     res.json({ msg: "Wey logged in with google!!!", token, tempUserID });
   }
 );
-
+// @route  POST api/user/profile
+// @desc   Authenticate profile for routing
+// @access Public
 router.get(
   "/profile",
   passport.authenticate("jwt", { session: false }),

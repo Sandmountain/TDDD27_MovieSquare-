@@ -4,7 +4,7 @@ const router = express.Router();
 const userWatchlist = require("../../models/UserWatchlist");
 const Movie = require("../../models/Movies");
 
-// @route  GET api/userID/watchlist
+// @route  GET api/userID/:id
 // @desc   Get all movies in the users watchlist
 // @access Public
 router.get("/userID/:id", async (req, res) => {
@@ -26,7 +26,7 @@ router.get("/userID/:id", async (req, res) => {
   }
 });
 
-// @route  POST api/userID/watchlist
+// @route  POST api/userID/
 // @desc   Add a movie to the users watchlist
 // @access Public
 router.post("/userID/", async (req, res) => {
@@ -82,7 +82,7 @@ router.post("/userID/", async (req, res) => {
   }
 });
 
-// @route  DELETE api/userID/watchlist
+// @route  DELETE api/userID/
 // @desc   Delete a movie in the users watchlist
 // @access Public
 router.delete("/userID/", async (req, res) => {
@@ -95,7 +95,7 @@ router.delete("/userID/", async (req, res) => {
   }
 });
 
-// @route  GET api/userID/history
+// @route  GET api/userID/history/:id
 // @desc   Get all movies in the users history
 // @access Public
 router.get("/userID/history/:id", async (req, res) => {

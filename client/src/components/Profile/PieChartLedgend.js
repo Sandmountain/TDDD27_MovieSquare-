@@ -98,7 +98,9 @@ const favoriteGenre = movies => {
       movies.map((genres, index) =>
         typeof genres.movieGenre[index] === "string"
           ? genres.movieGenre
-          : genres.movieGenre[index].name
+          : genres.movieGenre[0].name
+          ? genres.movieGenre.map(genre => genre.name)
+          : null
       )
     );
 
